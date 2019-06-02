@@ -9,11 +9,9 @@
 	nonmaint_reroll = 100
 	contents_list_base = list(/obj/item/weapon/disk/autolathe_disk/excelsior = 1,
 	 /obj/item/weapon/circuitboard/excelsiorautolathe = 1,
-	 /obj/item/weapon/circuitboard/excelsior_teleporter = 1,
-	 /obj/item/weapon/implanter/excelsior = 2)
+	 /obj/item/weapon/circuitboard/excelsior_teleporter = 1)
 
-	contents_list_random = list(/obj/item/weapon/implantcase/excelsior = 70,
-	/obj/item/weapon/disk/autolathe_disk/excelsior = 30,
+	contents_list_random = list(/obj/item/weapon/disk/autolathe_disk/excelsior = 30,
 	/obj/item/weapon/implantcase/excelsior = 40,
 	/obj/item/clothing/suit/space/void/excelsior = 70,
 	/obj/item/clothing/head/helmet/space/void/excelsior = 70,
