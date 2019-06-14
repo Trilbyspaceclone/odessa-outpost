@@ -894,10 +894,11 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 					/obj/item/weapon/cell/large/moebius/nuclear,
 					/obj/item/weapon/cell/large/moebius/nuclear,
 					/obj/item/weapon/cell/large/moebius/nuclear)
-	cost = 20000
+	cost = 25000
 	containertype = /obj/structure/closet/crate
-	crate_name = "Atomcell :arge crate"
+	crate_name = "Atomcell Large crate"
 	group = "Enginelarge
+
 //----------------------------------------------
 //------------MEDICAL / SCIENCE-----------------
 //----------------------------------------------
