@@ -869,7 +869,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 					/obj/item/weapon/cell/large/hyper)
 	cost = 3000
 	containertype = /obj/structure/closet/crate
-	crate_name = large cell crate"
+	crate_name = "large cell crate"
 	group = "Engineering"
 
 /datum/supply_pack/large_cells_d
@@ -894,7 +894,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 					/obj/item/weapon/cell/large/moebius/nuclear,
 					/obj/item/weapon/cell/large/moebius/nuclear,
 					/obj/item/weapon/cell/large/moebius/nuclear)
-	cost = 25000
+	cost = 22500
 	containertype = /obj/structure/closet/crate
 	crate_name = "Atomcell Large crate"
 	group = "Enginelarge
