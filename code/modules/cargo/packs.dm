@@ -765,7 +765,139 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	crate_name = "Disposal Dispenser Crate"
 	group = "Engineering"
 
+/datum/supply_pack/tiny_cells
+	name = "Small cell crate"
+	contains = list(/obj/item/weapon/cell/small,
+					/obj/item/weapon/cell/small,
+					/obj/item/weapon/cell/small/super,
+					/obj/item/weapon/cell/small/high,
+					/obj/item/weapon/cell/small/high,
+					/obj/item/weapon/cell/small/high,
+					/obj/item/weapon/cell/small/super,
+					/obj/item/weapon/cell/small/hyper,
+					/obj/item/weapon/cell/small/hyper)
+	cost = 1000
+	containertype = /obj/structure/closet/crate
+	crate_name = "Small cell crate"
+	group = "Engineering"
 
+/datum/supply_pack/tiny_cells_d
+	name = "Moebius small cell crate"
+	contains = list(/obj/item/weapon/cell/small/moebius,
+					/obj/item/weapon/cell/small/moebius/super,
+					/obj/item/weapon/cell/small/moebius/super,
+					/obj/item/weapon/cell/small/moebius,
+					/obj/item/weapon/cell/small/moebius,
+					/obj/item/weapon/cell/small/moebius/hyper,
+					/obj/item/weapon/cell/small/moebius/hyper,
+					/obj/item/weapon/cell/small/moebius/high,
+					/obj/item/weapon/cell/small/moebius/high)
+	cost = 6500
+	containertype = /obj/structure/closet/crate
+	crate_name = "Moebius small cell crate"
+	group = "Engineering"
+
+/datum/supply_pack/tiny_cells_a
+	name = "Atomcell small cell crate"
+	contains = list(/obj/item/weapon/cell/small/moebius/nuclear,
+					/obj/item/weapon/cell/small/moebius/nuclear,
+					/obj/item/weapon/cell/small/moebius/pda,
+					/obj/item/weapon/cell/small/moebius/pda,
+					/obj/item/weapon/cell/small/moebius/pda,
+					/obj/item/weapon/cell/small/moebius/pda,
+					/obj/item/weapon/cell/small/moebius/pda,
+					/obj/item/weapon/cell/small/moebius/nuclear,
+					/obj/item/weapon/cell/small/moebius/nuclear)
+	cost = 15000
+	containertype = /obj/structure/closet/crate
+	crate_name = "Atomcell small crate"
+	group = "Engineering"
+
+/datum/supply_pack/medium_cells
+	name = "Medium cell crate"
+	contains = list(/obj/item/weapon/cell/medium,
+					/obj/item/weapon/cell/medium,
+					/obj/item/weapon/cell/medium/high,
+					/obj/item/weapon/cell/medium/high,
+					/obj/item/weapon/cell/medium/high,
+					/obj/item/weapon/cell/medium/high,
+					/obj/item/weapon/cell/medium/super,
+					/obj/item/weapon/cell/medium/hyper,
+					/obj/item/weapon/cell/medium/hyper)
+	cost = 1000
+	containertype = /obj/structure/closet/crate
+	crate_name = "Medium cell crate"
+	group = "Engineering"
+
+/datum/supply_pack/medium_cells_d
+	name = "Moebius Medium cell crate"
+	contains = list(/obj/item/weapon/cell/medium/moebius,
+					/obj/item/weapon/cell/medium/moebius/super,
+					/obj/item/weapon/cell/medium/moebius/super,
+					/obj/item/weapon/cell/medium/moebius,
+					/obj/item/weapon/cell/medium/moebius,
+					/obj/item/weapon/cell/medium/moebius/hyper,
+					/obj/item/weapon/cell/medium/moebius/hyper,
+					/obj/item/weapon/cell/medium/moebius/high,
+					/obj/item/weapon/cell/medium/moebius/high)
+	cost = 6500
+	containertype = /obj/structure/closet/crate
+	crate_name = "Moebius medium cell crate"
+	group = "Engineering"
+
+/datum/supply_pack/medium_cells_a
+	name = "Atomcell medium cell crate"
+	contains = list(/obj/item/weapon/medium/moebius/nuclear,
+					/obj/item/weapon/cell/medium/moebius/nuclear,
+					/obj/item/weapon/cell/medium/moebius/nuclear,
+					/obj/item/weapon/cell/medium/moebius/nuclear)
+	cost = 17500
+	containertype = /obj/structure/closet/crate
+	crate_name = "Atomcell medium crate"
+	group = "Engineering"
+
+/datum/supply_pack/large_cells
+	name = "Large cell crate"
+	contains = list(/obj/item/weapon/cell/large,
+					/obj/item/weapon/cell/large,
+					/obj/item/weapon/cell/large/high,
+					/obj/item/weapon/cell/large/high,
+					/obj/item/weapon/cell/large/high,
+					/obj/item/weapon/cell/large/high,
+					/obj/item/weapon/cell/large/super,
+					/obj/item/weapon/cell/large/hyper,
+					/obj/item/weapon/cell/large/hyper)
+	cost = 3000
+	containertype = /obj/structure/closet/crate
+	crate_name = large cell crate"
+	group = "Engineering"
+
+/datum/supply_pack/large_cells_d
+	name = "Moebius large cell crate"
+	contains = list(/obj/item/weapon/cell/large/moebius,
+					/obj/item/weapon/cell/large/moebius/super,
+					/obj/item/weapon/cell/large/moebius/super,
+					/obj/item/weapon/cell/large/moebius,
+					/obj/item/weapon/cell/large/moebius,
+					/obj/item/weapon/cell/large/moebius/hyper,
+					/obj/item/weapon/cell/large/moebius/hyper,
+					/obj/item/weapon/cell/large/moebius/high,
+					/obj/item/weapon/cell/large/moebius/high)
+	cost = 7500
+	containertype = /obj/structure/closet/crate
+	crate_name = "Moebius large cell crate"
+	group = "Engineering"
+
+/datum/supply_pack/large_cells_a
+	name = "Atomcell Large cell crate"
+	contains = list(/obj/item/weapon/medium/moebius/nuclear,
+					/obj/item/weapon/cell/large/moebius/nuclear,
+					/obj/item/weapon/cell/large/moebius/nuclear,
+					/obj/item/weapon/cell/large/moebius/nuclear)
+	cost = 20000
+	containertype = /obj/structure/closet/crate
+	crate_name = "Atomcell :arge crate"
+	group = "Enginelarge
 //----------------------------------------------
 //------------MEDICAL / SCIENCE-----------------
 //----------------------------------------------
