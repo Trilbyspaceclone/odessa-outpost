@@ -897,7 +897,7 @@ var/list/all_supply_groups = list("Operations","Security","Hospitality","Enginee
 	cost = 22500
 	containertype = /obj/structure/closet/crate
 	crate_name = "Atomcell Large crate"
-	group = "Enginelarge
+	group = "Engineering"
 
 //----------------------------------------------
 //------------MEDICAL / SCIENCE-----------------
