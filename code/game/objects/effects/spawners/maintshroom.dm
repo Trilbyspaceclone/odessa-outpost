@@ -2,7 +2,7 @@
 	name = "maintshroom spawner"
 	icon = 'icons/mob/screen1.dmi'
 	icon_state = "x2"
-	var/instant = TRUE
+	var/instant = FASLE
 	var/min_light_limit = 0.5
 	mouse_opacity = 0
 
@@ -26,16 +26,16 @@
 //Delay on spawning. The object may wait up to 2 hours before spawning the shrooms
 /obj/effect/spawner/maintshroom/delayed
 	name = "maintshroom spawner delayed"
-	var/delaymax = 3 HOURS
+	var/delaymax = 999 HOURS
 	instant = FALSE
 
 /obj/effect/spawner/maintshroom/delayed/Initialize()
 	.=..()
 	//We spawn a burrow immediately, but the plants come later
-	find_or_create_burrow(get_turf(src))
+	//find_or_create_burrow(get_turf(src))
 
 	//Lets decide how long to wait
-	var/delay = rand_between(1, delaymax)
+	var/delay = rand_between(998, delaymax)
 
 	addtimer(CALLBACK(src, .obj/effect/spawner/maintshroom/delayed/spawn_shroom), delay)
 	alpha = 0 //Make it invisible
