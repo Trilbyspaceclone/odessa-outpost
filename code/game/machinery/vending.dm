@@ -949,7 +949,7 @@
 				/obj/item/weapon/reagent_containers/food/drinks/cans/sodawater = 15,
 				/obj/item/weapon/reagent_containers/food/drinks/flask/barflask = 2,
 				/obj/item/weapon/reagent_containers/food/drinks/flask/vacuumflask = 2,
-				/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 30,)
+				/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 30,
 				/obj/item/weapon/reagent_containers/food/drinks/ice = 9,
 				/obj/item/weapon/reagent_containers/food/drinks/bottle/melonliquor = 2,
 				/obj/item/weapon/reagent_containers/food/drinks/bottle/bluecuracao = 2,
@@ -972,7 +972,7 @@
 		/obj/item/weapon/cartridge/signal = 4
 	)
 	contraband = list(/obj/item/device/lighting/toggleable/flashlight = 5,
-	/obj/item/device/assembly/timer = 2)
+				/obj/item/device/assembly/timer = 2)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 	auto_price = FALSE
 
@@ -1149,11 +1149,11 @@
 				/obj/item/weapon/storage/box/matches = 10,
 				/obj/item/weapon/flame/lighter/random = 4)
 	contraband = list(/obj/item/clothing/mask/smokable/cigarette/cigar = 4,
-				/obj/item/weapon/flame/lighter/zippo = 4,)
+				/obj/item/weapon/flame/lighter/zippo = 4)
 	premium = list(/obj/item/weapon/storage/fancy/cigar = 5,
-				/obj/item/weapon/storage/fancy/cigarettes/killthroat = 5 )
+				/obj/item/weapon/storage/fancy/cigarettes/killthroat = 5)
 	prices = list(/obj/item/clothing/mask/smokable/cigarette/cigar = 200,
-				/obj/item/weapon/storage/fancy/cigarettes = 100 ,
+				/obj/item/weapon/storage/fancy/cigarettes = 100,
 				/obj/item/weapon/storage/box/matches = 10,
 				/obj/item/weapon/flame/lighter/random = 5,
 				/obj/item/weapon/flame/lighter/zippo = 250)
@@ -1186,7 +1186,7 @@
 				/obj/item/weapon/storage/firstaid/regular = 3,
 				/obj/item/weapon/storage/firstaid/toxin = 3,
 				/obj/item/weapon/storage/firstaid/o2 = 3,
-				/obj/item/weapon/storage/firstaid/adv = 3,)
+				/obj/item/weapon/storage/firstaid/adv = 3)
 	prices = list(/obj/item/weapon/storage/pouch/medical_supply = 800)
 	idle_power_usage = 211 //refrigerator - believe it or not, this is actually the average power consumption of a refrigerated vending machine according to NRCan.
 	auto_price = FALSE
@@ -1332,7 +1332,7 @@
 				/obj/item/seeds/nettleseed = 2,
 				/obj/item/seeds/reishimycelium = 2,
 				/obj/item/seeds/reishimycelium = 2,
-				/obj/item/seeds/shandseed = 2,)
+				/obj/item/seeds/shandseed = 2)
 	premium = list(/obj/item/toy/waterflower = 1)
 	auto_price = FALSE
 
@@ -1392,7 +1392,7 @@
 				/obj/item/weapon/reagent_containers/food/drinks/mug/rainbow = 3,
 				/obj/item/weapon/reagent_containers/food/drinks/mug/brit = 3,
 				/obj/item/weapon/reagent_containers/food/drinks/mug/moebius = 3,
-				/obj/item/weapon/reagent_containers/food/drinks/mug/teacup = 10,)
+				/obj/item/weapon/reagent_containers/food/drinks/mug/teacup = 10)
 	contraband = list(/obj/item/weapon/material/kitchen/rollingpin = 2,
 				/obj/item/weapon/material/knife/butch = 2,
 				/obj/item/weapon/reagent_containers/food/drinks/flask/lithium = 3,
@@ -1444,7 +1444,7 @@
 				/obj/item/clothing/gloves/insulated/cheap  = 80,
 				/obj/item/clothing/gloves/insulated = 600,
 				/obj/item/weapon/storage/pouch/engineering_tools = 300,
-				/obj/item/weapon/storage/pouch/engineering_supply = 600
+				/obj/item/weapon/storage/pouch/engineering_supply = 600,
 				/obj/item/weapon/tool/weldingtool/advanced = 500,
 				/obj/item/weapon/tool/saw = 120,
 				/obj/item/weapon/tool/shovel 275)
@@ -1531,8 +1531,8 @@
 	icon_deny = "robotics-deny"
 	products = list(/obj/item/clothing/suit/storage/toggle/labcoat = 4,
 				/obj/item/clothing/under/rank/roboticist = 4,
-				/obj/item/stack/cable_coil = 4
-				,/obj/item/device/flash = 4,
+				/obj/item/stack/cable_coil = 4,
+				/obj/item/device/flash = 4,
 				/obj/item/weapon/cell/large/high = 8,
 				/obj/item/device/assembly/prox_sensor = 3,
 				/obj/item/device/assembly/signaler = 3,
@@ -1607,8 +1607,8 @@
 				/obj/item/weapon/cell/medium/super = 5,
 				/obj/item/weapon/cell/small/super = 5)
 	premium = list(/obj/item/weapon/cell/large/hyper = 2,
-			/obj/item/weapon/cell/medium/hyper 2,
-			/obj/item/weapon/cell/small/hyper = 2)
+				/obj/item/weapon/cell/medium/hyper 2,
+				/obj/item/weapon/cell/small/hyper = 2)
 	prices = list(/obj/item/weapon/cell/large = 500,
 				/obj/item/weapon/cell/large/high = 700,
 				/obj/item/weapon/cell/medium = 300,
