@@ -1617,7 +1617,7 @@
 				/obj/item/weapon/cell/small/high = 200,
 				/obj/item/weapon/cell/large/super = 1200,
 				/obj/item/weapon/cell/medium/super = 700,
-				/obj/item/weapon/cell/small/super = 350
+				/obj/item/weapon/cell/small/super = 350,
 				/obj/item/weapon/cell/large/hyper = 1800, //Yes Asters are making you double pay for them
 				/obj/item/weapon/cell/medium/hyper = 1200,
 				/obj/item/weapon/cell/small/hyper = 500)
