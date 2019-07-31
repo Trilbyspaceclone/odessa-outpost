@@ -1459,10 +1459,9 @@
 				/obj/item/weapon/airlock_electronics = 10,
 				/obj/item/weapon/circuitboard/apc = 10,
 				/obj/item/weapon/airalarm_electronics = 10,
-				/obj/item/weapon/cell/small/high = 10,
-				/obj/item/weapon/cell/medium/high = 10,
 				/obj/item/weapon/cell/large/high = 10)
-	contraband = list(/obj/item/weapon/cell/large/potato = 3)
+	contraband = list(/obj/item/weapon/cell/large/potato = 3
+				/obj/item/weapon/cell/small/high = 3)
 	premium = list(/obj/item/weapon/storage/belt/utility = 3)
 	auto_price = FALSE
 
