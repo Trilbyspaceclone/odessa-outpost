@@ -1521,7 +1521,7 @@
 				/obj/item/weapon/stock_parts/console_screen = 40,
 				/obj/item/weapon/tool/weldingtool/advanced = 500,
 				/obj/item/weapon/tool/saw = 120,
-				/obj/item/weapon/tool/shovel 275)
+				/obj/item/weapon/tool/shovel 275,)
 
 //This one's from bay12
 /obj/machinery/vending/robotics
