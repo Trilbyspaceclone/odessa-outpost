@@ -50,6 +50,7 @@
 	icon_state = "IHSgasmask"
 	siemens_coefficient = 0.7
 	body_parts_covered = FACE|EYES
+	matter = list(MATERIAL_PLASTIC = 3, MATERIAL_GLASS = 1)
 	price_tag = 40
 
 /obj/item/clothing/mask/gas/syndicate
