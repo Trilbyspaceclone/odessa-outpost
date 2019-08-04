@@ -428,6 +428,11 @@
 		/datum/design/autolathe/tool/tacknife,
 		/datum/design/autolathe/sec/beartrap,
 		/datum/design/autolathe/sec/silencer,
+		/datum/design/autolathe/sec/binoculars,
+		/datum/design/autolathe/sec/hailer,
+		/datum/design/autolathe/sec/earmuffs,
+		/datum/design/autolathe/sec/gasmask,
+		/datum/design/autolathe/sec/evidence_bag,
 	)
 
 /obj/item/weapon/computer_hardware/hard_drive/portable/design/security/hos
