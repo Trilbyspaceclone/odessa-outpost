@@ -25,3 +25,23 @@
 /datum/design/autolathe/sec/silencer
 	name = "silencer"
 	build_path = /obj/item/weapon/silencer
+
+/datum/design/autolathe/sec/hailer
+	name = "hailer"
+	build_path = /obj/item/device/hailer
+
+/datum/design/autolathe/sec/earmuffs
+	name = "earmuffs"
+	build_path = /obj/item/clothing/ears/earmuffs
+
+/datum/design/autolathe/sec/gasmask
+	name = "ironhammer gasmask"
+	build_path = /obj/item/clothing/mask/gas/ihs
+
+/datum/design/autolathe/sec/evidencebag
+	name = "evidence bag"
+	build_path = /obj/item/weapon/storage/box/evidence
+
+/datum/design/autolathe/sec/coptape
+	name = "police tape"
+	build_path = /obj/item/taperoll/police
