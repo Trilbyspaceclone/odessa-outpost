@@ -432,7 +432,7 @@
 		/datum/design/autolathe/sec/hailer,
 		/datum/design/autolathe/sec/earmuffs,
 		/datum/design/autolathe/sec/gasmask,
-		/datum/design/autolathe/sec/evidence_bag,
+		/datum/design/autolathe/sec/evidencebag,
 	)
 
 /obj/item/weapon/computer_hardware/hard_drive/portable/design/security/hos
