@@ -5,6 +5,7 @@
 	item_state = "flashbang"	//looks exactly like a flash (and nothing like a flashbang)
 	w_class = ITEM_SIZE_TINY
 	flags = CONDUCT
+	matter = list(MATERIAL_STEEL = 5, MATERIAL_PLASTIC = 3, MATERIAL_GLASS = 2)
 
 	var/use_message = "Halt! Security!"
 	var/spamcheck = 0
