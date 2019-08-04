@@ -8,6 +8,7 @@
 	item_state = ""
 	w_class = ITEM_SIZE_SMALL
 	var/obj/item/stored_item = null
+	matter = list(MATERIAL_PLASTIC = 1)
 	price_tag = 5
 
 /obj/item/weapon/evidencebag/MouseDrop(var/obj/item/I as obj)
