@@ -127,7 +127,7 @@
 	icon_state = "earmuffs"
 	item_state = "earmuffs"
 	slot_flags = SLOT_EARS | SLOT_TWOEARS
-
+	matter = list(MATERIAL_STEEL = 1, MATERIAL_PLASTIC = 1)
 
 /obj/item/clothing/ears/earmuffs/mp3
 	name = "headphones"
