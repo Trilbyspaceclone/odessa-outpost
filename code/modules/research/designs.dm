@@ -98,7 +98,7 @@ other types of metals and chemistry for reagents).
 
 /datum/design/research/item/medical/compact_defibs
 	desc = "Much smaller defibulators build into a belt, to more easily carry."
-	req_tech = list(TECH_BIO = 6, TECH_MAGNET = 7)
+	req_tech = list(TECH_BIO = 6, TECH_MAGNET = 6)
 	build_path = /obj/item/device/defib_kit/compact
 	sort_string = "MACCB"
 
