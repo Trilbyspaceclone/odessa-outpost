@@ -1333,7 +1333,6 @@
 				/obj/item/seeds/reishimycelium = 2,
 				/obj/item/seeds/reishimycelium = 2,
 				/obj/item/seeds/shandseed = 2)
-	premium = list(/obj/item/toy/weapon/waterflower = 1)
  	auto_price = FALSE
 
 /**
