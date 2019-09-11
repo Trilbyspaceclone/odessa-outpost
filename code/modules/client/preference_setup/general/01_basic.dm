@@ -1,6 +1,6 @@
 datum/preferences
 	var/gender = MALE							//physical gender of character (well duh)
-	var/gender_identity = MALE
+	var/gender_identity = null
 	var/age = 30								//age of character
 	var/spawnpoint = "Cryogenic Storage" 		//where this character will spawn
 	var/real_name								//our character's name
@@ -21,6 +21,7 @@ datum/preferences
 
 /datum/category_item/player_setup_item/physical/basic/load_character(var/savefile/S)
 	from_file(S["gender"],					pref.gender)
+	from_file(S["gender_identity"],			pref.gender_identity)
 	from_file(S["age"],						pref.age)
 	from_file(S["b_type"],					pref.b_type)
 	from_file(S["disabilities"], 			pref.disabilities)
@@ -35,6 +36,7 @@ datum/preferences
 
 /datum/category_item/player_setup_item/physical/basic/save_character(var/savefile/S)
 	to_file(S["gender"],					pref.gender)
+	to_file(S["gender_identity"],			pref.gender_identity)
 	to_file(S["age"],						pref.age)
 	to_file(S["b_type"],					pref.b_type)
 	to_file(S["disabilities"],				pref.disabilities)
@@ -54,6 +56,7 @@ datum/preferences
 	pref.b_type				= sanitize_text(pref.b_type, initial(pref.b_type))
 	pref.disabilities		= sanitize_integer(pref.disabilities, 0, 65535, initial(pref.disabilities))
 	pref.gender             = sanitize_inlist(pref.gender, S.genders, pick(S.genders))
+	pref.gender_identity	= sanitize_inlist(pref.gender_identity, GLOB.gender_datums, null)
 	pref.spawnpoint         = sanitize_inlist(pref.spawnpoint, get_late_spawntypes(), initial(pref.spawnpoint))
 	pref.be_random_name     = sanitize_integer(pref.be_random_name, 0, 1, initial(pref.be_random_name))
 	pref.real_name				= sanitize_text(pref.real_name, random_name(pref.gender, pref.species))
@@ -147,7 +150,7 @@ datum/preferences
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["gender_identity"])
-		var/new_gender = input(user, "Choose your character's gender identity:", CHARACTER_PREFERENCE_INPUT_TITLE, pref.gender_identity) as null|anything in (list("Default" = "") + GLOB.gender_datums)
+		var/new_gender = input(user, "Choose your character's gender identity:", CHARACTER_PREFERENCE_INPUT_TITLE, pref.gender_identity ? pref.gender_identity : "Default") as null|anything in (list("Default" = "") + GLOB.gender_datums)
 		if(new_gender && CanUseTopic(user) && (new_gender in (list("Default" = "") + GLOB.gender_datums)))
 			if(new_gender == "Default")
 				pref.gender_identity = null

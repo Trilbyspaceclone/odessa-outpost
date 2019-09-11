@@ -1303,8 +1303,8 @@
 				/obj/item/seeds/potatoseed = 3,
 				/obj/item/seeds/soyaseed = 3,
 				/obj/item/seeds/sunflowerseed = 3,
-				/obj/item/seeds/tomatoseed = 3
-				,/obj/item/seeds/towermycelium = 3,
+				/obj/item/seeds/tomatoseed = 3,
+        /obj/item/seeds/towermycelium = 3,
 				/obj/item/seeds/wheatseed = 3,
 				/obj/item/seeds/appleseed = 3,
 				/obj/item/seeds/poppyseed = 3,
@@ -1333,8 +1333,8 @@
 				/obj/item/seeds/reishimycelium = 2,
 				/obj/item/seeds/reishimycelium = 2,
 				/obj/item/seeds/shandseed = 2)
-	premium = list(/obj/item/toy/waterflower = 1)
-	auto_price = FALSE
+	premium = list(/obj/item/toy/weapon/waterflower = 1)
+  auto_price = FALSE
 
 /**
  *  Populate hydroseeds product_records
@@ -1375,7 +1375,7 @@
 				/obj/item/weapon/material/kitchen/utensil/spoon = 6,
 				/obj/item/weapon/material/knife = 3,
 				/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 8,
-				/obj/item/clothing/suit/chef/classic = 2,
+				/obj/item/clothing/suit/rank/chef/classic = 2,
 				/obj/item/weapon/storage/lunchbox = 3,
 				/obj/item/weapon/storage/lunchbox/rainbow = 3,
 				/obj/item/weapon/storage/lunchbox/cat = 3,
@@ -1553,8 +1553,8 @@
 				/obj/item/device/lighting/toggleable/lamp = 2,
 				/obj/item/device/lighting/toggleable/lamp/green = 2,
 				/obj/item/weapon/reagent_containers/food/drinks/jar = 1,
-				/obj/item/toy/cultsword = 4,
-				/obj/item/toy/katana = 2,
+				/obj/item/toy/weapon/cultsword = 4,
+				/obj/item/toy/weapon/katana = 2,
 				/obj/item/weapon/phone = 3)
 	auto_price = FALSE
 

@@ -1,8 +1,8 @@
-
-/datum/gear/clothing/
+/datum/gear/clothing
+	display_name = "sterile mask"
+	path = /obj/item/clothing/mask/surgical
+	slot = slot_wear_mask
 	sort_category = "Clothing Pieces"
-	category = /datum/gear/clothing/
-	slot = slot_accessory_buffer
 
 /datum/gear/clothing/scarf
 	display_name = "scarf selection"
@@ -16,8 +16,8 @@
 	slot = slot_wear_mask
 	flags = GEAR_HAS_TYPE_SELECTION
 
-/datum/gear/clothing/mask
-	display_name = "sterile mask"
-	path = /obj/item/clothing/mask/surgical
+/datum/gear/clothing/gasmask
+	display_name = "gas mask"
+	path = /obj/item/clothing/mask/gas
 	slot = slot_wear_mask
 	cost = 2
