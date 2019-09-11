@@ -1304,7 +1304,7 @@
 				/obj/item/seeds/soyaseed = 3,
 				/obj/item/seeds/sunflowerseed = 3,
 				/obj/item/seeds/tomatoseed = 3,
-        /obj/item/seeds/towermycelium = 3,
+        			/obj/item/seeds/towermycelium = 3,
 				/obj/item/seeds/wheatseed = 3,
 				/obj/item/seeds/appleseed = 3,
 				/obj/item/seeds/poppyseed = 3,
