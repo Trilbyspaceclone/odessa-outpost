@@ -113,12 +113,12 @@
 
 	license = 8
 	designs = list(
-		/datum/design/autolathe/recipe/cell/large,
-		/datum/design/autolathe/recipe/cell/large/high,
-		/datum/design/autolathe/recipe/cell/medium,
-		/datum/design/autolathe/recipe/cell/medium/high,
-		/datum/design/autolathe/recipe/cell/small,
-		/datum/design/autolathe/recipe/cell/small/high,
+		/datum/design/autolathe/cell/large,
+		/datum/design/autolathe/cell/large/high,
+		/datum/design/autolathe/cell/medium,
+		/datum/design/autolathe/cell/medium/high,
+		/datum/design/autolathe/cell/small,
+		/datum/design/autolathe/cell/small/high,
 		/datum/design/autolathe/part/cell_mout,
 	)
 
@@ -244,12 +244,12 @@
 
 /obj/item/weapon/computer_hardware/hard_drive/portable/design/parttoolpack
 	name = "Technomancers PAK-103 Tool Mods"
-	category = "Engineering"
+
 	icon_state = "technomancers"
 	license = 10
 
-/obj/item/weapon/disk/autolathe_disk/parttoolpack/New()
-	recipes = list(
+/obj/item/weapon/computer_hardware/hard_drive/portable/design/parttoolpack/New()
+	designs = list(
 		/datum/design/autolathe/part/laserguide,
 		/datum/design/autolathe/part/diamondblade,
 		/datum/design/autolathe/part/stick,
@@ -384,7 +384,7 @@
 	disk_name = "Moebius Computer Parts"
 	icon_state = "moebius"
 
-/obj/item/weapon/disk/autolathe_disk/computer/New()
+/obj/item/weapon/computer_hardware/hard_drive/portable/design/computer/New()
 	license = 20
 	designs = list(
 		/datum/design/autolathe/computer_part/frame_pda,
@@ -546,23 +546,23 @@
 
 /obj/item/weapon/computer_hardware/hard_drive/portable/design/nonlethal_ammoboxs
 	name = "Frozen Star Nonlethal Ammo Box Pack"
-	category = "Ammo"
+
 	icon_state = "frozenstar"
 	license = 30
 
 /obj/item/weapon/computer_hardware/hard_drive/portable/design/nonlethal_ammoboxs/New()
 	designs = list(
-		/datum/design/autolathe/recipe/ammo/box_a10mm/rubber,
-		/datum/design/autolathe/recipe/ammo/box_c9mm/flash,
-		/datum/design/autolathe/recipe/ammo/box_c9mm/rubber,
-		/datum/design/autolathe/recipe/ammo/box_c9mm/practice,
-		/datum/design/autolathe/recipe/ammo/box_cl32/rubber,
-		/datum/design/autolathe/recipe/ammo/box_c45/flash,
-		/datum/design/autolathe/recipe/ammo/box_c45/rubber,
-		/datum/design/autolathe/recipe/ammo/box_c45/practice,
-		/datum/design/autolathe/recipe/ammo/box_c65mm/rubber,
-		/datum/design/autolathe/recipe/ammo/box_c44/rubber,
-		/datum/design/autolathe/recipe/ammo/box_c50/rubber,
+		/datum/design/autolathe/ammo/box_a10mm/rubber,
+		/datum/design/autolathe/ammo/box_c9mm/flash,
+		/datum/design/autolathe/ammo/box_c9mm/rubber,
+		/datum/design/autolathe/ammo/box_c9mm/practice,
+		/datum/design/autolathe/ammo/box_cl32/rubber,
+		/datum/design/autolathe/ammo/box_c45/flash,
+		/datum/design/autolathe/ammo/box_c45/rubber,
+		/datum/design/autolathe/ammo/box_c45/practice,
+		/datum/design/autolathe/ammo/box_c65mm/rubber,
+		/datum/design/autolathe/ammo/box_c44/rubber,
+		/datum/design/autolathe/ammo/box_c50/rubber,
 	)
 	..()
 
@@ -595,25 +595,25 @@
 
 /obj/item/weapon/computer_hardware/hard_drive/portable/design/lethal_ammoboxs
 	name = "Frozen Star Lethal Ammo Boxes Pack"
-	category = "Ammo"
+
 	icon_state = "frozenstar"
 	license = 30
 
 /obj/item/weapon/computer_hardware/hard_drive/portable/design/lethal_ammoboxs/New()
 	designs = list(
-		/datum/design/autolathe/recipe/ammo/box_a762,
-		/datum/design/autolathe/recipe/ammo/box_a10mm,
-		/datum/design/autolathe/recipe/ammo/box_a9mm,
-		/datum/design/autolathe/recipe/ammo/box_cl32,
-		/datum/design/autolathe/recipe/ammo/box_c45,
-		/datum/design/autolathe/recipe/ammo/box_c10x24,
-		/datum/design/autolathe/recipe/ammo/box_a556,
-		/datum/design/autolathe/recipe/ammo/box_c65mm,
-		/datum/design/autolathe/recipe/ammo/box_c357,
-		/datum/design/autolathe/recipe/ammo/box_c38,
-		/datum/design/autolathe/recipe/ammo/box_c44,
-		/datum/design/autolathe/recipe/ammo/box_c50,
-		/datum/design/autolathe/recipe/ammo/box_a145,
+		/datum/design/autolathe/ammo/box_a762,
+		/datum/design/autolathe/ammo/box_a10mm,
+		/datum/design/autolathe/ammo/box_a9mm,
+		/datum/design/autolathe/ammo/box_cl32,
+		/datum/design/autolathe/ammo/box_c45,
+		/datum/design/autolathe/ammo/box_c10x24,
+		/datum/design/autolathe/ammo/box_a556,
+		/datum/design/autolathe/ammo/box_c65mm,
+		/datum/design/autolathe/ammo/box_c357,
+		/datum/design/autolathe/ammo/box_c38,
+		/datum/design/autolathe/ammo/box_c44,
+		/datum/design/autolathe/ammo/box_c50,
+		/datum/design/autolathe/ammo/box_a145,
 	)
 	..()
 

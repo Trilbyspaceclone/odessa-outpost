@@ -28,15 +28,15 @@
 
 /datum/design/autolathe/part/subspace_transmitter
 	name = "subspace transmitter"
-	path = /obj/item/weapon/stock_parts/subspace/transmitter
+	build_path = /obj/item/weapon/stock_parts/subspace/transmitter
 
 /datum/design/autolathe/part/subspace_crystal
 	name = "ansible crystal"
-	path = /obj/item/weapon/stock_parts/subspace/crystal
+	build_path = /obj/item/weapon/stock_parts/subspace/crystal
 
 /datum/design/autolathe/part/subspace_amplifier
 	name = "subspace amplifier"
-	path = /obj/item/weapon/stock_parts/subspace/amplifier
+	build_path = /obj/item/weapon/stock_parts/subspace/amplifier
 
 /datum/design/autolathe/part/laserguide
 	name = "Asters \"Guiding Light\" laser guide"
@@ -48,72 +48,72 @@
 
 /datum/design/autolathe/part/stick
 	name = "Reinforcing Brace Bar"
-	path = /obj/item/weapon/tool_upgrade/reinforcement/stick
+	build_path = /obj/item/weapon/tool_upgrade/reinforcement/stick
 
 /datum/design/autolathe/part/heatsink
 	name = "Aptiva Heat Sink"
-	path = /obj/item/weapon/tool_upgrade/reinforcement/heatsink
+	build_path = /obj/item/weapon/tool_upgrade/reinforcement/heatsink
 
 /datum/design/autolathe/part/plating
 	name = "Reinforcing Plate"
-	path = /obj/item/weapon/tool_upgrade/reinforcement/plating
+	build_path = /obj/item/weapon/tool_upgrade/reinforcement/plating
 
 /datum/design/autolathe/part/guard
 	name = "Reinforcing Arm Guard"
-	path = /obj/item/weapon/tool_upgrade/reinforcement/guard
+	build_path = /obj/item/weapon/tool_upgrade/reinforcement/guard
 
 /datum/design/autolathe/part/ergonomic_grip
 	name = "Ergonomic Grip"
-	path = /obj/item/weapon/tool_upgrade/productivity/ergonomic_grip
+	build_path = /obj/item/weapon/tool_upgrade/productivity/ergonomic_grip
 
 /datum/design/autolathe/part/ratchet
 	name = "Ratcheting Mechanism"
-	path = /obj/item/weapon/tool_upgrade/productivity/ratchet
+	build_path = /obj/item/weapon/tool_upgrade/productivity/ratchet
 
 /datum/design/autolathe/part/red_paint
 	name = "Red Paint"
-	path = /obj/item/weapon/tool_upgrade/productivity/red_paint
+	build_path = /obj/item/weapon/tool_upgrade/productivity/red_paint
 
 /datum/design/autolathe/part/whetstone
 	name = "Whetstone"
-	path = /obj/item/weapon/tool_upgrade/productivity/whetstone
+	build_path = /obj/item/weapon/tool_upgrade/productivity/whetstone
 
 /datum/design/autolathe/part/magbit
 	name = "Magnetic Tool Bit"
-	path = /obj/item/weapon/tool_upgrade/refinement/magbit
+	build_path = /obj/item/weapon/tool_upgrade/refinement/magbit
 
 /datum/design/autolathe/part/red_paint
 	name = "Red Paint"
-	path = /obj/item/weapon/tool_upgrade/productivity/red_paint
+	build_path = /obj/item/weapon/tool_upgrade/productivity/red_paint
 
 /datum/design/autolathe/part/stabilized_grip
 	name = "Gyrostabilized Grip"
-	path = /obj/item/weapon/tool_upgrade/refinement/stabilized_grip
+	build_path = /obj/item/weapon/tool_upgrade/refinement/stabilized_grip
 
 /datum/design/autolathe/part/motor
 	name = "High Power Motor"
-	path = /obj/item/weapon/tool_upgrade/productivity/motor
+	build_path = /obj/item/weapon/tool_upgrade/productivity/motor
 
 /datum/design/autolathe/part/ported_barrel
 	name = "Welder Ported Barrel"
-	path = /obj/item/weapon/tool_upgrade/refinement/ported_barrel
+	build_path = /obj/item/weapon/tool_upgrade/refinement/ported_barrel
 
 /datum/design/autolathe/part/cell_mout
 	name = "Tool Heavy Cell Mout"
-	path = /obj/item/weapon/tool_upgrade/augment/cell_mount
+	build_path = /obj/item/weapon/tool_upgrade/augment/cell_mount
 
 /datum/design/autolathe/part/fuel_tank
 	name = "Expanded Fuel Tank"
-	path = /obj/item/weapon/tool_upgrade/augment/fuel_tank
+	build_path = /obj/item/weapon/tool_upgrade/augment/fuel_tank
 
 /datum/design/autolathe/part/expansion
 	name = "Expansion Port"
-	path = /obj/item/weapon/tool_upgrade/augment/expansion
+	build_path = /obj/item/weapon/tool_upgrade/augment/expansion
 
 /datum/design/autolathe/part/spikes
 	name = "Additive Tool Spikes"
-	path = /obj/item/weapon/tool_upgrade/augment/spikes
+	build_path = /obj/item/weapon/tool_upgrade/augment/spikes
 
 /datum/design/autolathe/part/dampener
 	name = "Sound Dampener"
-	path = /obj/item/weapon/tool_upgrade/augment/dampener
+	build_path = /obj/item/weapon/tool_upgrade/augment/dampener
