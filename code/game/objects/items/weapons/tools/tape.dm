@@ -31,21 +31,30 @@
 	use_stock_cost = 0.10
 	max_stock = 100
 
+/obj/item/weapon/tool/tape_roll/flextape
+	name = "flex tape"
+	desc = "To fix a lot of damage! Posdate: It doesn't repair the Supermatter."
+	icon_state = "flextaperoll"
+	tool_qualities = list(QUALITY_ADHESIVE = 100, QUALITY_SEALING = 100)
+	matter = list(MATERIAL_PLASTIC = 40)
+	use_stock_cost = 0.10
+	max_stock = 100
+
 /obj/item/weapon/tool/tape_roll/attack(var/mob/living/carbon/human/H, var/mob/user)
 	if(istype(H))
 		if(user.targeted_organ == BP_EYES)
 
 			if(!H.organs_by_name[BP_HEAD])
-				user << SPAN_WARNING("\The [H] doesn't have a head.")
+				to_chat(user, SPAN_WARNING("\The [H] doesn't have a head."))
 				return
 			if(!H.has_eyes())
-				user << SPAN_WARNING("\The [H] doesn't have any eyes.")
+				to_chat(user, SPAN_WARNING("\The [H] doesn't have any eyes."))
 				return
 			if(H.glasses)
-				user << SPAN_WARNING("\The [H] is already wearing somethign on their eyes.")
+				to_chat(user, SPAN_WARNING("\The [H] is already wearing somethign on their eyes."))
 				return
 			if(H.head && (H.head.body_parts_covered & FACE))
-				user << SPAN_WARNING("Remove their [H.head] first.")
+				to_chat(user, SPAN_WARNING("Remove their [H.head] first."))
 				return
 			user.visible_message(SPAN_DANGER("\The [user] begins taping over \the [H]'s eyes!"))
 
@@ -57,20 +66,20 @@
 				return
 
 			user.visible_message(SPAN_DANGER("\The [user] has taped up \the [H]'s eyes!"))
-			H.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/blindfold/tape(H), slot_glasses)
+			H.equip_to_slot_or_del(new /obj/item/clothing/glasses/blindfold/tape(H), slot_glasses)
 
 		else if(user.targeted_organ == BP_MOUTH || user.targeted_organ == BP_HEAD)
 			if(!H.organs_by_name[BP_HEAD])
-				user << SPAN_WARNING("\The [H] doesn't have a head.")
+				to_chat(user, SPAN_WARNING("\The [H] doesn't have a head."))
 				return
 			if(!H.check_has_mouth())
-				user << SPAN_WARNING("\The [H] doesn't have a mouth.")
+				to_chat(user, SPAN_WARNING("\The [H] doesn't have a mouth."))
 				return
 			if(H.wear_mask)
-				user << SPAN_WARNING("\The [H] is already wearing a mask.")
+				to_chat(user, SPAN_WARNING("\The [H] is already wearing a mask."))
 				return
 			if(H.head && (H.head.body_parts_covered & FACE))
-				user << SPAN_WARNING("Remove their [H.head] first.")
+				to_chat(user, SPAN_WARNING("Remove their [H.head] first."))
 				return
 			user.visible_message(SPAN_DANGER("\The [user] begins taping up \the [H]'s mouth!"))
 
@@ -99,7 +108,7 @@
 		return
 
 	if (target.w_class > ITEM_SIZE_SMALL)
-		user << SPAN_WARNING("The [target] is too big to stick with tape!")
+		to_chat(user, SPAN_WARNING("The [target] is too big to stick with tape!"))
 		return
 	if (istype(target.loc, /obj))
 		return
@@ -145,9 +154,9 @@
 		return
 
 	if (istype(stuck, /obj/item/weapon/paper))
-		icon_state = stuck.icon_state + "_taped"
+		icon_state = stuck.icon_state
 		overlays.Cut()
-		overlays = stuck.overlays
+		overlays = stuck.overlays + "tape_overlay"
 	else
 		var/mutable_appearance/MA = new(stuck)
 		MA.layer = layer-0.1
@@ -161,7 +170,7 @@
 	if(!stuck)
 		return
 
-	user << "You remove \the [initial(name)] from [stuck]."
+	to_chat(user, "You remove \the [initial(name)] from [stuck].")
 
 	user.drop_from_inventory(src)
 	stuck.forceMove(get_turf(src))
@@ -182,7 +191,7 @@
 	if(target_turf != source_turf)
 		dir_offset = get_dir(source_turf, target_turf)
 		if(!(dir_offset in cardinal))
-			user << "You cannot reach that from here."		// can only place stuck papers in cardinal directions, to
+			to_chat(user, "You cannot reach that from here."		) // can only place stuck papers in cardinal directions, to
 			return											// reduce papers around corners issue.
 
 	user.drop_from_inventory(src)

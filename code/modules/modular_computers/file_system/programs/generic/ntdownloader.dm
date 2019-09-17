@@ -118,7 +118,7 @@
 			download_netspeed = NTNETSPEED_HIGHSIGNAL
 		if(3)
 			download_netspeed = NTNETSPEED_ETHERNET
-	download_netspeed *= rand_between(1-netspeed_variance, 1+netspeed_variance)
+	download_netspeed *= rand_decimal(1-netspeed_variance, 1+netspeed_variance)
 	download_netspeed = round(download_netspeed, 0.001)
 	download_completion += download_netspeed
 
@@ -159,7 +159,7 @@
 	name = "Network Downloader"
 	var/obj/item/modular_computer/my_computer = null
 
-/datum/nano_module/program/computer_ntnetdownload/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
+/datum/nano_module/program/computer_ntnetdownload/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS, var/datum/topic_state/state = GLOB.default_state)
 	if(program)
 		my_computer = program.computer
 

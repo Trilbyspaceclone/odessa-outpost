@@ -4,7 +4,7 @@
 	damage = 0
 	damage_type = BURN
 	nodamage = 1
-	check_armour = "energy"
+	check_armour = ARMOR_ENERGY
 
 
 	on_hit(var/atom/target, var/blocked = 0)
@@ -16,7 +16,7 @@
 	name ="explosive bolt"
 	icon_state= "bolter"
 	damage = 50
-	check_armour = "bullet"
+	check_armour = ARMOR_BULLET
 	sharp = 1
 	edge = 1
 
@@ -24,13 +24,28 @@
 		explosion(target, -1, 0, 2)
 		return 1
 
+/obj/item/projectile/bullet/rocket
+	name = "high explosive rocket"
+	icon_state= "rocket"
+	damage = 50
+	check_armour = "explosive"
+
+/obj/item/projectile/bullet/rocket/launch(atom/target, var/target_zone, var/x_offset, var/y_offset, angle_offset)
+	set_light(2.5, 0.5, "#dddd00")
+	..(target, target_zone, x_offset, y_offset, angle_offset)
+
+/obj/item/projectile/bullet/rocket/on_hit(var/atom/target, var/blocked = 0)
+	explosion(target, 0, 1, 2, 4)
+	set_light(0)
+	return 1
+
 /obj/item/projectile/temp
 	name = "freeze beam"
 	icon_state = "ice_2"
 	damage = 0
 	damage_type = BURN
 	nodamage = 1
-	check_armour = "energy"
+	check_armour = ARMOR_ENERGY
 	var/temperature = 300
 
 
@@ -47,7 +62,7 @@
 	damage = 0
 	damage_type = BRUTE
 	nodamage = 1
-	check_armour = "bullet"
+	check_armour = ARMOR_BULLET
 
 	Bump(atom/A as mob|obj|turf|area)
 		if(A == firer)
@@ -76,7 +91,7 @@
 	damage = 0
 	damage_type = TOX
 	nodamage = 1
-	check_armour = "energy"
+	check_armour = ARMOR_ENERGY
 
 	on_hit(var/atom/target, var/blocked = 0)
 		var/mob/living/M = target
@@ -109,7 +124,7 @@
 	damage = 0
 	damage_type = TOX
 	nodamage = 1
-	check_armour = "energy"
+	check_armour = ARMOR_ENERGY
 
 	on_hit(var/atom/target, var/blocked = 0)
 		var/mob/M = target

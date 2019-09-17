@@ -20,7 +20,7 @@
 	set category = "Object"
 
 	sliding_behavior = !sliding_behavior
-	usr << SPAN_NOTICE("Items will now [sliding_behavior ? "" : "not"] slide out of [src]")
+	to_chat(usr, SPAN_NOTICE("Items will now [sliding_behavior ? "" : "not"] slide out of [src]"))
 
 /obj/item/weapon/storage/pouch/attack_hand(mob/living/carbon/human/user)
 	if(sliding_behavior && contents.len && (src in user))
@@ -42,6 +42,10 @@
 	storage_slots = null //Uses generic capacity
 	max_storage_space = ITEM_SIZE_TINY * 3
 	max_w_class = ITEM_SIZE_SMALL
+
+/obj/item/weapon/storage/pouch/small_generic/purple
+	icon_state = "small_generic_p"
+	item_state = "small_generic_p"
 
 /obj/item/weapon/storage/pouch/medium_generic
 	name = "medium generic pouch"
@@ -135,6 +139,7 @@
 		/obj/item/weapon/tool,
 		/obj/item/stack/material,
 		/obj/item/weapon/material,
+		/obj/item/stack/rods,
 		/obj/item/device/lighting/toggleable/flashlight,
 		/obj/item/stack/cable_coil,
 		/obj/item/device/t_scanner,
@@ -142,7 +147,27 @@
 		/obj/item/taperoll/engineering,
 		/obj/item/device/robotanalyzer,
 		/obj/item/device/scanner/analyzer/plant_analyzer,
-		/obj/item/weapon/extinguisher/mini
+		/obj/item/weapon/extinguisher/mini,
+		/obj/item/weapon/airlock_electronics,
+		/obj/item/weapon/airalarm_electronics,
+		/obj/item/weapon/circuitboard/apc
+		)
+
+/obj/item/weapon/storage/pouch/janitor_supply
+	name = "janitorial supply pouch"
+	desc = "Can hold janitorial equipment, but only about three pieces of them."
+	icon_state = "janitor_supply"
+	item_state = "janitor_supply"
+
+	storage_slots = 3
+	w_class = ITEM_SIZE_NORMAL
+	max_w_class = ITEM_SIZE_NORMAL
+
+	can_hold = list(
+		/obj/item/weapon/grenade/chem_grenade/cleaner,
+		/obj/item/weapon/grenade/chem_grenade/antiweed,
+		/obj/item/weapon/reagent_containers/spray/cleaner,
+		/obj/item/device/assembly/mousetrap
 		)
 
 /obj/item/weapon/storage/pouch/ammo
@@ -160,14 +185,15 @@
 		/obj/item/ammo_casing
 		)
 
-/obj/item/weapon/storage/pouch/flare
-	name = "flares pouch"
-	desc = "Can hold five cylindrical and small items, including but not limiting to flares, glowsticks, syringes and even hatton tubes."
+/obj/item/weapon/storage/pouch/tubular
+	name = "tubular pouch"
+	desc = "Can hold five cylindrical and small items, including but not limiting to flares, glowsticks, syringes and even hatton tubes or rockets."
 	icon_state = "flare"
 	item_state = "flare"
 
 	storage_slots = 5
 	w_class = ITEM_SIZE_NORMAL
+	max_w_class = ITEM_SIZE_NORMAL
 
 	can_hold = list(
 		/obj/item/device/lighting/glowstick,
@@ -176,14 +202,15 @@
 		/obj/item/weapon/reagent_containers/hypospray,
 		/obj/item/weapon/pen,
 		/obj/item/weapon/storage/pill_bottle,
-		/obj/item/weapon/hatton_magazine
+		/obj/item/weapon/hatton_magazine,
+		/obj/item/ammo_casing/rocket
 		)
 
-/obj/item/weapon/storage/pouch/flare/vial
+/obj/item/weapon/storage/pouch/tubular/vial
 	name = "vial pouch"
 	desc = "Can hold about five vials. Rebranding!"
 
-/obj/item/weapon/storage/pouch/flare/update_icon()
+/obj/item/weapon/storage/pouch/tubular/update_icon()
 	..()
 	overlays.Cut()
 	if(contents.len)
@@ -211,7 +238,6 @@
 		/obj/item/weapon/gun/projectile/olivaw,
 		/obj/item/weapon/gun/projectile/silenced,
 		/obj/item/weapon/gun/energy/gun,
-		/obj/item/weapon/gun/energy/retro,
 		/obj/item/weapon/gun/energy/chameleon,
 		//obj/item/weapon/gun/energy/captain, //too unwieldy, use belt/suit slot or other storage
 		/obj/item/weapon/gun/energy/stunrevolver,

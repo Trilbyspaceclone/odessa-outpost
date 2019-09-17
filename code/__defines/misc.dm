@@ -5,7 +5,9 @@
 #define TRANSITIONEDGE 7 // Distance from edge to move to another z-level.
 
 // Invisibility constants.
+#define INVISIBILITY_NONE                 0
 #define INVISIBILITY_LIGHTING             20
+#define INVISIBILITY_WEAK                 25
 #define INVISIBILITY_ANGEL                30
 #define INVISIBILITY_LEVEL_ONE            35
 #define INVISIBILITY_LEVEL_TWO            45
@@ -57,9 +59,9 @@
 #define WAIT_FINISH  4
 
 // Setting this much higher than 1024 could allow spammers to DOS the server easily.
-#define MAX_MESSAGE_LEN       1024
-#define MAX_PAPER_MESSAGE_LEN 3072
-#define MAX_BOOK_MESSAGE_LEN  9216
+#define MAX_MESSAGE_LEN       3072
+#define MAX_PAPER_MESSAGE_LEN 4096
+#define MAX_BOOK_MESSAGE_LEN  12288
 #define MAX_LNAME_LEN         64
 #define MAX_NAME_LEN          26
 #define MAX_DESC_LEN          128
@@ -71,6 +73,14 @@
 #define MANIFEST_ERROR_NAME			1
 #define MANIFEST_ERROR_CONTENTS		2
 #define MANIFEST_ERROR_ITEM			4
+
+// Bureaucracy Bitfields
+#define STAMP_GENERIC	0x1		//Most stamps should apply this.
+#define STAMP_APPROVAL	0x2		//No special behaviour usually, a checkmark stamp would apply it.
+#define STAMP_DENIAL	0x4		//Applied by the denied stamp, though some others also have cross symbols.
+#define STAMP_FACTION	0x8		//For factions. A faction will have an official stamp they can use.
+#define STAMP_DOCUMENT	0xF		//For stuff like ATM printouts.
+#define STAMP_ADMIN		0x10	//Admin Fax Replies
 
 //General-purpose life speed define for plants.
 #define HYDRO_SPEED_MULTIPLIER 1
@@ -211,3 +221,10 @@
 
 //Number of slots a modular computer has which can be tweaked via gear tweaks.
 #define TWEAKABLE_COMPUTER_PART_SLOTS 8
+
+ //Preference save/load cooldown. This is in deciseconds.
+#define PREF_SAVELOAD_COOLDOWN 4 //Should be sufficiently hard to achieve without a broken mouse or autoclicker while still fulfilling its intended goal.
+
+#define CLIENT_FROM_VAR(I) (ismob(I) ? I:client : (istype(I, /client) ? I : (istype(I, /datum/mind) ? I:current?:client : null)))
+
+#define MAP_FACTION "CEV Eris"

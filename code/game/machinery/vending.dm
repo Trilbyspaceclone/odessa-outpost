@@ -19,22 +19,27 @@
 	var/list/instances = list()		   // Stores inserted items. Instances are only used for things added during the round, and not for things spawned at initialize
 
 
-/datum/data/vending_product/New(var/vending_machine, var/path, var/name = null, var/amount = 1, var/price = 0, var/color = null, var/category = CAT_NORMAL)
+/datum/data/vending_product/New(vending_machine, path, name = null, amount = 1, price = 0, color = null, category = CAT_NORMAL)
 	..()
 
 	product_path = path
-	var/obj/tmp = path
-
-	if(!name)
-		product_name = initial(tmp.name)
-	else
-		product_name = name
-
-	product_desc = initial(tmp.desc)
-	src.amount = amount
+	product_name = name
 	src.price = price
+	src.amount = amount
 	display_color = color
 	src.category = category
+
+	var/obj/tmp = path
+
+	if(!product_name)
+		product_name = initial(tmp.name)
+		if(ispath(tmp, /obj/item/weapon/computer_hardware/hard_drive/portable))
+			var/obj/item/weapon/computer_hardware/hard_drive/portable/tmp_disk = tmp
+			if(initial(tmp_disk.disk_name))
+				product_name = initial(tmp_disk.disk_name)
+
+	product_desc = initial(tmp.desc)
+
 	src.vending_machine = vending_machine
 
 	if(src.price <= 0 && src.vending_machine.auto_price)
@@ -192,7 +197,7 @@
 	if(!user.unEquip(W))
 		return
 
-	user << SPAN_NOTICE("You insert \the [W] in the product receptor.")
+	to_chat(user, SPAN_NOTICE("You insert \the [W] in the product receptor."))
 	if (R)
 		R.add_product(W)
 	else
@@ -202,13 +207,13 @@
 
 /obj/machinery/vending/proc/try_to_buy(obj/item/weapon/W, var/datum/data/vending_product/R, var/mob/user)
 	if(!earnings_account)
-		user << SPAN_WARNING("[src] flashes a message: Vendomat not registered to an account.")
+		to_chat(user, SPAN_WARNING("[src] flashes a message: Vendomat not registered to an account."))
 		return
 	if(vendor_department)
-		user << SPAN_WARNING("[src] flashes a message: Vendomat not authorized to accept sales. Please contact a member of [all_departments[vendor_department]].")
+		to_chat(user, SPAN_WARNING("[src] flashes a message: Vendomat not authorized to accept sales. Please contact a member of [all_departments[vendor_department]]."))
 		return
 	if(buying_percentage <= 0)
-		user << SPAN_WARNING("[src] flashes a message: Vendomat not accepting sales.")
+		to_chat(user, SPAN_WARNING("[src] flashes a message: Vendomat not accepting sales."))
 		return
 
 	if(!user.unEquip(W))
@@ -216,7 +221,7 @@
 
 	var/buying_price = round(R.price * buying_percentage/100,5)
 	if(earnings_account.money < buying_price)
-		user << SPAN_WARNING("[src] flashes a message: Account is unable to make this purchase.")
+		to_chat(user, SPAN_WARNING("[src] flashes a message: Account is unable to make this purchase."))
 		return
 	var/datum/transaction/T = new(-buying_price, "[user.name] (via [name])", "Sale of [R.product_name]", name)
 	T.apply_to(earnings_account)
@@ -225,7 +230,7 @@
 
 	spawn_money(buying_price,loc,usr)
 
-	user << SPAN_NOTICE("[src] accepts the sale of [W] and dispenses [buying_price] credits.")
+	to_chat(user, SPAN_NOTICE("[src] accepts the sale of [W] and dispenses [buying_price] credits."))
 
 
 	SSnano.update_uis(src)
@@ -299,14 +304,14 @@
 
 /obj/machinery/vending/emag_act(var/remaining_charges, var/mob/user)
 	if (machine_vendor_account || vendor_department || earnings_account)
-		user << "You override the ownership protocols on \the [src] and unlock it. You can now register it in your name."
+		to_chat(user, "You override the ownership protocols on \the [src] and unlock it. You can now register it in your name.")
 		machine_vendor_account = null
 		vendor_department = null
 		earnings_account = null
 		return 1
 	if (!emagged)
 		emagged = 1
-		user << "You short out the product lock on \the [src]"
+		to_chat(user, "You short out the product lock on \the [src]")
 		return 1
 
 /obj/machinery/vending/attackby(obj/item/I, mob/user)
@@ -316,7 +321,7 @@
 
 		if(QUALITY_BOLT_TURNING)
 			if(I.use_tool(user, src, WORKTIME_NORMAL, tool_type, FAILCHANCE_VERY_EASY, required_stat = STAT_MEC))
-				user << SPAN_NOTICE("You [anchored? "un" : ""]secured \the [src]!")
+				to_chat(user, SPAN_NOTICE("You [anchored? "un" : ""]secured \the [src]!"))
 				anchored = !anchored
 			return
 
@@ -324,7 +329,7 @@
 			var/used_sound = panel_open ? 'sound/machines/Custom_screwdriveropen.ogg' :  'sound/machines/Custom_screwdriverclose.ogg'
 			if(I.use_tool(user, src, WORKTIME_NEAR_INSTANT, tool_type, FAILCHANCE_VERY_EASY, required_stat = STAT_MEC, instant_finish_tier = 30, forced_sound = used_sound))
 				panel_open = !panel_open
-				user << SPAN_NOTICE("You [panel_open ? "open" : "close"] the maintenance panel.")
+				to_chat(user, SPAN_NOTICE("You [panel_open ? "open" : "close"] the maintenance panel."))
 				overlays.Cut()
 				if(panel_open)
 					overlays += image(icon, "[icon_type]-panel")
@@ -334,7 +339,7 @@
 		if(QUALITY_WELDING)
 			if(custom_vendor)
 				if(!panel_open)
-					usr << SPAN_WARNING("The maintenance panel on \the [src] needs to be open before deconstructing it.")
+					to_chat(usr, SPAN_WARNING("The maintenance panel on \the [src] needs to be open before deconstructing it."))
 					return
 				if(I.use_tool(user, src, WORKTIME_EXTREMELY_LONG, tool_type, FAILCHANCE_NORMAL, required_stat = STAT_MEC))
 					visible_message(SPAN_WARNING("\The [src] has been dismantled by [user]!"),"You hear welding.")
@@ -439,7 +444,7 @@
 		I.loc = src
 		coin = I
 		categories |= CAT_COIN
-		user << SPAN_NOTICE("You insert \the [I] into \the [src].")
+		to_chat(user, SPAN_NOTICE("You insert \the [I] into \the [src]."))
 		SSnano.update_uis(src)
 		return
 
@@ -466,7 +471,7 @@
 	if(currently_vending.price > cashmoney.worth)
 		// This is not a status display message, since it's something the character
 		// themselves is meant to see BEFORE putting the money in
-		usr << "\icon[cashmoney] <span class='warning'>That is not enough money.</span>"
+		to_chat(usr, "\icon[cashmoney] <span class='warning'>That is not enough money.</span>")
 		return 0
 
 	visible_message("<span class='info'>\The [usr] inserts some cash into \the [src].</span>")
@@ -577,7 +582,7 @@
  *
  *  See NanoUI documentation for details.
  */
-/obj/machinery/vending/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/vending/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	user.set_machine(src)
 
 	var/list/data = list()
@@ -643,20 +648,20 @@
 
 	if(href_list["remove_coin"] && !issilicon(usr))
 		if(!coin)
-			usr << "There is no coin in this machine."
+			to_chat(usr, "There is no coin in this machine.")
 			return
 
 		coin.loc = loc
 		if(!usr.get_active_hand())
 			usr.put_in_hands(coin)
-		usr << SPAN_NOTICE("You remove the [coin] from the [src]")
+		to_chat(usr, SPAN_NOTICE("You remove the [coin] from the [src]"))
 		coin = null
 		categories &= ~CAT_COIN
 
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))))
 		if ((href_list["vend"]) && (vend_ready) && (!currently_vending))
 			if((!allowed(usr)) && !emagged && scan_id)	//For SECURE VENDING MACHINES YEAH
-				usr << SPAN_WARNING("Access denied.")	//Unless emagged of course
+				to_chat(usr, SPAN_WARNING("Access denied."))	//Unless emagged of course
 				flick(icon_deny,src)
 				return
 
@@ -670,7 +675,7 @@
 			if(R.price <= 0 || !locked)
 				vend(R, usr)
 			else if(issilicon(usr)) //If the item is not free, provide feedback if a synth is trying to buy something.
-				usr << SPAN_DANGER("Artificial unit recognized.  Artificial units cannot complete this transaction.  Purchase canceled.")
+				to_chat(usr, SPAN_DANGER("Artificial unit recognized.  Artificial units cannot complete this transaction.  Purchase canceled."))
 				return
 			else
 				currently_vending = R
@@ -745,7 +750,7 @@
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user)
 	if((!allowed(usr)) && !emagged && scan_id)	//For SECURE VENDING MACHINES YEAH
-		usr << SPAN_WARNING("Access denied.")	//Unless emagged of course
+		to_chat(usr, SPAN_WARNING("Access denied."))	//Unless emagged of course
 		flick(icon_deny,src)
 		return
 	vend_ready = 0 //One thing at a time!!
@@ -755,13 +760,13 @@
 
 	if (R.category & CAT_COIN)
 		if(!coin)
-			user << SPAN_NOTICE("You need to insert a coin to get this item.")
+			to_chat(user, SPAN_NOTICE("You need to insert a coin to get this item."))
 			return
 		if(coin.string_attached)
 			if(prob(50))
-				user << SPAN_NOTICE("You successfully pull the coin out before \the [src] could swallow it.")
+				to_chat(user, SPAN_NOTICE("You successfully pull the coin out before \the [src] could swallow it."))
 			else
-				user << SPAN_NOTICE("You weren't able to pull the coin out fast enough, the machine ate it, string and all.")
+				to_chat(user, SPAN_NOTICE("You weren't able to pull the coin out fast enough, the machine ate it, string and all."))
 				qdel(coin)
 				categories &= ~CAT_COIN
 		else
@@ -972,7 +977,7 @@
 	auto_price = FALSE
 
 /obj/machinery/vending/coffee
-	name = "Hot Drinks machine"
+	name = "hot drinks machine"
 	desc = "A vending machine which dispenses hot drinks."
 	product_ads = "Have a drink!;Drink up!;It's good for you!;Would you like a hot joe?;I'd kill for some coffee!;The best beans in the galaxy.;Only the finest brew for you.;Mmmm. Nothing like a coffee.;I like coffee, don't you?;Coffee helps you work!;Try some tea.;We hope you like the best!;Try our new chocolate!"
 	icon_state = "coffee"
@@ -989,9 +994,6 @@
 					/obj/item/weapon/reagent_containers/food/drinks/tea/black = 3,
 					/obj/item/weapon/reagent_containers/food/drinks/tea/green = 3,
 					/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 3)
-
-
-
 
 /obj/machinery/vending/snack
 	name = "Getmore Chocolate Corp"
@@ -1027,51 +1029,62 @@
 	icon_state = "weapon"
 	no_criminals = TRUE
 	products = list(/obj/item/device/flash = 6,
-					/obj/item/weapon/reagent_containers/spray/pepper = 6,
-					/obj/item/weapon/gun/projectile/olivaw = 5,
-					/obj/item/weapon/gun/projectile/giskard = 5,
-					/obj/item/weapon/gun/projectile/revolver/detective = 5,
-					/obj/item/weapon/gun/projectile/shotgun/pump/gladstone = 3,
-					/obj/item/weapon/gun/projectile/shotgun/pump = 3,
-					/obj/item/ammo_magazine/cl32/rubber = 20,
-					/obj/item/ammo_magazine/sl38/rubber = 20,
-					/obj/item/ammo_magazine/ammobox/c38/rubber = 20,
-					/obj/item/ammo_magazine/ammobox/cl32/rubber = 20,
-					/obj/item/weapon/storage/box/shotgunammo/beanbags = 10,
-					/obj/item/weapon/storage/box/shotgunammo/flashshells = 10,
-					/obj/item/weapon/storage/box/shotgunammo/blanks = 10,
-					/obj/item/clothing/accessory/holster = 5,
-					/obj/item/weapon/storage/pouch/pistol_holster = 5)
+	/obj/item/weapon/reagent_containers/spray/pepper = 6,
+	/obj/item/weapon/gun/projectile/olivaw = 5,
+	/obj/item/weapon/gun/projectile/giskard = 5,
+	/obj/item/weapon/gun/projectile/revolver/detective = 5,
+	/obj/item/weapon/gun/projectile/shotgun/pump/gladstone = 3,
+	/obj/item/weapon/gun/projectile/shotgun/pump = 3,
+	/obj/item/ammo_magazine/cl32/rubber = 20,
+	/obj/item/ammo_magazine/sl38/rubber = 20,
+	/obj/item/ammo_magazine/ammobox/c38/rubber = 20,
+	/obj/item/ammo_magazine/ammobox/cl32/rubber = 20,
+	/obj/item/weapon/storage/box/shotgunammo/beanbags = 10,
+	/obj/item/weapon/storage/box/shotgunammo/flashshells = 10,
+	/obj/item/weapon/storage/box/shotgunammo/blanks = 10,
+	/obj/item/clothing/accessory/holster = 5,
+	/obj/item/clothing/accessory/holster/hip = 5,
+	/obj/item/clothing/accessory/holster/waist = 5,
+	/obj/item/clothing/accessory/holster/armpit = 5,
+	/obj/item/clothing/accessory/holster/leg = 5,
+	/obj/item/weapon/storage/pouch/pistol_holster = 5,
+	/obj/item/weapon/storage/pouch/ammo = 2)
+
 	contraband = list(/obj/item/ammo_magazine/sl38 = 20,
-						/obj/item/ammo_magazine/cl32 = 20,
-						/obj/item/ammo_magazine/ammobox/cl32 = 20,
-						/obj/item/ammo_magazine/ammobox/c38 = 20,
-						/obj/item/weapon/storage/box/shotgunammo/slug = 10,
-						/obj/item/weapon/storage/box/shotgunammo/buckshot = 10,
-						/datum/autolathe/recipe/tool/tacknife = 6)
+	/obj/item/ammo_magazine/cl32 = 20,
+	/obj/item/ammo_magazine/ammobox/cl32 = 20,
+	/obj/item/ammo_magazine/ammobox/c38 = 20,
+	/obj/item/weapon/storage/box/shotgunammo/slug = 10,
+	/obj/item/weapon/storage/box/shotgunammo/buckshot = 10,
+	/obj/item/weapon/material/hatchet/tacknife = 6)
 	prices = list(/obj/item/device/flash = 600,
-					/obj/item/weapon/reagent_containers/spray/pepper = 800,
-					/obj/item/weapon/gun/projectile/olivaw = 1600,
-					/obj/item/weapon/gun/projectile/giskard = 1200,
-					/obj/item/weapon/gun/projectile/revolver/detective = 2500,
-					/obj/item/weapon/gun/projectile/shotgun/pump/gladstone = 3700,
-					/obj/item/weapon/gun/projectile/shotgun/pump = 2000,
-					/obj/item/ammo_magazine/cl32/rubber = 300,
-					/obj/item/ammo_magazine/sl38/rubber = 400,
-					/obj/item/ammo_magazine/ammobox/c38/rubber = 400,
-					/obj/item/ammo_magazine/ammobox/cl32/rubber = 500,
-					/obj/item/weapon/storage/box/shotgunammo/beanbags = 300,
-					/obj/item/weapon/storage/box/shotgunammo/flashshells = 300,
-					/obj/item/weapon/storage/box/shotgunammo/blanks = 50,
-					/obj/item/clothing/accessory/holster = 150,
-					/obj/item/weapon/storage/pouch/pistol_holster =150,
-					/obj/item/ammo_magazine/sl38 = 400,
-					/obj/item/ammo_magazine/cl32 = 300,
-					/obj/item/ammo_magazine/ammobox/cl32 = 500,
-					/obj/item/ammo_magazine/ammobox/c38 = 400,
-					/obj/item/weapon/storage/box/shotgunammo/slug = 300,
-					/obj/item/weapon/storage/box/shotgunammo/buckshot = 300,
-					/datum/autolathe/recipe/tool/tacknife = 600)
+	/obj/item/weapon/reagent_containers/spray/pepper = 800,
+	/obj/item/weapon/gun/projectile/olivaw = 1600,
+	/obj/item/weapon/gun/projectile/giskard = 1200,
+	/obj/item/weapon/gun/projectile/revolver/detective = 2500,
+	/obj/item/weapon/gun/projectile/shotgun/pump/gladstone = 3700,
+	/obj/item/weapon/gun/projectile/shotgun/pump = 2000,
+	/obj/item/ammo_magazine/cl32/rubber = 300,
+	/obj/item/ammo_magazine/sl38/rubber = 400,
+	/obj/item/ammo_magazine/ammobox/c38/rubber = 400,
+	/obj/item/ammo_magazine/ammobox/cl32/rubber = 500,
+	/obj/item/weapon/storage/box/shotgunammo/beanbags = 300,
+	/obj/item/weapon/storage/box/shotgunammo/flashshells = 300,
+	/obj/item/weapon/storage/box/shotgunammo/blanks = 50,
+	/obj/item/clothing/accessory/holster = 150,
+	/obj/item/clothing/accessory/holster/armpit = 150,
+	/obj/item/clothing/accessory/holster/waist = 150,
+	/obj/item/clothing/accessory/holster/hip = 150,
+	/obj/item/weapon/storage/pouch/pistol_holster = 150,
+	/obj/item/clothing/accessory/holster/leg = 150,
+	/obj/item/ammo_magazine/sl38 = 400,
+	/obj/item/ammo_magazine/cl32 = 300,
+	/obj/item/ammo_magazine/ammobox/cl32 = 500,
+	/obj/item/ammo_magazine/ammobox/c38 = 400,
+	/obj/item/weapon/storage/box/shotgunammo/slug = 300,
+	/obj/item/weapon/storage/box/shotgunammo/buckshot = 300,
+	/obj/item/weapon/material/hatchet/tacknife = 600,
+	/obj/item/weapon/storage/pouch/ammo = 800)
 
 //This one's from bay12
 /obj/machinery/vending/cart
@@ -1089,7 +1102,6 @@
 					/obj/item/weapon/computer_hardware/card_slot = 3,
 					/obj/item/weapon/computer_hardware/ai_slot = 4)
 	auto_price = FALSE
-
 
 /obj/machinery/vending/cola
 	name = "Robust Softdrinks"
@@ -1120,7 +1132,7 @@
 	idle_power_usage = 211 //refrigerator - believe it or not, this is actually the average power consumption of a refrigerated vending machine according to NRCan.
 
 /obj/machinery/vending/cigarette
-	name = "Cigarette machine" //OCD had to be uppercase to look nice with the new formating
+	name = "cigarette machine" //OCD had to be uppercase to look nice with the new formating
 	desc = "If you want to get cancer, might as well do it in style!"
 	product_slogans = "Space cigs taste good like a cigarette should.;I'd rather toolbox than switch.;Smoke!;Don't believe the reports - smoke today!"
 	product_ads = "Probably not bad for you!;Don't believe the scientists!;It's good for you!;Don't quit, buy more!;Smoke!;Nicotine heaven.;Best cigarettes since 2150.;Award-winning cigs."
@@ -1136,7 +1148,6 @@
 					/obj/item/weapon/storage/box/matches = 100,
 					/obj/item/weapon/flame/lighter/random = 150,
 					/obj/item/weapon/flame/lighter/zippo = 250)
-
 
 /obj/machinery/vending/medical
 	name = "NanoMed Plus"
@@ -1160,6 +1171,7 @@
 	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3,
 						/obj/item/weapon/reagent_containers/pill/stox = 4,
 						/obj/item/weapon/reagent_containers/pill/antitox = 6)
+	prices = list(/obj/item/weapon/storage/pouch/medical_supply = 800)
 	idle_power_usage = 211 //refrigerator - believe it or not, this is actually the average power consumption of a refrigerated vending machine according to NRCan.
 	auto_price = FALSE
 
@@ -1231,6 +1243,7 @@
 					/obj/item/device/hailer = 8,
 					/obj/item/taperoll/police = 8,
 					/obj/item/weapon/storage/box/evidence = 2)
+
 	contraband = list(/datum/autolathe/recipe/tool/tacknife = 4,
 						/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12)
 	auto_price = FALSE
@@ -1343,7 +1356,7 @@
 					/obj/item/weapon/material/kitchen/utensil/spoon = 6,
 					/obj/item/weapon/material/knife = 3,
 					/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 8,
-					/obj/item/clothing/suit/chef/classic = 2,
+					/obj/item/clothing/suit/rank/chef/classic = 2,
 					/obj/item/weapon/storage/lunchbox = 3,
 					/obj/item/weapon/storage/lunchbox/rainbow = 3,
 					/obj/item/weapon/storage/lunchbox/cat = 3,
@@ -1498,8 +1511,8 @@
 					/obj/item/device/lighting/toggleable/lamp = 2,
 					/obj/item/device/lighting/toggleable/lamp/green = 2,
 					/obj/item/weapon/reagent_containers/food/drinks/jar = 1,
-					/obj/item/toy/cultsword = 4,
-					/obj/item/toy/katana = 2,
+					/obj/item/toy/weapon/cultsword = 4,
+					/obj/item/toy/weapon/katana = 2,
 					/obj/item/weapon/phone = 3)
 	auto_price = FALSE
 
@@ -1515,7 +1528,7 @@
 
 /obj/machinery/vending/theomat
 	name = "NeoTheology Theo-Mat"
-	desc = "A Neotheology dispensary for disciples and new converts."
+	desc = "A NeoTheology dispensary for disciples and new converts."
 	product_slogans = "Immortality is the reward of the faithful.; Help humanity ascend, join your brethren today!; Come and seek a new life!"
 	product_ads = "Praise!;Pray!;Obey!"
 	icon_state = "teomat"
@@ -1531,8 +1544,8 @@
 
 /obj/machinery/vending/powermat
 	name = "Asters Guild Power-Mat"
-	desc = "Trust is power, and there’s no power you can trust like Robustcell."
-	product_slogans = "Trust is power, and there’s no cell you can trust like Robustcell.;No battery is stronger nor lasts longer.;One that Lasts!;You can't top the copper top!"
+	desc = "Trust is power, and there's no power you can trust like Robustcell."
+	product_slogans = "Trust is power, and there's no cell you can trust like Robustcell.;No battery is stronger nor lasts longer.;One that Lasts!;You can't top the copper top!"
 	product_ads = "Robust!;Trustworthy!;Durable!"
 	icon_state = "powermat"
 	products = list(/obj/item/weapon/cell/large = 10,
@@ -1616,7 +1629,7 @@
 	set src in oview(1)
 
 	if(locked)
-		usr << SPAN_WARNING("[src] needs to be unlocked to remodel it.")
+		to_chat(usr, SPAN_WARNING("[src] needs to be unlocked to remodel it."))
 		return
 	var/choice = input(usr, "How do you want your Vendomat to look? You can remodel it again later.", "Vendomat Remodeling", null) in CUSTOM_VENDOMAT_MODELS
 	if(!choice)
@@ -1630,7 +1643,7 @@
 	set src in oview(1)
 
 	if(locked)
-		usr << SPAN_WARNING("[src] needs to be unlocked to rename it.")
+		to_chat(usr, SPAN_WARNING("[src] needs to be unlocked to rename it."))
 		return
 
 	var/choice = sanitize(input("What do you want to name your Vendomat? You can rename it again later.", "Vendomat Renaming", name) as text|null, MAX_NAME_LEN)

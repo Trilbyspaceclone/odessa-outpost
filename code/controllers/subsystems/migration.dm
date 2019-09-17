@@ -1,11 +1,10 @@
 /*
 	The migration subsystem handles burrows and the movement of various NPC mobs aboard Eris.
-
 	It allows mobs to move between burrows, dispatches reinforcements to distress calls from mobs under attack,
 	and keeps track of all the burrows, negating any need for them to process individually most of the time
 	This subsystem also handles spreading plants through burrows
-
 */
+
 var/list/global/all_burrows = list()
 var/list/global/populated_burrows = list()
 var/list/global/unpopulated_burrows = list()
@@ -227,8 +226,16 @@ This proc will attempt to create a burrow against a wall, within view of the tar
 		if (candidate.target || candidate.recieving)
 			continue
 
+		// just nop.
+		if (candidate.obelisk_around)
+			continue
+
 		//And a high chance to reroll it if its not what we want in terms of being in/out of maintenance
 		if ((candidate.maintenance != reroll_type) && prob(reroll_prob))
+			continue
+		
+		// if burrow was closed before it has chance to be ignored
+		if (candidate.isSealed && candidate.isRevealed && prob(reroll_prob/2))
 			continue
 
 		break
@@ -260,6 +267,10 @@ This proc will attempt to create a burrow against a wall, within view of the tar
 
 		//Burrow is already busy
 		if (candidate.target || candidate.recieving)
+			continue
+		
+		// Burrow is closed
+		if(candidate.isSealed)
 			continue
 
 		//Lets not take mobs away from a burrow that's requesting more

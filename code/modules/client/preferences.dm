@@ -12,6 +12,8 @@
 	var/last_ip
 	var/last_id
 
+	var/save_load_cooldown
+
 	//game-preferences
 	var/lastchangelog = ""				//Saved changlog filesize to detect if there was a change
 
@@ -54,6 +56,7 @@
 		load_path(client.ckey)
 		load_preferences()
 		load_and_update_character()
+
 	sanitize_preferences()
 	if(client && istype(client.mob, /mob/new_player))
 		var/mob/new_player/np = client.mob
@@ -72,9 +75,15 @@
 		return
 
 	if(!get_mob_by_key(client_ckey))
-		user << SPAN_DANGER("No mob exists for the given client!")
+		to_chat(user, SPAN_DANGER("No mob exists for the given client!"))
 		close_load_dialog(user)
 		return
+
+	if(!path && !IsGuestKey(user.client.key))
+		error("Prefs failed to setup (datum): [user.client.ckey]")
+		load_path(user.client.ckey)
+		load_preferences()
+		load_and_update_character()
 
 	var/dat = "<html><body><center>"
 
@@ -83,7 +92,8 @@
 		dat += "<a href='?src=\ref[src];load=1'>Load slot</a> - "
 		dat += "<a href='?src=\ref[src];save=1'>Save slot</a> - "
 		dat += "<a href='?src=\ref[src];resetslot=1'>Reset slot</a> - "
-		dat += "<a href='?src=\ref[src];reload=1'>Reload slot</a>"
+		dat += "<a href='?src=\ref[src];reload=1'>Reload slot</a> - "
+		dat += "<a href='?src=\ref[src];copy=1'>Copy slot</a>"
 
 	else
 		dat += "Please create an account to save your preferences."
@@ -107,10 +117,18 @@
 		if(config.forumurl)
 			user << link(config.forumurl)
 		else
-			user << SPAN_DANGER("The forum URL is not set in the server configuration.")
+			to_chat(user, SPAN_DANGER("The forum URL is not set in the server configuration."))
 			return
 	ShowChoices(usr)
 	return 1
+
+/datum/preferences/proc/check_cooldown()
+	if(save_load_cooldown != world.time && (save_load_cooldown + PREF_SAVELOAD_COOLDOWN > world.time))
+		return FALSE
+
+	save_load_cooldown = world.time
+	return TRUE
+
 
 /datum/preferences/Topic(href, list/href_list)
 	if(..())
@@ -136,6 +154,14 @@
 			return 0
 		load_character(SAVE_RESET)
 		sanitize_preferences()
+	else if(href_list["copy"])
+		if(!IsGuestKey(usr.key))
+			open_copy_dialog(usr)
+			return 1
+	else if(href_list["overwrite"])
+		overwrite_character(text2num(href_list["overwrite"]))
+		sanitize_preferences()
+		close_load_dialog(usr)
 	else
 		return 0
 
@@ -160,6 +186,7 @@
 			real_name += "[pick(GLOB.last_names)]"
 	character.fully_replace_character_name(newname = real_name)
 	character.gender = gender
+	character.identifying_gender = gender_identity
 	character.age = age
 	character.b_type = b_type
 
@@ -229,7 +256,7 @@
 	character.gen_record = gen_record
 	character.exploit_record = exploit_record
 	if(!character.isSynthetic())
-		character.nutrition = rand(140,360)
+		character.nutrition = rand(250, 450)
 
 
 
@@ -261,3 +288,26 @@
 		panel.close()
 		panel = null
 	user << browse(null, "window=saves")
+
+/datum/preferences/proc/open_copy_dialog(mob/user)
+	var/dat = "<body>"
+	dat += "<tt><center>"
+
+	var/savefile/S = new /savefile(path)
+	if(S)
+		dat += "<b>Select a character slot to overwrite</b><br>"
+		dat += "<b>You will then need to save to confirm</b><hr>"
+		var/name
+		for(var/i=1, i<= config.character_slots, i++)
+			S.cd = "/character[i]"
+			S["real_name"] >> name
+			if(!name)	name = "Character[i]"
+			if(i==default_slot)
+				name = "<b>[name]</b>"
+			dat += "<a href='?src=\ref[src];overwrite=[i]'>[name]</a><br>"
+
+	dat += "<hr>"
+	dat += "</center></tt>"
+	panel = new(user, "Character Slots", "Character Slots", 300, 390, src)
+	panel.set_content(dat)
+	panel.open()

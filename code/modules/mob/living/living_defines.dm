@@ -20,10 +20,6 @@
 	var/brainloss = 0	//'Retardation' damage caused by someone hitting you in the head with a bible or being infected with brainrot.
 	var/halloss = 0		//Hallucination damage. 'Fake' damage obtained through hallucinating or the holodeck. Sleeping should cause it to wear off.
 
-
-	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
-	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
-
 	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.
 
 	var/t_plasma = null
@@ -46,20 +42,22 @@
 
 	var/tod = null // Time of death
 	var/update_slimes = 1
-	var/silent = null 		// Can't talk. Value goes down every life proc.
+	var/silent = 0 		// Can't talk. Value goes down every life proc.
 	var/on_fire = 0 //The "Are we on fire?" var
 	var/fire_stacks
 
 	var/failed_last_breath = 0 //This is used to determine if the mob failed a breath. If they did fail a brath, they will attempt to breathe each tick, otherwise just once per 4 ticks.
 	var/possession_candidate // Can be possessed by ghosts if unplayed.
 
-	var/eye_blind = null	//Carbon
-	var/eye_blurry = null	//Carbon
-	var/ear_damage = null	//Carbon
-	var/stuttering = null	//Carbon
-	var/slurring = null		//Carbon
+	var/eye_blind = 0	//Carbon
+	var/eye_blurry = 0	//Carbon
+	var/ear_damage = 0	//Carbon
+	var/stuttering = 0	//Carbon
+	var/slurring = 0	//Carbon
 
 	var/job = null//Living
 
 	var/image/static_overlay // For static overlays on living mobs
 	mob_classification = CLASSIFICATION_ORGANIC
+
+	var/list/chem_effects = list()

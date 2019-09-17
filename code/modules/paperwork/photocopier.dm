@@ -58,7 +58,7 @@
 				var/obj/item/weapon/paper_bundle/B = bundlecopy(copyitem)
 				sleep(15*B.pages.len)
 			else
-				usr << SPAN_WARNING("\The [copyitem] can't be copied by \the [src].")
+				to_chat(usr, SPAN_WARNING("\The [copyitem] can't be copied by \the [src]."))
 				break
 
 			use_power(active_power_usage)
@@ -67,7 +67,7 @@
 		if(copyitem)
 			copyitem.loc = usr.loc
 			usr.put_in_hands(copyitem)
-			usr << SPAN_NOTICE("You take \the [copyitem] out of \the [src].")
+			to_chat(usr, SPAN_NOTICE("You take \the [copyitem] out of \the [src]."))
 			copyitem = null
 			updateUsrDialog()
 	else if(href_list["min"])
@@ -109,25 +109,25 @@
 			user.drop_item()
 			copyitem = I
 			I.loc = src
-			user << SPAN_NOTICE("You insert \the [I] into \the [src].")
+			to_chat(user, SPAN_NOTICE("You insert \the [I] into \the [src]."))
 			flick(insert_anim, src)
 			updateUsrDialog()
 		else
-			user << SPAN_NOTICE("There is already something in \the [src].")
+			to_chat(user, SPAN_NOTICE("There is already something in \the [src]."))
 	else if(istype(I, /obj/item/device/toner))
 		if(toner <= 10) //allow replacing when low toner is affecting the print darkness
 			user.drop_item()
-			user << SPAN_NOTICE("You insert the toner cartridge into \the [src].")
+			to_chat(user, SPAN_NOTICE("You insert the toner cartridge into \the [src]."))
 			var/obj/item/device/toner/T = I
 			toner += T.toner_amount
 			qdel(I)
 			updateUsrDialog()
 		else
-			user << SPAN_NOTICE("This cartridge is not yet ready for replacement! Use up the rest of the toner.")
+			to_chat(user, SPAN_NOTICE("This cartridge is not yet ready for replacement! Use up the rest of the toner."))
 	if(QUALITY_BOLT_TURNING in I.tool_qualities)
 		if(I.use_tool(user, src, WORKTIME_FAST, QUALITY_BOLT_TURNING, FAILCHANCE_EASY,  required_stat = STAT_MEC))
 			anchored = !anchored
-			user << "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>"
+			to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
 	return
 
 /obj/machinery/photocopier/ex_act(severity)
@@ -155,8 +155,8 @@
 	else			//no toner? shitty copies for you!
 		c.info = "<font color = #808080>"
 	var/copied = html_decode(copy.info)
-	copied = replacetext(copied, "<font face=\"[c.deffont]\" color=", "<font face=\"[c.deffont]\" nocolor=")	//state of the art techniques in action
-	copied = replacetext(copied, "<font face=\"[c.crayonfont]\" color=", "<font face=\"[c.crayonfont]\" nocolor=")	//This basically just breaks the existing color tag, which we need to do because the innermost tag takes priority.
+	//copied = replacetext(copied, "<font face=\"[c.deffont]\" color=", "<font face=\"[c.deffont]\" nocolor=")	//state of the art techniques in action
+	//copied = replacetext(copied, "<font face=\"[c.crayonfont]\" color=", "<font face=\"[c.crayonfont]\" nocolor=")	//This basically just breaks the existing color tag, which we need to do because the innermost tag takes priority.
 	c.info += copied
 	c.info += "</font>"//</font>
 	c.name = copy.name // -- Doohl
@@ -169,9 +169,9 @@
 	var/list/temp_overlays = copy.overlays       //Iterates through stamps
 	var/image/img                                //and puts a matching
 	for (var/j = 1, j <= min(temp_overlays.len, copy.ico.len), j++) //gray overlay onto the copy
-		if (findtext(copy.ico[j], "cap") || findtext(copy.ico[j], "cent"))
+		if (findtext(copy.ico[j], "_stamp-cap") || findtext(copy.ico[j], "_stamp-cent") || findtext(copy.ico[j], "_stamp-circle"))
 			img = image('icons/obj/bureaucracy.dmi', "paper_stamp-circle")
-		else if (findtext(copy.ico[j], "deny"))
+		else if (findtext(copy.ico[j], "_stamp-deny") || findtext(copy.ico[j], "_stamp-x"))
 			img = image('icons/obj/bureaucracy.dmi', "paper_stamp-x")
 		else
 			img = image('icons/obj/bureaucracy.dmi', "paper_stamp-dots")

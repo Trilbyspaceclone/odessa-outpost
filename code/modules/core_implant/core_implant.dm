@@ -19,14 +19,12 @@
 	var/list/modules = list()
 	var/list/upgrades = list()
 
+	var/list/access = list()	// Core implant can grant access levels to its user
+
 /obj/item/weapon/implant/core_implant/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	deactivate()
 	. = ..()
-
-/obj/item/weapon/implant/core_implant/New()
-	..()
-
 
 /obj/item/weapon/implant/core_implant/uninstall()
 	if(active)
@@ -99,7 +97,17 @@
 
 	address = null
 
-/obj/item/weapon/implant/core_implant/hear_talk(mob/living/carbon/human/H, message)
+/obj/item/weapon/implant/core_implant/GetAccess()
+	if(!activated) // A brand new implant can't be used as an access card, but one pulled from a corpse can.
+		return list()
+
+	var/list/L = access.Copy()
+	for(var/m in modules)
+		var/datum/core_module/M = m
+		L |= M.GetAccess()
+	return L
+
+/obj/item/weapon/implant/core_implant/hear_talk(mob/living/carbon/human/H, message, verb, datum/language/speaking, speech_volume)
 	for(var/datum/core_module/group_ritual/GR in src.modules)
 		GR.hear(H, message)
 
@@ -110,10 +118,10 @@
 		var/datum/ritual/R = GLOB.all_rituals[RT]
 		if(R.compare(message))
 			if(R.power > src.power)
-				H << SPAN_DANGER("Not enough energy for the [R.name].")
+				to_chat(H, SPAN_DANGER("Not enough energy for the [R.name]."))
 				return
 			if(!R.is_allowed(src))
-				H << SPAN_DANGER("You are not allowed to perform [R.name].")
+				to_chat(H, SPAN_DANGER("You are not allowed to perform [R.name]."))
 				return
 			R.activate(H, src, R.get_targets(message))
 			return
@@ -176,6 +184,9 @@
 		if(istype(CM,m_type))
 			remove_module(CM)
 
+/obj/item/weapon/implant/core_implant/proc/install_default_modules_by_job(datum/job/J)
+	for(var/module_type in J.core_upgrades)
+		add_module(new module_type)
 
 /obj/item/weapon/implant/core_implant/proc/process_modules()
 	for(var/datum/core_module/CM in modules)

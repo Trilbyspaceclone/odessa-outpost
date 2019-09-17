@@ -1,7 +1,7 @@
 /obj/item/weapon/lipstick
 	gender = PLURAL
 	name = "red lipstick"
-	desc = "A generic brand of lipstick. You can wipe off lipstick with paper"
+	desc = "A generic brand of red lipstick. Can be wiped off with paper."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lipstick"
 	w_class = ITEM_SIZE_TINY
@@ -12,27 +12,21 @@
 
 /obj/item/weapon/lipstick/purple
 	name = "purple lipstick"
+	desc = "A generic brand of purple lipstick. Can be wiped off with paper."
 	colour = "purple"
 
 /obj/item/weapon/lipstick/jade
 	name = "jade lipstick"
+	desc = "A generic brand of jade lipstick. Can be wiped off with paper."
 	colour = "jade"
 
 /obj/item/weapon/lipstick/black
 	name = "black lipstick"
+	desc = "A generic brand of black lipstick. Can be wiped off with paper."
 	colour = "black"
 
-
-/obj/item/weapon/lipstick/random
-	name = "lipstick"
-
-/obj/item/weapon/lipstick/random/New()
-	colour = pick("red","purple","jade","black")
-	name = "[colour] lipstick"
-
-
 /obj/item/weapon/lipstick/attack_self(mob/user as mob)
-	user << "<span class='notice'>You twist \the [src] [open ? "closed" : "open"].</span>"
+	to_chat(user, "<span class='notice'>You twist \the [src] [open ? "closed" : "open"].</span>")
 	open = !open
 	if(open)
 		icon_state = "[initial(icon_state)]_[colour]"
@@ -49,7 +43,7 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.lip_style)	//if they already have lipstick on
-			user << SPAN_NOTICE("You need to wipe off the old lipstick first!")
+			to_chat(user, SPAN_NOTICE("You need to wipe off the old lipstick first!"))
 			return
 		if(H == user)
 			user.visible_message(SPAN_NOTICE("[user] does their lips with \the [src]."), \
@@ -65,14 +59,14 @@
 				H.lip_style = colour
 				H.update_body()
 	else
-		user << SPAN_NOTICE("Where are the lips on that?")
+		to_chat(user, SPAN_NOTICE("Where are the lips on that?"))
 
 //you can wipe off lipstick with paper! see code/modules/paperwork/paper.dm, paper/attack()
 
 
 /obj/item/weapon/haircomb //sparklysheep's comb
 	name = "purple comb"
-	desc = "A pristine purple comb made from flexible plastic. You can wipe off lipstick with paper"
+	desc = "A pristine purple comb made from flexible plastic."
 	w_class = ITEM_SIZE_TINY
 	slot_flags = SLOT_EARS
 	icon = 'icons/obj/items.dmi'

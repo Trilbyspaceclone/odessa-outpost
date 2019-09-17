@@ -9,7 +9,7 @@
 #define ANIM_CLOSE -1
 
 /obj/machinery/neotheology/cloner
-	name = "NeoTheology's clonepod"
+	name = "NeoTheology clonepod"
 	desc = "The newest design and God's gift from NeoTheology, this automatic machine will return the flesh to the spirit in no time."
 	icon = 'icons/obj/neotheology_pod.dmi'
 	icon_state = "preview"
@@ -199,10 +199,8 @@
 
 		if(progress <= CLONING_DONE)
 			if(container)
-				if(container.biomass - biomass_consumption < 0)
+				if(!container.reagents.remove_reagent("biomatter", biomass_consumption))
 					stop()
-				else
-					container.biomass -= biomass_consumption
 			else
 				stop()
 
@@ -360,36 +358,36 @@
 /////////////////////
 
 /obj/machinery/neotheology/biomass_container
-	name = "NeoTheology's biomass container"
+	name = "NeoTheology biomass container"
 	desc = "Making strange noises barrel, filled with a substance which at any time may become someone else's body."
 	icon_state = "biocan"
 	density = TRUE
 	anchored = TRUE
 	circuit = /obj/item/weapon/circuitboard/neotheology/biocan
 
-	var/biomass = 0
-	var/biomass_max = 600
+	var/biomass_capacity = 600
 
 
 /obj/machinery/neotheology/biomass_container/New()
 	..()
+	create_reagents(biomass_capacity)
 	if(SSticker.current_state != GAME_STATE_PLAYING)
-		biomass = 300
+		reagents.add_reagent("biomatter", 300)
 
 /obj/machinery/neotheology/biomass_container/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating * 200
-	biomass_max = T
+	biomass_capacity = T
 
 /obj/machinery/neotheology/biomass_container/examine(mob/user)
 	if(!..(user, 2))
 		return
 
-	if(biomass == 0)
-		user << SPAN_NOTICE("It is empty.")
+	if(!reagents.has_reagent("biomatter"))
+		to_chat(user, SPAN_NOTICE("It is empty."))
 	else
-		user << SPAN_NOTICE("Filled to [biomass]/[biomass_max].")
+		to_chat(user, SPAN_NOTICE("Filled to [reagents.total_volume]/[biomass_capacity]."))
 
 /obj/machinery/neotheology/biomass_container/attackby(obj/item/I, mob/user as mob)
 
@@ -399,16 +397,14 @@
 	if(default_part_replacement(I, user))
 		return
 
-	for(var/type in BIOMASS_TYPES)
-		if(istype(I,type))
-			if(biomass >= biomass_max)
-				user << SPAN_NOTICE("\The [src] is full.")
-				return
-			user << SPAN_NOTICE("You put [I] into [src]'s load hatch.")
-			biomass += BIOMASS_TYPES[type]
-			user.drop_item()
-			qdel(I)
-	
+	if(istype(I, /obj/item/weapon/reagent_containers) && I.is_open_container())
+		var/obj/item/weapon/reagent_containers/container = I
+		if(container.reagents.get_reagent_amount("biomatter") == container.reagents.total_volume)
+			container.reagents.trans_to_holder(reagents, container.amount_per_transfer_from_this)
+			to_chat(user, SPAN_NOTICE("You transfer some of biomatter from [container] to [src]."))
+		else
+			to_chat(user, SPAN_NOTICE("You need clear biomatter to fill [src]."))
+
 
 /obj/machinery/neotheology/biomass_container/update_icon()
 	overlays.Cut()
@@ -425,7 +421,7 @@
 /////////////////////
 
 /obj/machinery/neotheology/reader
-	name = "NeoTheology's cruciform reader"
+	name = "NeoTheology cruciform reader"
 	desc = "The altar for scanning genetic information from medium of soul - the cruciform."
 	icon_state = "reader_off"
 	density = TRUE
@@ -458,7 +454,7 @@
 		return
 
 	if(reading)
-		user << SPAN_WARNING("You try to pull the [implant], but it does not move.")
+		to_chat(user, SPAN_WARNING("You try to pull the [implant], but it does not move."))
 		return
 
 	user.put_in_active_hand(implant)
@@ -467,7 +463,7 @@
 	src.add_fingerprint(user)
 	update_icon()
 
-/obj/machinery/neotheology/reader/dismantle()
+/obj/machinery/neotheology/reader/on_deconstruction()
 	if(implant)
 		implant.forceMove(loc)
 		implant = null

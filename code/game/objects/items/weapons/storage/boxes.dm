@@ -79,7 +79,7 @@
 	close_all()
 
 	// Now make the cardboard
-	user << SPAN_NOTICE("You fold [src] flat.")
+	to_chat(user, SPAN_NOTICE("You fold [src] flat."))
 	new src.foldable(get_turf(src))
 	qdel(src)
 
@@ -477,6 +477,21 @@
 		new /obj/item/weapon/implantcase/death_alarm(src)
 		new /obj/item/weapon/implantcase/death_alarm(src)
 
+/obj/item/weapon/storage/box/flares
+	name = "box of flares"
+	desc = "Box that contains some flares."
+	icon_state = "flare"
+
+	New()
+		..()
+		new /obj/item/device/lighting/glowstick/flare(src)
+		new /obj/item/device/lighting/glowstick/flare(src)
+		new /obj/item/device/lighting/glowstick/flare(src)
+		new /obj/item/device/lighting/glowstick/flare(src)
+		new /obj/item/device/lighting/glowstick/flare(src)
+		new /obj/item/device/lighting/glowstick/flare(src)
+		new /obj/item/device/lighting/glowstick/flare(src)
+
 /obj/item/weapon/storage/box/condimentbottles
 	name = "box of condiment bottles"
 	desc = "It has a large ketchup smear on it."
@@ -628,11 +643,11 @@
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "spbox"
-	can_hold = list(/obj/item/toy/snappop)
+	can_hold = list(/obj/item/toy/junk/snappop)
 	New()
 		..()
 		for(var/i=1; i <= 8; i++)
-			new /obj/item/toy/snappop(src)
+			new /obj/item/toy/junk/snappop(src)
 
 /obj/item/weapon/storage/box/matches
 	name = "matchbox"
@@ -719,10 +734,10 @@
 	use_to_pickup = 1 // for picking up broken bulbs, not that most people will try
 
 /obj/item/weapon/storage/box/autolathe_blank
-	name = "Autolathe Diskette Box"
+	name = "data disk box"
 	icon_state = "disk_kit"
 
-/obj/item/weapon/storage/box/autolathe_blank/New()
-	..()
+/obj/item/weapon/storage/box/autolathe_blank/Initialize()
+	. = ..()
 	for(var/i in 1 to 7)
-		new /obj/item/weapon/disk/autolathe_disk/blank(src)
+		new /obj/item/weapon/computer_hardware/hard_drive/portable(src)

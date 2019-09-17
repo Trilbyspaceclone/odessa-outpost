@@ -97,7 +97,13 @@
 
 	if(href_list["ready"])
 		if(SSticker.current_state <= GAME_STATE_PREGAME) // Make sure we don't ready up after the round has started
-			ready = text2num(href_list["ready"])
+
+			if(!BC_IsKeyAllowedToConnect(ckey) && !usr.client.holder)
+				alert("Border Control is enabled, and you haven't been whitelisted!  You're welcome to observe, \
+					   but in order to play, you'll need to be whitelisted!  Please visit our discord to submit an access request!" , "Border Control Active")
+				ready = 0
+			else
+				ready = text2num(href_list["ready"])
 		else
 			ready = 0
 
@@ -118,10 +124,10 @@
 			close_spawn_windows()
 			var/turf/T = pick_spawn_location("Observer")
 			if(istype(T))
-				src << SPAN_NOTICE("You are observer now.")
+				to_chat(src, SPAN_NOTICE("You are observer now."))
 				observer.forceMove(T)
 			else
-				src << "<span class='danger'>Could not locate an observer spawn point. Use the Teleport verb to jump to the station map.</span>"
+				to_chat(src, "<span class='danger'>Could not locate an observer spawn point. Use the Teleport verb to jump to the station map.</span>")
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
 			announce_ghost_joinleave(src)
@@ -137,7 +143,8 @@
 			//observer.key = key
 			observer.ckey = ckey
 			observer.initialise_postkey()
-			observer.client.create_UI()
+
+			observer.client.create_UI(observer.type)
 			qdel(src)
 
 			return 1
@@ -145,7 +152,7 @@
 	if(href_list["late_join"])
 
 		if(SSticker.current_state != GAME_STATE_PLAYING)
-			usr << "\red The round is either not ready, or has already finished..."
+			to_chat(usr, "\red The round is either not ready, or has already finished...")
 			return
 
 		if(!check_rights(R_ADMIN, 0))
@@ -158,6 +165,11 @@
 				src << alert("Your current species, [client.prefs.species], is not available for play on the station.")
 				return 0
 
+		if(!BC_IsKeyAllowedToConnect(ckey) && !usr.client.holder)
+			alert("Border Control is enabled, and you haven't been whitelisted!  You're welcome to observe, \
+				   but in order to play, you'll need to be whitelisted!  Please visit our discord to submit an access request!" , "Border Control Active")
+			return 0
+
 		LateChoices()
 
 	if(href_list["manifest"])
@@ -166,10 +178,10 @@
 	if(href_list["SelectedJob"])
 
 		if(!config.enter_allowed)
-			usr << "<span class='notice'>There is an administrative lock on entering the game!</span>"
+			to_chat(usr, "<span class='notice'>There is an administrative lock on entering the game!</span>")
 			return
 		else if(SSticker.nuke_in_progress)
-			usr << "<span class='danger'>The station is currently exploding. Joining would go poorly.</span>"
+			to_chat(usr, "<span class='danger'>The station is currently exploding. Joining would go poorly.</span>")
 			return
 
 		var/datum/species/S = all_species[client.prefs.species]
@@ -225,10 +237,10 @@
 	if(src != usr)
 		return 0
 	if(SSticker.current_state != GAME_STATE_PLAYING)
-		usr << "\red The round is either not ready, or has already finished..."
+		to_chat(usr, "\red The round is either not ready, or has already finished...")
 		return 0
 	if(!config.enter_allowed)
-		usr << "<span class='notice'>There is an administrative lock on entering the game!</span>"
+		to_chat(usr, "<span class='notice'>There is an administrative lock on entering the game!</span>")
 		return 0
 	if(!IsJobAvailable(rank))
 		src << alert("[rank] is not available. Please try another.")
@@ -300,6 +312,8 @@
 		if(job && IsJobAvailable(job.title))
 			if(job.minimum_character_age && (client.prefs.age < job.minimum_character_age))
 				continue
+			if(job.is_religion_restricted(client.prefs.religion))
+				continue
 			var/active = 0
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in GLOB.player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
@@ -325,7 +339,7 @@
 	var/use_form_name
 	var/datum/species_form/chosen_form
 	if(client.prefs.species_form)
-		chosen_form = all_species_form_list[client.prefs.species_form]
+		chosen_form = GLOB.all_species_form_list[client.prefs.species_form]
 		use_form_name = chosen_form.get_station_variant() //Not used at all but whatever.
 
 	if(chosen_species && use_species_name)
@@ -348,15 +362,6 @@
 				|| (new_character.species && (chosen_language.name in new_character.species.secondary_langs)))
 				new_character.add_language(lang)
 
-	if(SSticker.random_players)
-		new_character.gender = pick(MALE, FEMALE)
-		client.prefs.real_name = random_name(new_character.gender)
-		client.prefs.randomize_appearance_and_body_for(new_character)
-	else
-		client.prefs.copy_to(new_character)
-
-	sound_to(src, sound(null, repeat = 0, wait = 0, volume = 85, channel = GLOB.lobby_sound_channel))
-
 	if(mind)
 		mind.active = 0//we wish to transfer the key manually
 		mind.original = new_character
@@ -369,6 +374,15 @@
 			mind.gen_relations_info = client.prefs.relations_info["general"]
 		mind.transfer_to(new_character)					//won't transfer key since the mind is not active
 
+	if(SSticker.random_players)
+		new_character.gender = pick(MALE, FEMALE)
+		client.prefs.real_name = random_name(new_character.gender)
+		client.prefs.randomize_appearance_and_body_for(new_character)
+	else
+		client.prefs.copy_to(new_character)
+
+	sound_to(src, sound(null, repeat = 0, wait = 0, volume = 85, channel = GLOB.lobby_sound_channel))
+
 	new_character.name = real_name
 	new_character.dna.ready_dna(new_character)
 	new_character.dna.b_type = client.prefs.b_type
@@ -378,7 +392,7 @@
 		new_character.dna.SetSEState(GLASSESBLOCK,1,0)
 		new_character.disabilities |= NEARSIGHTED
 
-	new_character.species_aan = client.prefs.species_aan
+/*	new_character.species_aan = client.prefs.species_aan
 	new_character.species_color_key = client.prefs.species_color
 	new_character.species_name = client.prefs.custom_species
 
@@ -389,7 +403,7 @@
 	new_character.wings = GLOB.wings_styles_list[client.prefs.wings_style]
 	new_character.wings_colors = client.prefs.wings_colors
 
-	new_character.body_markings = client.prefs.body_markings
+	new_character.body_markings = client.prefs.body_markings*/
 
 	// And uncomment this, too.
 	//new_character.dna.UpdateSE()
@@ -415,7 +429,7 @@
 
 /mob/new_player/proc/is_form_whitelisted(datum/species_form/F)
 	if(!F) return 1
-	return F.selectable
+	return F.playable
 
 /mob/new_player/get_species()
 	var/datum/species/chosen_species
@@ -440,7 +454,7 @@
 /mob/new_player/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "",var/italics = 0, var/mob/speaker = null)
 	return
 
-/mob/new_player/hear_radio(var/message, var/verb="says", var/datum/language/language=null, var/part_a, var/part_b, var/mob/speaker = null, var/hard_to_hear = 0)
+/mob/new_player/hear_radio(var/message, var/verb="says", var/datum/language/language=null, var/part_a, var/part_b, var/part_c, var/mob/speaker = null, var/hard_to_hear = 0)
 	return
 
 mob/new_player/MayRespawn()

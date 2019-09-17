@@ -9,12 +9,12 @@
 	icon = 'icons/obj/playing_cards.dmi'
 	var/list/cards = list()
 
-/obj/item/weapon/deck/holder
+/obj/item/weapon/cardholder
 	name = "card box"
 	desc = "A small leather case to show how classy you are compared to everyone else."
 	icon_state = "card_holder"
 
-/obj/item/weapon/deck/cards
+/obj/item/weapon/deck
 	name = "deck of cards"
 	desc = "A simple deck of playing cards."
 	icon_state = "deck"
@@ -58,7 +58,7 @@
 		for(var/datum/playingcard/P in H.cards)
 			cards += P
 		qdel(O)
-		user << "You place your cards on the bottom of \the [src]."
+		to_chat(user, "You place your cards on the bottom of \the [src].")
 		return
 	..()
 
@@ -77,7 +77,7 @@
 	var/mob/living/carbon/user = usr
 
 	if(!cards.len)
-		usr << "There are no cards in the deck."
+		to_chat(usr, "There are no cards in the deck.")
 		return
 
 	var/obj/item/weapon/hand/H
@@ -96,7 +96,7 @@
 	cards -= P
 	H.update_icon()
 	user.visible_message("\The [user] draws a card.")
-	user << "It's the [P]."
+	to_chat(user, "It's the [P].")
 
 /obj/item/weapon/deck/verb/deal_card()
 
@@ -108,7 +108,7 @@
 	if(usr.stat || !Adjacent(usr)) return
 
 	if(!cards.len)
-		usr << "There are no cards in the deck."
+		to_chat(usr, "There are no cards in the deck.")
 		return
 
 	var/list/players = list()
@@ -164,7 +164,7 @@
 	if(!ishuman(over) || !(over in viewers(3))) return
 
 	if(!cards.len)
-		usr << "There are no cards in the deck."
+		to_chat(usr, "There are no cards in the deck.")
 		return
 
 	deal_at(usr, over)
@@ -236,9 +236,9 @@
 /obj/item/weapon/hand/examine(mob/user)
 	..(user)
 	if((!concealed || src.loc == user) && cards.len)
-		user << "It contains: "
+		to_chat(user, "It contains: ")
 		for(var/datum/playingcard/P in cards)
-			user << "The [P.name]."
+			to_chat(user, "The [P.name].")
 
 /obj/item/weapon/hand/update_icon(var/direction = 0)
 

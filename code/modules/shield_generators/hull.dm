@@ -1,6 +1,6 @@
 //The main hull shield. Moving a few variables here to make it easier to branch off the parent for shortrange bubble shields and such
 /obj/machinery/power/shield_generator/hull
-	name = "Hull Shield Core"
+	name = "hull shield core"
 	report_integrity = TRUE
 	default_modes = list(MODEFLAG_HYPERKINETIC, MODEFLAG_HULL, MODEFLAG_MULTIZ)
 	// Foolproof defaults for a hull shield to block meteors
@@ -110,7 +110,7 @@
 		return ..(href, href_list)
 
 /obj/machinery/shield_conduit
-	name = "Shield"
+	name = "shield"
 	icon = 'icons/obj/machines/shielding.dmi'
 	icon_state = "conduit_0"
 	desc = "A combined conduit and capacitor that transfers and stores massive amounts of energy"
@@ -123,12 +123,12 @@
 	if(O.use_tool(user, src, WORKTIME_FAST, QUALITY_BOLT_TURNING, FAILCHANCE_EASY,  required_stat = STAT_MEC))
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 		if(anchored)
-			user << SPAN_NOTICE("You unsecure the [src] from the floor!")
+			to_chat(user, SPAN_NOTICE("You unsecure the [src] from the floor!"))
 			toggle_tendrils(FALSE)
 			anchored = FALSE
 		else
 			if(istype(get_turf(src), /turf/space)) return //No wrenching these in space!
 			if ((toggle_tendrils(TRUE)))
-				user << SPAN_NOTICE("You secure the [src] to the floor!")
+				to_chat(user, SPAN_NOTICE("You secure the [src] to the floor!"))
 				anchored = TRUE
 		return

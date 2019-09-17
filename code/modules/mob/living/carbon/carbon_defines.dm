@@ -2,7 +2,7 @@
 	gender = MALE
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/datum/species_form/form //Steals the icon generation info from above.
-	var/species_aan = "a"
+	var/species_aan = ""
 	var/species_color_key = "#000000"
 	var/species_name = "Carbon Lifeform"
 	var/list/stomach_contents = list()
@@ -19,7 +19,7 @@
 	var/datum/surgery_status/op_stage = new/datum/surgery_status
 	//Active emote/pose
 	var/pose = null
-	var/list/chem_effects = list()
+	
 	var/datum/reagents/metabolism/bloodstr = null
 	var/datum/reagents/metabolism/ingested = null
 	var/datum/reagents/metabolism/touching = null
@@ -35,3 +35,7 @@
 	var/flesh_color = "#A10808"
 
 	var/obj/item/weapon/tank/internal = null//Human/Monkey
+
+	//TODO: move to brain
+	var/list/nerve_system_accumulations = list() // Nerve system accumulations
+	var/nsa_threshold = 100

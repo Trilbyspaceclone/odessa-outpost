@@ -9,7 +9,8 @@
 	time = 60
 	choice_types = list(/datum/vote_choice/restart, /datum/vote_choice/countinue_round)
 
-	only_admin = TRUE
+	// Overriden by implementation of IsAdminOnly
+	//only_admin = TRUE
 
 	multiple_votes = FALSE
 	can_revote = TRUE
@@ -17,18 +18,25 @@
 
 	see_votes = TRUE
 
+
+/datum/poll/restart/IsAdminOnly()
+	if(config.allow_vote_restart)
+		return FALSE
+	else
+		return TRUE
+
+
 /datum/vote_choice/restart
 	text = "Restart Round"
 
 /datum/vote_choice/restart/on_win()
-	world << "<b>World restarting due to vote...<b>"
+	to_chat(world, "<b>World restarting due to vote...<b>")
 	sleep(50)
 	log_game("Rebooting due to restart vote")
 	world.Reboot()
 
 /datum/vote_choice/countinue_round
 	text = "Continue Round"
-
 
 
 
@@ -84,7 +92,7 @@
 /datum/poll/storyteller/Process()
 	if(pregame && SSticker.current_state != GAME_STATE_PREGAME)
 		SSvote.stop_vote()
-		world << "<b>Voting aborted due to game start.</b>"
+		to_chat(world, "<b>Voting aborted due to game start.</b>")
 	return
 
 
@@ -93,7 +101,7 @@
 	if (SSticker.current_state == GAME_STATE_PREGAME)
 		pregame = TRUE
 		round_progressing = FALSE
-		world << "<b>Game start has been delayed due to voting.</b>"
+		to_chat(world, "<b>Game start has been delayed due to voting.</b>")
 
 //If one wins, on_end is called after on_win, so the new storyteller will be set in master_storyteller
 /datum/poll/storyteller/on_end()
@@ -109,7 +117,7 @@
 	set_storyteller(config.pick_storyteller(master_storyteller), announce = !(pregame)) //This does the actual work //Even if master storyteller is null, this will pick the default
 	if (pregame)
 		round_progressing = TRUE
-		world << "<b>The game will start in [SSticker.pregame_timeleft] seconds.</b>"
+		to_chat(world, "<b>The game will start in [SSticker.pregame_timeleft] seconds.</b>")
 		spawn(10 SECONDS)
 			var/tipsAndTricks/T = SStips.getRandomTip()
 			if(T)
@@ -185,7 +193,7 @@
 		return 0 //Shouldnt be possible, but safety
 
 	var/mob/M = C.mob
-	if (!M || isghost(M) || isnewplayer(M))
+	if (!M || isghost(M) || isnewplayer(M) || ismouse(M) || isdrone(M))
 		return VOTE_WEIGHT_LOW
 
 	var/datum/mind/mind = M.mind

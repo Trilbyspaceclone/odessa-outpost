@@ -3,6 +3,7 @@
 	layer = 4.0
 	animate_movement = 2
 	flags = PROXMOVE
+	blood_color = "#A10808"
 	var/datum/mind/mind
 
 	movement_handlers = list(
@@ -34,6 +35,7 @@
 
 
 	var/use_me = 1 //Allows all mobs to use the me verb by default, will have to manually specify they cannot
+	var/use_subtle = 1 //Similarly, the subtle verb.
 	var/damageoverlaytemp = 0
 	var/obj/machinery/machine = null
 	var/poll_answer = 0.0
@@ -176,6 +178,7 @@ While it would be entirely possible to check the mob's move handlers list for th
 
 	var/memory = ""
 	var/flavor_text = ""
+	var/ooc_text = ""
 
 
 	var/list/HUDneed = list() // What HUD object need see

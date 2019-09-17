@@ -4,7 +4,7 @@
 
 
 /obj/machinery/computer/power_monitor
-	name = "Power Monitoring Console"
+	name = "power monitoring console"
 	desc = "Computer designed to remotely monitor power levels around the station"
 	icon_keyboard = "power_key"
 	icon_screen = "power_monitor"
@@ -52,7 +52,7 @@
 	ui_interact(user)
 
 // Uses dark magic to operate the NanoUI of this computer.
-/obj/machinery/computer/power_monitor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/computer/power_monitor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	power_monitor.ui_interact(user, ui_key, ui, force_open)
 
 

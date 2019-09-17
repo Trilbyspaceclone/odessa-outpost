@@ -1,7 +1,7 @@
 //Todo: make this thing work under new shield system
 /obj/machinery/shieldwallgen/excelsior
 
-	name = "Excelsior Shield Generator"
+	name = "excelsior shield generator"
 	desc = "A shield generator."
 	icon = 'icons/obj/machines/excelsior/field.dmi'
 	stun_chance = 3
@@ -36,9 +36,9 @@
 	stunmode = !stunmode
 
 	if(stunmode)
-		usr << SPAN_NOTICE("You toggle on [src]'s stun mode.")
+		to_chat(usr, SPAN_NOTICE("You toggle on [src]'s stun mode."))
 	else
-		usr << SPAN_NOTICE("You toggle off [src]'s stun mode.")
+		to_chat(usr, SPAN_NOTICE("You toggle off [src]'s stun mode."))
 
 
 //Special variant that allows excelsior people to walk though

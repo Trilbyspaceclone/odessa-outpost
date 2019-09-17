@@ -3,7 +3,7 @@
 
 //legacy crystal
 /obj/machinery/crystal
-	name = "Crystal"
+	name = "crystal"
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "crystal"
 
@@ -15,8 +15,8 @@
 
 /obj/item/weapon/talkingcrystal
 
-	name = "Crystal"
-	icon = 'icons/obj/mining.dmi'
+	name = "crystal"
+	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "talk_crystal"
 	//listening_to_players = 1
 	//speaking_to_players = 1

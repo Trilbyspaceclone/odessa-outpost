@@ -13,6 +13,12 @@
 	attack_verb = list("attacked", "bashed", "battered", "bludgeoned", "whacked")
 	tool_qualities = list(QUALITY_PRYING = 25, QUALITY_DIGGING = 10)
 
+/obj/item/weapon/tool/crowbar/bs
+	name = "bluespace crowbar"
+	icon_state = "bs_crowbar"
+	item_state = "bs_crowbar"
+	tool_qualities = list(QUALITY_PRYING = 100, QUALITY_DIGGING = 100)
+
 /obj/item/weapon/tool/crowbar/improvised
 	name = "rebar"
 	desc = "A pair of metal rods laboriously twisted into a useful shape"
@@ -22,22 +28,25 @@
 	degradation = 5 //This one breaks REALLY fast
 
 /obj/item/weapon/tool/crowbar/onestar
-	name = "-One Star- crowbar"
+	name = "One Star crowbar"
 	desc = "Looks like a classic one, but more durable."
 	icon_state = "one_star_crowbar"
 	item_state = "crowbar"
 	matter = list(MATERIAL_STEEL = 3, MATERIAL_PLATINUM = 1)
-	tool_qualities = list(QUALITY_PRYING = 30, QUALITY_DIGGING = 15)
+	tool_qualities = list(QUALITY_PRYING = 25, QUALITY_DIGGING = 10)
 	origin_tech = list(TECH_ENGINEERING = 1, TECH_MATERIAL = 2)
+	degradation = 0.6
+	workspeed = 1.2
+	max_upgrades = 2
 
 /obj/item/weapon/tool/crowbar/pneumatic
 	name = "pneumatic crowbar"
-	desc = "When you realy need to crack open something."
+	desc = "When you really need to crack open something."
 	icon_state = "pneumo_crowbar"
 	item_state = "jackhammer"
 	matter = list(MATERIAL_STEEL = 6, MATERIAL_PLASTIC = 2)
 	tool_qualities = list(QUALITY_PRYING = 40, QUALITY_DIGGING = 35)
-	degradation = 0.07
+	degradation = 0.7
 	use_power_cost = 0.8
 	max_upgrades = 4
 	suitable_cell = /obj/item/weapon/cell/medium

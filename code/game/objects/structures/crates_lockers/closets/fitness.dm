@@ -6,11 +6,11 @@
 /obj/structure/closet/athletic_mixed/populate_contents()
 	new /obj/item/clothing/under/shorts/grey(src)
 	new /obj/item/clothing/under/shorts/black(src)
-	new /obj/item/clothing/under/shorts/red(src)
+	new /obj/item/clothing/under/shorts(src)
 	new /obj/item/clothing/under/shorts/blue(src)
 	new /obj/item/clothing/under/shorts/green(src)
 	new /obj/item/clothing/under/swimsuit/red(src)
-	new /obj/item/clothing/under/swimsuit/black(src)
+	new /obj/item/clothing/under/swimsuit(src)
 	new /obj/item/clothing/under/swimsuit/blue(src)
 	new /obj/item/clothing/under/swimsuit/green(src)
 	new /obj/item/clothing/under/swimsuit/purple(src)
@@ -34,9 +34,9 @@
 	desc = "IT'S A STORAGE UNIT FOR FIGHTER MASKS OLE!"
 
 /obj/structure/closet/masks/populate_contents()
-	new /obj/item/clothing/mask/luchador(src)
-	new /obj/item/clothing/mask/luchador/rudos(src)
-	new /obj/item/clothing/mask/luchador/tecnicos(src)
+	new /obj/item/clothing/mask/costume/job/luchador(src)
+	new /obj/item/clothing/mask/costume/job/luchador/rudos(src)
+	new /obj/item/clothing/mask/costume/job/luchador/tecnicos(src)
 
 /obj/structure/closet/lasertag/red
 	name = "red laser tag equipment"

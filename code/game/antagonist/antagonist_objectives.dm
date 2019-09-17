@@ -15,7 +15,7 @@
 		return
 
 	if(objectives.len)
-		owner.current << "<span class='danger'><font size=3>Your objectives were updated.</font></span>"
+		to_chat(owner.current, "<span class='danger'><font size=3>Your objectives were updated.</font></span>")
 
 	objectives.Cut()
 	objectives.Add(new_objectives)
@@ -45,7 +45,7 @@
 	if(!possible_objectives || !possible_objectives.len)
 		return
 
-	if (!owner || (!istype(owner, /datum/faction) && !istype(owner, /datum/antagonist)))
+	if (!owner || (!istype(owner, /datum/antag_faction) && !istype(owner, /datum/antagonist)))
 		return
 
 	if (!isnum(quantity) || quantity <= 0)

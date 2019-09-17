@@ -1,6 +1,6 @@
 /datum/species_form //The default species form is going to be uncolored human.
 	var/name = "Unknown"
-	var/name_plural = "Unknowns"
+//	var/name_plural = "Unknowns"
 	// Icon/appearance vars.
 	var/base = 'icons/mob/human_races/r_human.dmi'    // Normal icon set.
 	var/deform = 'icons/mob/human_races/r_def_human.dmi' // Mutated icon set.
@@ -46,28 +46,40 @@
 	var/colorable = FALSE
 	var/color_mode = ICON_MULTIPLY
 
-	var/selectable = FALSE
+	var/playable = FALSE //Whether or not it can be selected in char creation.
+	var/variantof = null
+	var/list/variants = list()
+/*
+	How variants work. The base form's variants var will either be set to its own name or null in code.
+	At runtime, each variant will seek the base variant. If the base variant it is given has its own variant
+*/
 
 	var/virus_immune = FALSE
 
-	var/backpack_icon = 	'icons/inventory/back/mob.dmi'
-	var/uniform_icon = 		'icons/inventory/uniform/mob.dmi'
-	var/gloves_icon = 		'icons/inventory/hands/mob.dmi'
-	var/glasses_icon = 		'icons/inventory/eyes/mob.dmi'
-	var/ears_icon = 		'icons/inventory/ears/mob.dmi'
-	var/shoes_icon = 		'icons/inventory/feet/mob.dmi'
-	var/s_store_icon = 		'icons/inventory/on_suit/mob.dmi'
-	var/hat_icon = 			'icons/inventory/head/mob.dmi'
-	var/belt_icon = 		'icons/inventory/belt/mob.dmi'
-	var/suit_icon = 		'icons/inventory/suit/mob.dmi'
-	var/mask_icon = 		'icons/inventory/face/mob.dmi'
-	var/underwear_icon = 	'icons/inventory/underwear/mob.dmi'
-	var/misc_icon = 		'icons/mob/mob.dmi'
+	var/icon_fallback = FORM_HUMAN //Set this to fall back on another spritesheet if this one doesn't have the icon_state needed. Use form defines, it'll pull from the global list.
+	var/backpack_icon = 		'icons/inventory/back/mob.dmi'
+	var/uniform_icon = 			'icons/inventory/uniform/mob.dmi'
+	var/gloves_icon = 			'icons/inventory/hands/mob.dmi'
+	var/glasses_icon = 			'icons/inventory/eyes/mob.dmi'
+	var/ears_icon = 			'icons/inventory/ears/mob.dmi'
+	var/shoes_icon = 			'icons/inventory/feet/mob.dmi'
+	var/s_store_icon = 			'icons/inventory/on_suit/mob.dmi'
+	var/hat_icon = 				'icons/inventory/head/mob.dmi'
+	var/belt_icon = 			'icons/inventory/belt/mob.dmi'
+	var/suit_icon = 			'icons/inventory/suit/mob.dmi'
+	var/mask_icon = 			'icons/inventory/face/mob.dmi'
+	var/underwear_icon = 		'icons/inventory/underwear/mob.dmi'
+	var/misc_icon = 			'icons/mob/mob.dmi'
+
+	//Use these for form_variants of sprites. //TODO make functional.
+	//var/form_suffix =			""
+
+	var/list/subforms = null
 
 /datum/species_form/proc/get_mob_icon(var/slot, var/icon_state)
 	var/icon/I
 	switch(slot)
-		if("misk")    	I = misc_icon
+		if("misc")    	I = misc_icon
 		if("uniform") 	I = uniform_icon
 		if("suit")    	I = suit_icon
 		if("gloves")  	I = gloves_icon
@@ -84,6 +96,10 @@
 		if("rig")     	I = rig_back*/
 		else
 			log_world("##ERROR. Wrong sprite group for mob icon \"[slot]\"")
+	if(icon_fallback && (icon_fallback != name) && icon_state && !(icon_state in icon_states(I)))
+		var/datum/species_form/F = GLOB.all_species_form_list[icon_fallback]
+		if(F)
+			I = F.get_mob_icon(slot, icon_state)
 
 	return I
 

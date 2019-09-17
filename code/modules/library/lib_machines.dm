@@ -116,7 +116,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 // TODO: Make this an actual /obj/machinery/computer that can be crafted from circuit boards and such
 // It is August 22nd, 2012... This TODO has already been here for months.. I wonder how long it'll last before someone does something about it.
 /obj/machinery/librarycomp
-	name = "Check-In/Out Computer"
+	name = "check-in/out computer"
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"
 	anchored = 1
@@ -240,7 +240,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 	if(istype(W, /obj/item/weapon/barcodescanner))
 		var/obj/item/weapon/barcodescanner/scanner = W
 		scanner.computer = src
-		user << "[scanner]'s associated machine has been set to [src]."
+		to_chat(user, "[scanner]'s associated machine has been set to [src].")
 		for (var/mob/V in hearers(src))
 			V.show_message("[src] lets out a low, short blip.", 2)
 	else
@@ -343,7 +343,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 
 							var/DBQuery/query = dbcon.NewQuery("INSERT INTO library (author, title, content, category, author_id) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]', [author_id])")
 							if(!query.Execute())
-								usr << query.ErrorMsg()
+								to_chat(usr, query.ErrorMsg())
 							else
 								log_and_message_admins("has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] signs")
 								log_game("[usr.name]/[usr.key] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] signs")
@@ -443,7 +443,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
  * Book binder
  */
 /obj/machinery/bookbinder
-	name = "Book Binder"
+	name = "book binder"
 	icon = 'icons/obj/library.dmi'
 	icon_state = "binder"
 	anchored = 1

@@ -7,29 +7,15 @@
 	item_flags = NOSLIP | SILENT
 	origin_tech = list(TECH_ILLEGAL = 3)
 	var/list/clothing_choices = list()
-	siemens_coefficient = 0.8
+	siemens_coefficient = 0 // DAMN BOI
 	species_restricted = null
-
-/obj/item/clothing/shoes/mime
-	name = "mime shoes"
-	icon_state = "mime"
-
-/obj/item/clothing/shoes/black
-	name = "black shoes"
-	icon_state = "black"
-	desc = "A pair of black shoes."
-
-	cold_protection = LEGS
-	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = LEGS
-	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/shoes/swat
 	name = "\improper SWAT shoes"
 	desc = "When you want to turn up the heat."
 	icon_state = "swat"
 	force = WEAPON_FORCE_WEAK
-	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
+	armor = list(melee = 80, bullet = 60, energy = 25, bomb = 50, bio = 10, rad = 0)
 	item_flags = NOSLIP
 	siemens_coefficient = 0.6
 
@@ -38,9 +24,9 @@
 	desc = "When you REALLY want to turn up the heat"
 	icon_state = "swat"
 	force = WEAPON_FORCE_WEAK
-	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
+	armor = list(melee = 80, bullet = 60, energy = 25, bomb = 50, bio = 10, rad = 0)
 	item_flags = NOSLIP
-	siemens_coefficient = 0.6
+	siemens_coefficient = 0.4
 
 	cold_protection = LEGS
 	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECTION_TEMPERATURE
@@ -53,32 +39,14 @@
 	icon_state = "wizard"
 	species_restricted = null
 	body_parts_covered = 0
+	siemens_coefficient = 0
 
 /obj/item/clothing/shoes/sandal/marisa
 	desc = "A pair of magic, black shoes."
 	name = "magic shoes"
 	icon_state = "black"
 	body_parts_covered = LEGS
-
-/obj/item/clothing/shoes/clown_shoes
-	desc = "The prankster's standard-issue clowning shoes. Damn they're huge!"
-	name = "clown shoes"
-	icon_state = "clown"
-	item_state = "clown_shoes"
-	slowdown = SHOES_SLOWDOWN+1
-	force = 0
-	var/footstep = 1	//used for squeeks whilst walking
-	species_restricted = null
-
-/obj/item/clothing/shoes/clown_shoes/handle_movement(var/turf/walking, var/running)
-	if(running)
-		if(footstep >= 2)
-			footstep = 0
-			playsound(src, "clownstep", 50, 1) // this will get annoying very fast.
-		else
-			footstep++
-	else
-		playsound(src, "clownstep", 20, 1)
+	siemens_coefficient = 0
 
 /obj/item/clothing/shoes/cult
 	name = "boots"
@@ -108,7 +76,7 @@
 	species_restricted = null
 	w_class = ITEM_SIZE_SMALL
 
-/obj/item/clothing/shoes/slippers_worn
+/obj/item/clothing/shoes/slippers/worn
 	name = "worn bunny slippers"
 	desc = "Fluffy..."
 	icon_state = "slippers_worn"
@@ -128,3 +96,8 @@
 	name = "leather shoes"
 	desc = "A sturdy pair of leather shoes."
 	icon_state = "leather"
+
+/obj/item/clothing/shoes/laceup
+	name = "laceup shoes"
+	desc = "A pair of sleek polished shoes."
+	icon_state = "laceups"

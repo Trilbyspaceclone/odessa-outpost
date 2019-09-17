@@ -4,7 +4,7 @@
 // ###############################################################################
 
 /obj/machinery/power/fractal_reactor
-	name = "Fractal Energy Reactor"
+	name = "fractal energy reactor"
 	desc = "This thing drains power from fractal-subspace." // (DEBUG ITEM: INFINITE POWERSOURCE FOR MAP TESTING. CONTACT DEVELOPERS IF FOUND.)"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "tracker" //ICON stolen from solar tracker. There is no need to make new texture for debug item
@@ -18,7 +18,7 @@
 /obj/machinery/power/fractal_reactor/New()
 	..()
 	if(!mapped_in)
-		world << "<b>\red WARNING: \black Map testing power source activated at: X:[src.loc.x] Y:[src.loc.y] Z:[src.loc.z]</b>"
+		to_chat(world, "<b>\red WARNING: \black Map testing power source activated at: X:[src.loc.x] Y:[src.loc.y] Z:[src.loc.z]</b>")
 
 /obj/machinery/power/fractal_reactor/Process()
 	if(!powernet && !powernet_connection_failed)

@@ -32,7 +32,7 @@ LINEN BINS
 	if(!user)
 		return FALSE
 	if(inuse)
-		user << "Someone already using \the [src]"
+		to_chat(user, "Someone already using \the [src]")
 		return FALSE
 	inuse = TRUE
 	if (do_after(user, 6, src, incapacitation_flags = INCAPACITATION_UNCONSCIOUS))
@@ -60,7 +60,7 @@ LINEN BINS
 	if(!user)
 		return FALSE
 	if(inuse)
-		user << "Someone already using \the [src]"
+		to_chat(user, "Someone already using \the [src]")
 		return FALSE
 	inuse = TRUE
 	if (do_after(user, 25, src))
@@ -92,7 +92,7 @@ LINEN BINS
 	set src in view(1)
 
 	if(istype(loc,/mob))
-		usr << "Drop \the [src] first."
+		to_chat(usr, "Drop \the [src] first.")
 	else if(ishuman(usr))
 		toggle_fold(usr)
 
@@ -102,9 +102,9 @@ LINEN BINS
 	set src in view(1)
 
 	if(folded)
-		usr << "Unfold \the [src] first."
+		to_chat(usr, "Unfold \the [src] first.")
 	else if(istype(loc,/mob))
-		usr << "Drop \the [src] first."
+		to_chat(usr, "Drop \the [src] first.")
 	else if(ishuman(usr))
 		toggle_roll(usr)
 
@@ -115,7 +115,7 @@ LINEN BINS
 			SPAN_NOTICE("You begin cutting up \the [src] with \the [I].")
 		)
 		if(do_after(user, 50, src))
-			user << SPAN_NOTICE("You cut \the [src] into pieces!")
+			to_chat(user, SPAN_NOTICE("You cut \the [src] into pieces!"))
 			for(var/i in 1 to rand(2,5))
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 			qdel(src)
@@ -197,6 +197,77 @@ LINEN BINS
 /obj/item/weapon/bedsheet/brown
 	icon_state = "sheetbrown"
 
+/obj/item/weapon/bedsheet/ian
+	icon_state = "sheetian"
+
+/obj/item/weapon/bedsheet/double
+	icon_state = "doublesheet"
+	item_state = "sheet"
+
+/obj/item/weapon/bedsheet/bluedouble
+	icon_state = "doublesheetblue"
+	item_state = "sheetblue"
+
+/obj/item/weapon/bedsheet/greendouble
+	icon_state = "doublesheetgreen"
+	item_state = "sheetgreen"
+
+/obj/item/weapon/bedsheet/orangedouble
+	icon_state = "doublesheetorange"
+	item_state = "sheetorange"
+
+/obj/item/weapon/bedsheet/purpledouble
+	icon_state = "doublesheetpurple"
+	item_state = "sheetpurple"
+
+/obj/item/weapon/bedsheet/rainbowdouble //all the way across the sky.
+	icon_state = "doublesheetrainbow"
+	item_state = "sheetrainbow"
+
+/obj/item/weapon/bedsheet/reddouble
+	icon_state = "doublesheetred"
+	item_state = "sheetred"
+
+/obj/item/weapon/bedsheet/yellowdouble
+	icon_state = "doublesheetyellow"
+	item_state = "sheetyellow"
+
+/obj/item/weapon/bedsheet/mimedouble
+	icon_state = "doublesheetmime"
+	item_state = "sheetmime"
+
+/obj/item/weapon/bedsheet/clowndouble
+	icon_state = "doublesheetclown"
+	item_state = "sheetrainbow"
+
+/obj/item/weapon/bedsheet/captaindouble
+	icon_state = "doublesheetcaptain"
+	item_state = "sheetcaptain"
+
+/obj/item/weapon/bedsheet/rddouble
+	icon_state = "doublesheetrd"
+	item_state = "sheetrd"
+
+/obj/item/weapon/bedsheet/hosdouble
+	icon_state = "doublesheethos"
+	item_state = "sheethos"
+
+/obj/item/weapon/bedsheet/hopdouble
+	icon_state = "doublesheethop"
+	item_state = "sheethop"
+
+/obj/item/weapon/bedsheet/cedouble
+	icon_state = "doublesheetce"
+	item_state = "sheetce"
+
+/obj/item/weapon/bedsheet/browndouble
+	icon_state = "doublesheetbrown"
+	item_state = "sheetbrown"
+
+/obj/item/weapon/bedsheet/iandouble
+	icon_state = "doublesheetian"
+	item_state = "sheetian"
+
 
 /obj/structure/bedsheetbin
 	name = "linen bin"
@@ -213,12 +284,12 @@ LINEN BINS
 	..(user)
 
 	if(amount < 1)
-		user << "There are no bed sheets in the bin."
+		to_chat(user, "There are no bed sheets in the bin.")
 		return
 	if(amount == 1)
-		user << "There is one bed sheet in the bin."
+		to_chat(user, "There is one bed sheet in the bin.")
 		return
-	user << "There are [amount] bed sheets in the bin."
+	to_chat(user, "There are [amount] bed sheets in the bin.")
 
 
 /obj/structure/bedsheetbin/update_icon()
@@ -234,13 +305,13 @@ LINEN BINS
 		I.loc = src
 		sheets.Add(I)
 		amount++
-		user << SPAN_NOTICE("You put [I] in [src].")
+		to_chat(user, SPAN_NOTICE("You put [I] in [src]."))
 	//make sure there's sheets to hide it among, make sure nothing else is hidden in there.
 	else if(amount && !hidden && I.w_class < ITEM_SIZE_LARGE)
 		user.drop_item()
 		I.loc = src
 		hidden = I
-		user << SPAN_NOTICE("You hide [I] among the sheets.")
+		to_chat(user, SPAN_NOTICE("You hide [I] among the sheets."))
 
 /obj/structure/bedsheetbin/attack_hand(mob/user as mob)
 	if(amount >= 1)
@@ -256,11 +327,11 @@ LINEN BINS
 
 		B.loc = user.loc
 		user.put_in_hands(B)
-		user << SPAN_NOTICE("You take [B] out of [src].")
+		to_chat(user, SPAN_NOTICE("You take [B] out of [src]."))
 
 		if(hidden)
 			hidden.loc = user.loc
-			user << SPAN_NOTICE("[hidden] falls out of [B]!")
+			to_chat(user, SPAN_NOTICE("[hidden] falls out of [B]!"))
 			hidden = null
 
 
@@ -279,7 +350,7 @@ LINEN BINS
 			B = new /obj/item/weapon/bedsheet(loc)
 
 		B.loc = loc
-		user << SPAN_NOTICE("You telekinetically remove [B] from [src].")
+		to_chat(user, SPAN_NOTICE("You telekinetically remove [B] from [src]."))
 		update_icon()
 
 		if(hidden)

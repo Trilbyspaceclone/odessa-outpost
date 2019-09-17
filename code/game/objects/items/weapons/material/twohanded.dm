@@ -29,7 +29,7 @@
 
 /obj/item/weapon/material/twohanded/update_wear_icon()
 	var/mob/living/M = loc
-	if(istype(M) && !issmall(M) && ((M.r_hand == src && !M.l_hand) || (M.l_hand == src && !M.r_hand)))
+	if(istype(M) && !issmall(M) && !M.hands_are_full())
 		wielded = 1
 		force = force_wielded
 		name = "[base_name] (wielded)"
@@ -107,6 +107,7 @@
 	name = "spear"
 	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
 	force = WEAPON_FORCE_PAINFUL
+	structure_damage_factor = STRUCTURE_DAMAGE_WEAK
 	w_class = ITEM_SIZE_LARGE
 	slot_flags = SLOT_BACK
 	force_divisor = 0.33          // 22 when wielded with hardness 15 (glass)

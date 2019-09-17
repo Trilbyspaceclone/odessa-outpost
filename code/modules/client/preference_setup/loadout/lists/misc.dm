@@ -1,15 +1,7 @@
 /datum/gear/bible
-	display_name = "Neotheology ritual book"
+	display_name = "NeoTheology ritual book"
 	path = /obj/item/weapon/book/ritual/cruciform
 	cost = 2
-
-/datum/gear/flashlight
-	display_name = "Flashlight"
-	path = /obj/item/device/lighting/toggleable/flashlight
-
-/datum/gear/crowbar
-	display_name = "Crowbar"
-	path = /obj/item/weapon/tool/crowbar
 
 /datum/gear/cane
 	display_name = "cane"
@@ -18,22 +10,19 @@
 /datum/gear/dice
 	display_name = "dice pack"
 	path = /obj/item/weapon/storage/pill_bottle/dice
-
-/datum/gear/cards
-	display_name = "deck of cards"
-	path = /obj/item/weapon/deck/cards
-
-/datum/gear/tarot
-	display_name = "deck of tarot cards"
-	path = /obj/item/weapon/deck/tarot
-
 /datum/gear/holder
 	display_name = "card holder"
-	path = /obj/item/weapon/deck/holder
+	path = /obj/item/weapon/cardholder
 
-/datum/gear/cardemon_pack
-	display_name = "Cardemon booster pack"
-	path = /obj/item/weapon/pack/cardemon
+/datum/gear/cardpackstrad
+	display_name = "card traditional selection"
+	path = /obj/item/weapon/deck
+	flags = GEAR_HAS_TYPE_SELECTION
+
+/datum/gear/cardpacksgame
+	display_name = "card game selection"
+	path = /obj/item/weapon/pack
+	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/spaceball_pack
 	display_name = "Spaceball booster pack"
@@ -52,53 +41,24 @@
 	display_name = "flask"
 	path = /obj/item/weapon/reagent_containers/food/drinks/flask/barflask
 
-// TODO: enable after reagents
-/*
-/datum/gear/flask/New()
-	..()
-	gear_tweaks += new/datum/gear_tweak/reagents(lunchables_ethanol_reagents())
-*/
 /datum/gear/vacflask
 	display_name = "vacuum-flask"
 	path = /obj/item/weapon/reagent_containers/food/drinks/flask/vacuumflask
-// TODO: enable after reagents
-/*
-/datum/gear/vacflask/New()
-	..()
-	gear_tweaks += new/datum/gear_tweak/reagents(lunchables_drink_reagents())
-*/
-// TODO: enable after reagents
-/*
-/datum/gear/lunchbox
-	display_name = "lunchbox"
-	description = "A little lunchbox."
-	cost = 2
-	path = /obj/item/weapon/storage/lunchbox
-
-/datum/gear/lunchbox/New()
-	..()
-	var/list/lunchboxes = list()
-	for(var/lunchbox_type in typesof(/obj/item/weapon/storage/lunchbox))
-		var/obj/item/weapon/storage/lunchbox/lunchbox = lunchbox_type
-		if(!initial(lunchbox.filled))
-			lunchboxes[initial(lunchbox.name)] = lunchbox_type
-	gear_tweaks += new/datum/gear_tweak/path(lunchboxes)
-	gear_tweaks += new/datum/gear_tweak/contents(lunchables_lunches(), lunchables_snacks(), lunchables_drinks())
-*/
 
 /datum/gear/plush_toy
-	display_name = "plush toy"
-	description = "A plush toy."
+	display_name = "plushie selection"
 	path = /obj/item/toy/plushie
+	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/plush_toy/New()
 	..()
-	var/plushes = list()
-	plushes["mouse plush"] = /obj/item/toy/plushie/mouse
-	plushes["kitten plush"] = /obj/item/toy/plushie/kitten
-	plushes["lizard plush"] = /obj/item/toy/plushie/lizard
-	plushes["spider plush"] = /obj/item/toy/plushie/spider
-	plushes["farwa plush"] = /obj/item/toy/plushie/farwa
+	var/plushes = list(
+		"mouse plush"	=	/obj/item/toy/plushie/mouse,
+		"kitten plush"	=	/obj/item/toy/plushie/kitten,
+		"lizard plush"	=	/obj/item/toy/plushie/lizard,
+		"spider plush"	=	/obj/item/toy/plushie/spider,
+		"farwa plush"	=	/obj/item/toy/plushie/farwa,
+	)
 	gear_tweaks += new /datum/gear_tweak/path(plushes)
 
 /datum/gear/mirror/
@@ -108,18 +68,20 @@
 
 /datum/gear/lipstick
 	display_name = "lipstick selection"
+	sort_category = "Cosmetics"
 	path = /obj/item/weapon/lipstick
 	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/comb
 	display_name = "plastic comb"
+	sort_category = "Cosmetics"
 	path = /obj/item/weapon/haircomb
-	flags = GEAR_HAS_COLOR_SELECTION
 
-/datum/gear/mask
-	display_name = "sterile mask"
-	path = /obj/item/clothing/mask/surgical
-	cost = 2
+/datum/gear/hairflower
+	display_name = "hair flower pin selection"
+	sort_category = "Cosmetics"
+	path = /obj/item/clothing/head/hairflower
+	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/smokingpipe
 	display_name = "pipe, smoking"

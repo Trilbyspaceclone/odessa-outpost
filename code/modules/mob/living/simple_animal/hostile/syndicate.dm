@@ -18,7 +18,7 @@
 	melee_damage_upper = 10
 	attacktext = "punched"
 	a_intent = I_HURT
-	var/corpse = /obj/landmark/corpse/syndicatesoldier
+	var/corpse = /obj/landmark/corpse/antagonist/syndicate
 	var/weapon1
 	var/weapon2
 	min_oxy = 5
@@ -68,7 +68,7 @@
 			visible_message("\red \b [src] blocks the [O] with its shield! ")
 		//user.do_attack_animation(src)
 	else
-		usr << "\red This weapon is ineffective, it does no damage."
+		to_chat(usr, "\red This weapon is ineffective, it does no damage.")
 		visible_message("\red [user] gently taps [src] with the [O]. ")
 
 
@@ -93,11 +93,11 @@
 	minbodytemp = 0
 	icon_state = "syndicatemeleespace"
 	name = "Syndicate Commando"
-	corpse = /obj/landmark/corpse/syndicatecommando
+	corpse = /obj/landmark/corpse/antagonist/syndicate/commando
 	speed = 0
 
-/mob/living/simple_animal/hostile/syndicate/melee/space/allow_spacemove(var/check_drift = 0)
-	return
+/mob/living/simple_animal/hostile/syndicate/melee/space/allow_spacemove()
+	return ..()
 
 /mob/living/simple_animal/hostile/syndicate/ranged
 	ranged = 1
@@ -121,11 +121,11 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	corpse = /obj/landmark/corpse/syndicatecommando
+	corpse = /obj/landmark/corpse/antagonist/syndicate/commando
 	speed = 0
 
-/mob/living/simple_animal/hostile/syndicate/ranged/space/allow_spacemove(var/check_drift = 0)
-	return
+/mob/living/simple_animal/hostile/syndicate/ranged/space/allow_spacemove()
+	return ..()
 
 
 

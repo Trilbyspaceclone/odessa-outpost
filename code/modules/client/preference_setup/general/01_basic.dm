@@ -1,10 +1,11 @@
 datum/preferences
-	var/gender = MALE					//gender of character (well duh)
-	var/age = 30						//age of character
-	var/spawnpoint = "Cryogenic Storage" 			//where this character will spawn
-	var/real_name						//our character's name
-	var/be_random_name = 0				//whether we are a random name every round
-	var/b_type = "A+"					//blood type (not-chooseable)
+	var/gender = MALE							//physical gender of character (well duh)
+	var/gender_identity = null
+	var/age = 30								//age of character
+	var/spawnpoint = "Cryogenic Storage" 		//where this character will spawn
+	var/real_name								//our character's name
+	var/be_random_name = 0						//whether we are a random name every round
+	var/b_type = "A+"							//blood type (not-chooseable)
 	var/disabilities = 0
 
 	//Some faction information.
@@ -20,6 +21,7 @@ datum/preferences
 
 /datum/category_item/player_setup_item/physical/basic/load_character(var/savefile/S)
 	from_file(S["gender"],					pref.gender)
+	from_file(S["gender_identity"],			pref.gender_identity)
 	from_file(S["age"],						pref.age)
 	from_file(S["b_type"],					pref.b_type)
 	from_file(S["disabilities"], 			pref.disabilities)
@@ -34,6 +36,7 @@ datum/preferences
 
 /datum/category_item/player_setup_item/physical/basic/save_character(var/savefile/S)
 	to_file(S["gender"],					pref.gender)
+	to_file(S["gender_identity"],			pref.gender_identity)
 	to_file(S["age"],						pref.age)
 	to_file(S["b_type"],					pref.b_type)
 	to_file(S["disabilities"],				pref.disabilities)
@@ -53,10 +56,14 @@ datum/preferences
 	pref.b_type				= sanitize_text(pref.b_type, initial(pref.b_type))
 	pref.disabilities		= sanitize_integer(pref.disabilities, 0, 65535, initial(pref.disabilities))
 	pref.gender             = sanitize_inlist(pref.gender, S.genders, pick(S.genders))
+	pref.gender_identity	= sanitize_inlist(pref.gender_identity, GLOB.gender_datums, null)
 	pref.spawnpoint         = sanitize_inlist(pref.spawnpoint, get_late_spawntypes(), initial(pref.spawnpoint))
 	pref.be_random_name     = sanitize_integer(pref.be_random_name, 0, 1, initial(pref.be_random_name))
+	pref.real_name				= sanitize_text(pref.real_name, random_name(pref.gender, pref.species))
 	if(!pref.religion)
 		pref.religion =    "None"
+	else if(pref.religion == "Neotheology")
+		pref.religion = "NeoTheology"	// Replace old spelling with new spelling
 
 	pref.species_color		= iscolor(pref.species_color) ? pref.species_color : initial(pref.species_color)
 	var/adjusted = FALSE
@@ -103,7 +110,8 @@ datum/preferences
 	. += "<b>Species Name:</b> <a href='?src=\ref[src];species_aan=1'>A[pref.species_aan]</a><a href='?src=\ref[src];species_name=1'>[pref.custom_species]</a>"
 	. += "<a href='?src=\ref[src];species_name_color=1'><span class='color_holder_box' style='background-color:[pref.species_color]'></span></a><br>"
 
-	. += "<b>Gender:</b> <a href='?src=\ref[src];gender=1'>[gender2text(pref.gender)]</a><br>"
+	. += "<b>Sex:</b> <a href='?src=\ref[src];gender=1'>[gender2text(pref.gender)]</a><br>"
+	. += "<b>Gender Identity:</b> <a href='?src=\ref[src];gender_identity=1'>[pref.gender_identity ? gender2text(pref.gender_identity) : "Default"]</a><br>"
 	. += "<b>Age:</b> <a href='?src=\ref[src];age=1'>[pref.age]</a><br>"
 	. += "<b>Blood Type:</b> <a href='?src=\ref[src];blood_type=1'>[pref.b_type]</a><br>"
 	. += "<b>Needs Glasses:</b> <a href='?src=\ref[src];disabilities=[NEARSIGHTED]'><b>[pref.disabilities & NEARSIGHTED ? "Yes" : "No"]</b></a><br>"
@@ -141,6 +149,15 @@ datum/preferences
 			pref.gender = new_gender
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
+	else if(href_list["gender_identity"])
+		var/new_gender = input(user, "Choose your character's gender identity:", CHARACTER_PREFERENCE_INPUT_TITLE, pref.gender_identity ? pref.gender_identity : "Default") as null|anything in (list("Default" = "") + GLOB.gender_datums)
+		if(new_gender && CanUseTopic(user) && (new_gender in (list("Default" = "") + GLOB.gender_datums)))
+			if(new_gender == "Default")
+				pref.gender_identity = null
+			else
+				pref.gender_identity = new_gender
+		return TOPIC_REFRESH_UPDATE_PREVIEW
+
 	else if(href_list["age"])
 		var/new_age = input(user, "Choose your character's age:\n([S.min_age]-[S.max_age])", CHARACTER_PREFERENCE_INPUT_TITLE, pref.age) as num|null
 		if(new_age && CanUseTopic(user))
@@ -169,7 +186,8 @@ datum/preferences
 		return TOPIC_REFRESH
 
 	else if(href_list["religion"])
-		pref.religion = input("Religion") in list("None", "Neotheology")
+		pref.religion = input("Religion") in list("None", "NeoTheology")
+		prune_occupation_prefs()
 		return TOPIC_REFRESH
 
 	else if(href_list["species_name"])

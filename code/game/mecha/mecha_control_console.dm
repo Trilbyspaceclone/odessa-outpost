@@ -1,5 +1,5 @@
 /obj/machinery/computer/mecha
-	name = "Exosuit Control"
+	name = "exosuit control"
 	icon = 'icons/obj/computer.dmi'
 	icon_keyboard = "rd_key"
 	icon_screen = "mecha"
@@ -65,11 +65,12 @@
 
 
 /obj/item/mecha_parts/mecha_tracking
-	name = "Exosuit tracking beacon"
+	name = "exosuit tracking beacon"
 	desc = "Device used to transmit exosuit data."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "motion2"
 	origin_tech = list(TECH_DATA = 2, TECH_MAGNET = 2)
+	matter = list(MATERIAL_STEEL = 5)
 
 	proc/get_mecha_info()
 		if(!in_mecha())

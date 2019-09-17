@@ -17,7 +17,7 @@
 /mob/living/carbon/human/isSynthetic()
 	// If they are 100% robotic, they count as synthetic.
 	for(var/obj/item/organ/external/E in organs)
-		if(E.robotic < ORGAN_ROBOT)
+		if(!BP_IS_ROBOTIC(E))
 			return FALSE
 	return TRUE
 
@@ -219,12 +219,12 @@ proc/slur(phrase)
 		newphrase+="[newletter]";counter-=1
 	return html_encode(newphrase)
 
-/proc/stutter(n)
-	n = length(n)//length of the entire word
+/proc/stutter(phrase)
+	var/n = length(phrase)//length of the entire word
 	var/list/t = list()
 	var/p = 1//1 is the start of any word
 	while(p <= n)//while P, which starts at 1 is less or equal to N which is the length.
-		var/n_letter = copytext(n, p, p + 1)//copies text from a certain distance. In this case, only one letter at a time.
+		var/n_letter = copytext(phrase, p, p + 1)//copies text from a certain distance. In this case, only one letter at a time.
 		if (prob(80) && (lowertext(n_letter) in LIST_OF_CONSONANT))
 			if (prob(10))
 				n_letter = text("[n_letter]-[n_letter]-[n_letter]-[n_letter]")//replaces the current letter with this instead.
@@ -426,7 +426,7 @@ proc/is_blind(A)
 					else										// Everyone else (dead people who didn't ghost yet, etc.)
 						lname = name
 				lname = "<span class='name'>[lname]</span> "
-			M << "<span class='deadsay'>" + create_text_tag("dead", "DEAD:", M.client) + " [lname][follow][message]</span>"
+			to_chat(M, "<span class='deadsay'>" + create_text_tag("dead", "DEAD:", M.client) + " [lname][follow][message]</span>")
 
 //Announces that a ghost has joined/left, mainly for use with wizards
 /proc/announce_ghost_joinleave(O, var/joined_ghosts = 1, var/message = "")
@@ -598,7 +598,7 @@ proc/is_blind(A)
 
 	return ..()
 
-/mob/proc/get_sex()
+/mob/get_sex()
 	return gender
 
 //Tries to find the mob's email.

@@ -23,7 +23,7 @@ NanoBaseHelpers = function ()
 				if (typeof icon != 'undefined' && icon)
 				{
 					iconHtml = '<div class="uiLinkPendingIcon"></div><div class="uiIcon16 icon-' + icon + '"></div>';
-					iconClass = 'hasIcon';
+					iconClass = text ? 'hasIcon' : 'onlyIcon';
 				}
 
 				if (typeof elementClass == 'undefined' || !elementClass)
@@ -42,7 +42,7 @@ NanoBaseHelpers = function ()
 					return '<div unselectable="on" class="link ' + iconClass + ' ' + elementClass + ' ' + status + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
 				}
 
-				return '<div unselectable="on" class="linkActive ' + iconClass + ' ' + elementClass + '" data-href="' + NanoUtility.generateHref(parameters) + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
+				return '<div unselectable="on" class="link linkActive ' + iconClass + ' ' + elementClass + '" data-href="' + NanoUtility.generateHref(parameters) + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
 			},
 			// Round a number to the nearest integer
 			round: function(number) {

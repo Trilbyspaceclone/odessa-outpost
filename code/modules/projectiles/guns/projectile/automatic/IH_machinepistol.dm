@@ -18,11 +18,12 @@
 	silencer_type = /obj/item/weapon/silencer
 	damage_multiplier = 0.6
 	recoil = 0.7 //slightly more than a standart pistol due to auto-firing mode
+	recoil_buildup = 0.1 //smg level
 
 	firemodes = list(
 		FULL_AUTO_400,
 		SEMI_AUTO_NODELAY,
-		list(mode_name="3-round bursts", burst=3, fire_delay=null, move_delay=4,    dispersion=list(0.0, 0.6, 0.6), icon="burst"),
+		list(mode_name="3-round bursts", burst=3, fire_delay=null, move_delay=4,     icon="burst"),
 		)
 
 /obj/item/weapon/gun/projectile/automatic/IH_machinepistol/update_icon()

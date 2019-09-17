@@ -17,6 +17,7 @@
 	. = ..()
 	linked = map_sectors["[z]"]
 	get_known_sectors()
+	new /obj/effect/overmap_event/movable/comet()
 
 /obj/machinery/computer/helm/proc/get_known_sectors()
 	var/area/overmap/map = locate() in world
@@ -78,7 +79,7 @@
 
 	ui_interact(user)
 
-/obj/machinery/computer/helm/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/computer/helm/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(!linked)
 		return
 
@@ -142,7 +143,7 @@
 			sec_name = "Sector #[known_sectors.len]"
 		R.fields["name"] = sec_name
 		if(sec_name in known_sectors)
-			usr << "<span class='warning'>Sector with that name already exists, please input a different name.</span>"
+			to_chat(usr, "<span class='warning'>Sector with that name already exists, please input a different name.</span>")
 			return
 		switch(href_list["add"])
 			if("current")
@@ -222,7 +223,7 @@
 	icon_keyboard = "generic_key"
 	icon_screen = "helm"
 
-/obj/machinery/computer/navigation/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/computer/navigation/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(!linked)
 		return
 

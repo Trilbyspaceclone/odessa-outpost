@@ -8,31 +8,31 @@
 			return
 		src << link(config.wikiurl)
 	else
-		src << SPAN_WARNING("The wiki URL is not set in the server configuration.")
+		to_chat(src, SPAN_WARNING("The wiki URL is not set in the server configuration."))
 	return
 
 /client/verb/discordurl()
 	set name = "discordurl"
-	set desc = "Visit the Discordia Github."
+	set desc = "Visit the Discord Server."
 	set hidden = 1
 	if( config.discordurl )
-		if(alert("This will open the Discordia Discord  invite in your browser. Are you sure?",,"Yes","No")=="No")
+		if(alert("This will open the Discord invite in your browser. Are you sure?",,"Yes","No")=="No")
 			return
 		src << link(config.discordurl)
 	else
-		src << SPAN_WARNING("The Discordia Discord invite is not set in the server configuration.")
+		to_chat(src, SPAN_WARNING("The Discord invite is not set in the server configuration."))
 	return
 
 /client/verb/githuburl()
 	set name = "githuburl"
-	set desc = "Visit the Discordia Github."
+	set desc = "Visit the Github."
 	set hidden = 1
 	if( config.githuburl )
-		if(alert("This will open the Discordia Github page in your browser. Are you sure?",,"Yes","No")=="No")
+		if(alert("This will open the Github page in your browser. Are you sure?",,"Yes","No")=="No")
 			return
 		src << link(config.githuburl)
 	else
-		src << SPAN_WARNING("The Discordia Github is not set in the server configuration.")
+		to_chat(src, SPAN_WARNING("The Github is not set in the server configuration."))
 	return
 
 
@@ -160,10 +160,10 @@ Any-Mode: (hotkey doesn't need to be on)
 </font>"}
 
 	if(isrobot(src.mob))
-		src << robot_hotkey_mode
-		src << robot_other
+		to_chat(src, robot_hotkey_mode)
+		to_chat(src, robot_other)
 	else
-		src << hotkey_mode
-		src << other
+		to_chat(src, hotkey_mode)
+		to_chat(src, other)
 	if(holder)
-		src << admin
+		to_chat(src, admin)

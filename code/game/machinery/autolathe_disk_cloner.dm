@@ -1,5 +1,5 @@
 /obj/machinery/autolathe_disk_cloner
-	name = "Autolathe disk cloner"
+	name = "autolathe disk cloner"
 	desc = "Machine used for copying recipes from unprotected autolathe disks."
 	icon_state = "disk_cloner"
 	circuit = /obj/item/weapon/circuitboard/autolathe_disk_cloner
@@ -13,14 +13,14 @@
 	var/copying_delay = 0
 	var/hack_fail_chance = 0
 
-	var/obj/item/weapon/disk/autolathe_disk/original = null
-	var/obj/item/weapon/disk/autolathe_disk/copy = null
+	var/obj/item/weapon/computer_hardware/hard_drive/portable/original = null
+	var/obj/item/weapon/computer_hardware/hard_drive/portable/copy = null
 
 	var/copying = FALSE
 
 
-/obj/machinery/autolathe_disk_cloner/New()
-	..()
+/obj/machinery/autolathe_disk_cloner/Initialize()
+	. = ..()
 	update_icon()
 
 /obj/machinery/autolathe_disk_cloner/RefreshParts()
@@ -32,17 +32,14 @@
 	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
 		laser_rating += ML.rating
 
-	if(scanner_rating+laser_rating >= 9)
-		copying_delay = 30
-	else if(scanner_rating+laser_rating >= 6)
-		copying_delay = 60
-	else
-		copying_delay = 120
+	//Redid these to make each little upgrade worth taking.
+	copying_delay = min(120*14 / (3*scanner_rating + 2*laser_rating), 120) //480 / (3s + 2l)
+	hack_fail_chance = min(40*16 / (2*scanner_rating + 3*laser_rating), 75) //560 / (2s + 3l)
 
-	hack_fail_chance = ((scanner_rating+laser_rating) >= 9) ? 20 : 40
-
-	if(laser_rating >= 4 && scanner_rating >= 2)
-		hacked = TRUE
+	if(!hacked && laser_rating >= 4 && scanner_rating >= 2)
+		hacked = 2 //It'll reset if not emagged.
+	else if(hacked == 2)
+		hacked = FALSE
 
 /obj/machinery/autolathe_disk_cloner/attackby(var/obj/item/I, var/mob/user)
 	if(default_deconstruction(I, user))
@@ -54,22 +51,22 @@
 	if(panel_open)
 		return
 
-	if(istype(I,/obj/item/weapon/disk/autolathe_disk))
+	if(istype(I, /obj/item/weapon/computer_hardware/hard_drive/portable))
 		if(!original)
-			original = put_disk(I,user)
-			user << SPAN_NOTICE("You put \the [I] into the first slot of [src].")
+			original = put_disk(I, user)
+			to_chat(user, SPAN_NOTICE("You put \the [I] into the first slot of [src]."))
 		else if(!copy)
-			copy = put_disk(I,user)
-			user << SPAN_NOTICE("You put \the [I] into the second slot of [src].")
+			copy = put_disk(I, user)
+			to_chat(user, SPAN_NOTICE("You put \the [I] into the second slot of [src]."))
 		else
-			user << SPAN_NOTICE("[src]'s slots is full.")
+			to_chat(user, SPAN_NOTICE("[src]'s slots is full."))
 
 	user.set_machine(src)
 	ui_interact(user)
 	update_icon()
 
 
-/obj/machinery/autolathe_disk_cloner/dismantle()
+/obj/machinery/autolathe_disk_cloner/on_deconstruction()
 	if(original)
 		original.forceMove(src.loc)
 		original = null
@@ -77,12 +74,11 @@
 		copy.forceMove(src.loc)
 		copy = null
 	..()
-	return TRUE
 
 /obj/machinery/autolathe_disk_cloner/Process()
 	update_icon()
 
-/obj/machinery/autolathe_disk_cloner/proc/put_disk(var/obj/item/weapon/disk/autolathe_disk/AD, var/mob/user)
+/obj/machinery/autolathe_disk_cloner/proc/put_disk(obj/item/weapon/computer_hardware/hard_drive/portable/AD, var/mob/user)
 	ASSERT(istype(AD))
 
 	user.unEquip(AD,src)
@@ -97,40 +93,26 @@
 	ui_interact(user)
 	update_icon()
 
-/obj/machinery/autolathe_disk_cloner/ui_interact(mob/user, ui_key = "main",var/datum/nanoui/ui = null, var/force_open = 1)
-	var/list/data = list()
 
-	data["disk1"] = null
-	data["disk2"] = null
-	data["copying"] = copying
-	data["hacked"] = hacked
+/obj/machinery/autolathe_disk_cloner/ui_data()
+	var/list/data = list(
+		"copying" = copying,
+		"hacked" = hacked
+	)
 
 	if(original)
-		data["disk1"] = original.category
-		data["disk1license"] = original.license
-
-		var/list/R = list()
-
-		for(var/r in original.recipes)
-			var/datum/autolathe/recipe/recipe = autolathe_recipes[r]
-			R.Add(recipe.name)
-
-		data["disk1recipes"] = R
-
-		data["copyingtotal"] = original.recipes.len
+		data["disk1"] = original.ui_data()
+		data["copyingtotal"] = original.stored_files.len
 
 	if(copy)
-		data["disk2"] = copy.category
+		data["disk2"] = copy.ui_data()
+		data["copyingnow"] = copy.stored_files.len
 
-		var/list/R = list()
+	return data
 
-		for(var/r in copy.recipes)
-			var/datum/autolathe/recipe/recipe = autolathe_recipes[r]
-			R.Add(recipe.name)
 
-		data["disk2recipes"] = R
-
-		data["copyingnow"] = copy.recipes.len
+/obj/machinery/autolathe_disk_cloner/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = NANOUI_FOCUS)
+	var/list/data = ui_data()
 
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -156,7 +138,7 @@
 
 	if(href_list["eject"])
 		var/mob/living/H = null
-		var/obj/item/weapon/disk/autolathe_disk/D = null
+		var/obj/item/weapon/computer_hardware/hard_drive/portable/D = null
 		if(ishuman(usr))
 			H = usr
 			D = H.get_active_hand()
@@ -192,28 +174,46 @@
 	copying = TRUE
 	SSnano.update_uis(src)
 	update_icon()
-	if(original && copy && !copy.recipes.len && (hacked || original.license < 0))
-		if(!hacked)
-			copy.category = "[original.category] \[copy\]"
-			copy.name = "[original.name] copy"
-		else
-			copy.category = original.category
-			copy.name = original.name
+	if(original && copy && !copy.used_capacity)
+		var/designgrade = istype(copy, /obj/item/weapon/computer_hardware/hard_drive/portable/design) //Design disks ignore capacity restrictions.
+		copy.name = original.name
 
-		for(var/r in original.recipes)
-			if(!(original && copy) || !copying)
+		for(var/f in original.stored_files)
+			if(!(original && copy) || !copying || !f)
 				break
 
-			if(original.license < 0)
-				copy.recipes.Add(r)
-			else
-				if(hacked)
-					if(prob(hack_fail_chance))
-						copy.recipes.Add(/datum/autolathe/recipe/corrupted)
+			var/datum/computer_file/original_file = f
+			var/datum/computer_file/copying_file
+
+			// Design files with copy protection require special treatment
+			if(istype(original_file, /datum/computer_file/binary/design))
+				var/datum/computer_file/binary/design/design_file = original_file
+				if(design_file.copy_protected)
+					if(hacked)
+						var/datum/computer_file/binary/design/design_copy
+
+						if(prob(hack_fail_chance))
+							// Make a corrupted design with same filename as the original
+							design_copy = new
+							design_copy.set_design_type(/datum/design/autolathe/corrupted)
+							design_copy.filetype = "CCD"
+							design_copy.filename = original_file.filename
+						else
+							// Copy the original design, remove DRM
+							design_copy = design_file.clone()
+							design_copy.set_copy_protection(FALSE)
+
+						copying_file = design_copy
 					else
-						copy.recipes.Add(r)
-				else
-					break
+						break
+
+			// Any other files can be simply cloned
+			if(!copying_file)
+				copying_file = original_file.clone()
+
+			// Store the copied file. If the disc is corrupted, faulty, out of space - stop the copying process.
+			if(!copy.store_file(copying_file, designgrade))
+				break
 
 			SSnano.update_uis(src)
 			update_icon()
@@ -237,13 +237,13 @@
 		if(original)
 			overlays.Add(image(icon, icon_state = "disk_cloner_screen_disk1"))
 
-			if(original.recipes.len)
+			if(original.stored_files.len)
 				overlays.Add(image(icon, icon_state = "disk_cloner_screen_list1"))
 
 		if(copy)
 			overlays.Add(image(icon, icon_state = "disk_cloner_screen_disk2"))
 
-			if(copy.recipes.len)
+			if(copy.stored_files.len)
 				overlays.Add(image(icon, icon_state = "disk_cloner_screen_list2"))
 
 		if(copying)

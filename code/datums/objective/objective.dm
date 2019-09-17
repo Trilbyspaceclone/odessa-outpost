@@ -12,7 +12,7 @@ var/global/list/all_objectives_types = null
 /datum/objective
 	var/datum/antagonist/antag = null
 	var/datum/mind/owner = null			//Who owns the objective.
-	var/datum/faction/owner_faction = null
+	var/datum/antag_faction/owner_faction = null
 	var/explanation_text = "Nothing"	//What that person is supposed to do.
 	var/datum/mind/target = null		//If they are focused on a particular person.
 	var/target_amount = 0				//If they are focused on a particular number. Steal objectives have their own counter.
@@ -27,7 +27,7 @@ var/global/list/all_objectives_types = null
 		antag.objectives += src
 		if(antag.owner)
 			owner = antag.owner
-	else if (istype(new_owner, /datum/faction))
+	else if (istype(new_owner, /datum/antag_faction))
 		owner_faction = new_owner
 		owner_faction.objectives += src
 	if(!_target)
@@ -110,7 +110,7 @@ var/global/list/all_objectives_types = null
 /datum/objective/proc/select_human_target(var/mob/user)
 	var/list/possible_targets = get_targets_list()
 	if(!possible_targets || !possible_targets.len)
-		user << SPAN_WARNING("Sorry! No possible targets found!")
+		to_chat(user, SPAN_WARNING("Sorry! No possible targets found!"))
 		return
 	var/datum/mind/M = input(user, "New target") as null|anything in possible_targets
 	if(M)

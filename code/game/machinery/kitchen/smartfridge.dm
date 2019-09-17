@@ -55,7 +55,7 @@
 *   Xenobio Slime Fridge
 ********************/
 /obj/machinery/smartfridge/secure/extract
-	name = "\improper Slime Extract Storage"
+	name = "\improper slime extract SmartFridge"
 	desc = "A refrigerated storage unit for slime extracts"
 	req_access = list(access_moebius)
 
@@ -70,7 +70,7 @@
 *   Chemistry Medicine Storage
 ********************/
 /obj/machinery/smartfridge/secure/medbay
-	name = "\improper Refrigerated Medicine Storage"
+	name = "\improper medicine SmartFridge"
 	desc = "A refrigerated storage unit for storing medicine and chemicals."
 	icon_state = "smartfridge" //To fix the icon in the map editor.
 	icon_on = "smartfridge_chem"
@@ -90,7 +90,7 @@
 *   Virus Storage
 ********************/
 /obj/machinery/smartfridge/secure/virology
-	name = "\improper Refrigerated Virus Storage"
+	name = "\improper virus SmartFridge"
 	desc = "A refrigerated storage unit for storing viral material."
 	req_access = list(access_virology)
 	icon_state = "smartfridge_virology"
@@ -105,7 +105,7 @@
 	return 0
 
 /obj/machinery/smartfridge/chemistry
-	name = "\improper Smart Chemical Storage"
+	name = "\improper chemical SmartFridge"
 	desc = "A refrigerated storage unit for medicine and chemical storage."
 
 /obj/machinery/smartfridge/chemistry/accept_check(var/obj/item/O as obj)
@@ -123,7 +123,7 @@
 *   Bar Drinks Showcase
 **************************/
 /obj/machinery/smartfridge/drinks
-	name = "\improper Drink Showcase"
+	name = "\improper drink showcase"
 	desc = "A refrigerated storage unit for tasty tasty alcohol."
 
 /obj/machinery/smartfridge/drinks/accept_check(var/obj/item/O as obj)
@@ -135,7 +135,7 @@
 *   Hydroponics Drying Rack
 ****************************/
 /obj/machinery/smartfridge/drying_rack
-	name = "\improper Drying Rack"
+	name = "\improper drying rack"
 	desc = "A machine for drying plants."
 	icon_state = "drying_rack"
 	icon_on = "drying_rack_on"
@@ -266,12 +266,12 @@
 		return
 
 	if(stat & NOPOWER)
-		user << SPAN_NOTICE("\The [src] is unpowered and useless.")
+		to_chat(user, SPAN_NOTICE("\The [src] is unpowered and useless."))
 		return
 
 	if(accept_check(O))
 		if(contents.len >= max_n_of_items)
-			user << SPAN_NOTICE("\The [src] is full.")
+			to_chat(user, SPAN_NOTICE("\The [src] is full."))
 			return 1
 		else
 			user.remove_from_mob(O)
@@ -287,7 +287,7 @@
 		for(var/obj/G in P.contents)
 			if(accept_check(G))
 				if(contents.len >= max_n_of_items)
-					user << SPAN_NOTICE("\The [src] is full.")
+					to_chat(user, SPAN_NOTICE("\The [src] is full."))
 					return 1
 				else
 					P.remove_from_storage(G,src)
@@ -297,19 +297,19 @@
 			update_icon()
 			user.visible_message(SPAN_NOTICE("[user] loads \the [src] with \the [P]."), SPAN_NOTICE("You load \the [src] with \the [P]."))
 			if(P.contents.len > 0)
-				user << SPAN_NOTICE("Some items are refused.")
+				to_chat(user, SPAN_NOTICE("Some items are refused."))
 
 		SSnano.update_uis(src)
 
 	else
-		user << SPAN_NOTICE("\The [src] smartly refuses [O].")
+		to_chat(user, SPAN_NOTICE("\The [src] smartly refuses [O]."))
 		return 1
 
 /obj/machinery/smartfridge/secure/emag_act(var/remaining_charges, var/mob/user)
 	if(!emagged)
 		emagged = 1
 		locked = -1
-		user << "You short out the product lock on [src]."
+		to_chat(user, "You short out the product lock on [src].")
 		return 1
 
 /obj/machinery/smartfridge/attack_ai(mob/user as mob)
@@ -330,7 +330,7 @@
 *   SmartFridge Menu
 ********************/
 
-/obj/machinery/smartfridge/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/smartfridge/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	user.set_machine(src)
 
 	var/data[0]
@@ -425,6 +425,6 @@
 	if(stat & (NOPOWER|BROKEN)) return 0
 	if(usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf)))
 		if(!allowed(usr) && !emagged && locked != -1 && href_list["vend"])
-			usr << SPAN_WARNING("Access denied.")
+			to_chat(usr, SPAN_WARNING("Access denied."))
 			return 0
 	return ..()

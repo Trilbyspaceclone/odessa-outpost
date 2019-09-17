@@ -16,13 +16,18 @@
 	tool_qualities = list(QUALITY_SAWING = 30, QUALITY_CUTTING = 20, QUALITY_WIRE_CUTTING = 20)
 	embed_mult = 1 //Serrated blades catch on bone more easily
 
+/obj/item/weapon/tool/saw/bs
+	name = "bluespace metal saw"
+	icon_state = "bs_metal_saw"
+	tool_qualities = list(QUALITY_SAWING = 100, QUALITY_CUTTING = 100, QUALITY_WIRE_CUTTING = 100)
+
 /obj/item/weapon/tool/saw/improvised
 	name = "choppa"
 	desc = "A wicked serrated blade made of whatever nasty sharp things you could find. It would make a pretty decent weapon"
 	icon_state = "impro_saw"
 	force = WEAPON_FORCE_PAINFUL
 	tool_qualities = list(QUALITY_SAWING = 15, QUALITY_CUTTING = 10, QUALITY_WIRE_CUTTING = 10)
-	degradation = 0.7
+	degradation = 1
 
 /obj/item/weapon/tool/saw/circular
 	name = "circular saw"
@@ -37,6 +42,17 @@
 	use_power_cost = 0.15
 	suitable_cell = /obj/item/weapon/cell/small
 
+/obj/item/weapon/tool/saw/circular/medical
+	name = "medical cirular saw"
+	desc = "For clean bone cutting but dosnt seem all that durable. Spins slower then the normal saw as well."
+	icon_state = "saw"
+	force = WEAPON_FORCE_PAINFUL
+	matter = list(MATERIAL_STEEL = 6, MATERIAL_PLASTIC = 4)
+	tool_qualities = list(QUALITY_SAWING = 60, QUALITY_CUTTING = 40, QUALITY_WIRE_CUTTING = 40)
+	use_power_cost = 0.05
+	degradation = 2.65
+	suitable_cell = /obj/item/weapon/cell/small
+
 /obj/item/weapon/tool/saw/advanced_circular
 	name = "advanced circular saw"
 	desc = "You think you can cut anything with it."
@@ -46,14 +62,14 @@
 	force = WEAPON_FORCE_ROBUST
 	matter = list(MATERIAL_STEEL = 6, MATERIAL_PLASTIC = 2)
 	tool_qualities = list(QUALITY_SAWING = 50, QUALITY_CUTTING = 40, QUALITY_WIRE_CUTTING = 40)
-	degradation = 0.07
+	degradation = 0.7
 	use_power_cost = 0.22
 	suitable_cell = /obj/item/weapon/cell/small
 	max_upgrades = 4
 
 /obj/item/weapon/tool/saw/chain
 	name = "chainsaw"
-	desc = "You can cut trees, people walls and zombies with it, just watch out for fuel."
+	desc = "You can cut trees, people, walls, and zombies with it, just watch out for fuel."
 	icon_state = "chainsaw"
 	hitsound = WORKSOUND_CHAINSAW
 	worksound = WORKSOUND_CHAINSAW

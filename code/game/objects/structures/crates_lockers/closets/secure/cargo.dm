@@ -6,7 +6,7 @@
 
 /obj/structure/closet/secure_closet/personal/cargotech/populate_contents()
 	new /obj/item/clothing/under/rank/cargotech(src)
-	new /obj/item/clothing/shoes/black(src)
+	new /obj/item/clothing/shoes/color/black(src)
 	new /obj/item/device/radio/headset/headset_cargo(src)
 	new /obj/item/clothing/gloves/thick(src)
 	new /obj/item/clothing/head/soft(src)
@@ -25,7 +25,7 @@
 	new /obj/item/clothing/suit/fire/firefighter(src)
 	new /obj/item/weapon/tank/emergency_oxygen(src)
 	new /obj/item/clothing/mask/gas(src)
-	new /obj/item/clothing/glasses/meson(src)
+	new /obj/item/clothing/glasses/powered/meson(src)
 	new /obj/item/clothing/head/soft(src)
 	new /obj/item/weapon/gun/projectile/shotgun/pump(src)
 	new /obj/item/ammo_casing/shotgun/beanbag(src)

@@ -1,5 +1,5 @@
 /obj/machinery/optable
-	name = "Operating Table"
+	name = "operating table"
 	desc = "Used for advanced medical procedures."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "optable-idle"
@@ -129,10 +129,10 @@
 /obj/machinery/optable/proc/check_table(mob/living/carbon/patient as mob)
 	check_victim()
 	if(victim)
-		usr << SPAN_WARNING("\The [src] is already occupied!")
+		to_chat(usr, SPAN_WARNING("\The [src] is already occupied!"))
 		return 0
 	if(patient.buckled)
-		usr << SPAN_NOTICE("Unbuckle \the [patient] first!")
+		to_chat(usr, SPAN_NOTICE("Unbuckle \the [patient] first!"))
 		return 0
 	return 1
 

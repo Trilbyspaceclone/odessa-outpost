@@ -4,7 +4,7 @@
 	desc = "A skeletal limb wrapped in pseudomuscles, with a low-conductivity case."
 	dislocated = -1
 	cannot_break = 1
-	robotic = ORGAN_ROBOT
+	nature = MODIFICATION_SILICON
 	brute_mod = 0.8
 	burn_mod = 0.8
 	var/list/forced_children = null
@@ -16,9 +16,13 @@
 	var/gender = "m"
 	var/body = ""
 	if(owner)
-		gender = owner.gender == FEMALE ? "f" : "m"
-		body = owner.form.form_key
-	icon_state = "[organ_tag]_[gender][body]"
+		gender = owner.gender == FEMALE ? "_f" : "_m"
+		body = owner.form.form_key //Todo: figure out how to adapt this into multiple forms.
+	icon_state = "[organ_tag][gender][body]"
+	if(!(icon_state in icon_states(force_icon)))
+		icon_state = "[organ_tag][gender]"
+		if(!(icon_state in icon_states(force_icon)))
+			icon_state = "[organ_tag]"
 	mob_icon = icon(force_icon, icon_state)
 	return mob_icon
 

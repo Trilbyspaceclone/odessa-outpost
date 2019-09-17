@@ -12,6 +12,11 @@
 	attack_verb = list("stabbed")
 	tool_qualities = list(QUALITY_SCREW_DRIVING = 30, QUALITY_BONE_SETTING = 10)
 
+/obj/item/weapon/tool/screwdriver/bs
+	name = "bluespace screwdriver"
+	icon_state = "bs_screwdriver"
+	tool_qualities = list(QUALITY_SCREW_DRIVING = 100, QUALITY_BONE_SETTING = 100)
+
 /obj/item/weapon/tool/screwdriver/improvised
 	name = "screwpusher"
 	desc = "A little metal rod wrapped in tape, barely qualifies as a tool."
@@ -26,7 +31,7 @@
 	worksound = WORKSOUND_DRIVER_TOOL
 	matter = list(MATERIAL_STEEL = 2, MATERIAL_PLASTIC = 1)
 	tool_qualities = list(QUALITY_SCREW_DRIVING = 40, QUALITY_DRILLING = 10, QUALITY_BONE_SETTING = 10)
-	degradation = 0.07
+	degradation = 0.7
 	use_power_cost = 0.18
 	suitable_cell = /obj/item/weapon/cell/small
 
@@ -38,7 +43,7 @@
 	worksound = WORKSOUND_DRIVER_TOOL
 	matter = list(MATERIAL_STEEL = 3, MATERIAL_PLASTIC = 2)
 	tool_qualities = list(QUALITY_SCREW_DRIVING = 50, QUALITY_BOLT_TURNING = 50, QUALITY_DRILLING = 20)
-	degradation = 0.07
+	degradation = 0.7
 	use_power_cost = 0.24
 	suitable_cell = /obj/item/weapon/cell/small
 	max_upgrades = 4
@@ -54,14 +59,14 @@
 
 
 /obj/item/weapon/tool/screwdriver/combi_driver/onestar
-	name = "-One Star- combi driver"
-	desc = "A bulky \"One Star\" combi driver, that works just like standard one, but do it much better."
+	name = "One Star combi driver"
+	desc = "A One Star combi driver, does better than the standard combi drivers on the market."
 	icon_state = "one_star_combidriver"
 	matter = list(MATERIAL_STEEL = 4, MATERIAL_PLATINUM = 2)
-	tool_qualities = list(QUALITY_SCREW_DRIVING = 65, QUALITY_BOLT_TURNING = 60, QUALITY_DRILLING = 30)
+	tool_qualities = list(QUALITY_SCREW_DRIVING = 60, QUALITY_BOLT_TURNING = 60, QUALITY_DRILLING = 25)
 	origin_tech = list(TECH_ENGINEERING = 3, TECH_MATERIAL = 2)
-	degradation = 0.03
-	workspeed = 1.6
+	degradation = 0.6
+	workspeed = 1.7
 	use_power_cost = 0.3
 	suitable_cell = /obj/item/weapon/cell/small
 	max_upgrades = 2

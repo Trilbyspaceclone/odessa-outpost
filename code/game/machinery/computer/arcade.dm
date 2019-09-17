@@ -6,29 +6,29 @@
 	icon_screen = "invaders"
 	var/list/prizes = list(
 		/obj/item/weapon/storage/box/snappops			= 2,
-		/obj/item/toy/blink								= 2,
+		/obj/item/toy/junk/blink								= 2,
 		/obj/item/clothing/under/syndicate				= 2,
-		/obj/item/toy/sword								= 2,
+		/obj/item/toy/weapon/sword								= 2,
 		/obj/item/weapon/gun/projectile/revolver/capgun	= 2,
-		/obj/item/toy/crossbow							= 2,
-		/obj/item/clothing/suit/syndicatefake			= 2,
+		/obj/item/toy/weapon/crossbow							= 2,
+		/obj/item/clothing/suit/costume/halloween/syndicate	= 2,
 		/obj/item/weapon/storage/fancy/crayons			= 2,
-		/obj/item/toy/spinningtoy						= 2,
-		/obj/item/toy/prize/ripley						= 1,
-		/obj/item/toy/prize/fireripley					= 1,
-		/obj/item/toy/prize/deathripley					= 1,
-		/obj/item/toy/prize/gygax						= 1,
-		/obj/item/toy/prize/durand						= 1,
-		/obj/item/toy/prize/honk						= 1,
-		/obj/item/toy/prize/marauder					= 1,
-		/obj/item/toy/prize/seraph						= 1,
-		/obj/item/toy/prize/mauler						= 1,
-		/obj/item/toy/prize/odysseus					= 1,
-		/obj/item/toy/prize/phazon						= 1,
-		/obj/item/toy/waterflower						= 1,
+		/obj/item/toy/junk/spinningtoy						= 2,
+		/obj/item/toy/figure/mecha/ripley						= 1,
+		/obj/item/toy/figure/mecha/fireripley					= 1,
+		/obj/item/toy/figure/mecha/deathripley					= 1,
+		/obj/item/toy/figure/mecha/gygax						= 1,
+		/obj/item/toy/figure/mecha/durand						= 1,
+		/obj/item/toy/figure/mecha/honk						= 1,
+		/obj/item/toy/figure/mecha/marauder					= 1,
+		/obj/item/toy/figure/mecha/seraph						= 1,
+		/obj/item/toy/figure/mecha/mauler						= 1,
+		/obj/item/toy/figure/mecha/odysseus					= 1,
+		/obj/item/toy/figure/mecha/phazon						= 1,
+		/obj/item/toy/weapon/waterflower						= 1,
 		/obj/random/action_figure						= 1,
 		/obj/random/plushie								= 1,
-		/obj/item/toy/cultsword							= 1
+		/obj/item/toy/weapon/cultsword							= 1
 	)
 
 /obj/machinery/computer/arcade/Initialize()
@@ -44,8 +44,8 @@
 		var/prizeselect = pickweight(prizes)
 		new prizeselect(src.loc)
 
-		if(istype(prizeselect, /obj/item/clothing/suit/syndicatefake)) //Helmet is part of the suit
-			new	/obj/item/clothing/head/syndicatefake(src.loc)
+		if(istype(prizeselect, /obj/item/clothing/suit/costume/halloween/syndicate)) //Helmet is part of the suit
+			new	/obj/item/clothing/head/costume/halloween/syndicate(src.loc)
 
 	else
 		var/atom/movable/prize = pick(contents)
@@ -78,7 +78,7 @@
 
 /obj/machinery/computer/arcade/battle
 	name = "arcade machine"
-	desc = "Does not support Pinball."
+	desc = "Try your luck against a vicious and deadly opponent."
 	icon_state = "arcade"
 	circuit = /obj/item/weapon/circuitboard/arcade/battle
 	var/enemy_name = "Space Villian"
@@ -97,10 +97,10 @@
 	var/name_part1
 	var/name_part2
 
-	name_action = pick("Defeat ", "Annihilate ", "Save ", "Strike ", "Stop ", "Destroy ", "Robust ", "Romance ", "Pwn ", "Own ", "Ban ")
+	name_action = pick("Ambush ", "Annihilate ", "Assassinate ", "Assault ", "Arrest ", "Attack ", "Assail ", "Battle ", "Beat ", "Besiege ", "Challenge ", "Chase ", "Combat ", "Confront ", "Conquer ", "Contest ", "Crush ", "Decimate ", "Defeat ", "Demolish ", "Destroy ", "Detain ", "Dispatch ", "Duel ", "Execute ", "Expunge ", "Eradicate ", "Fight ", "Greytide ", "Hinder ", "Harm ", "Humiliate ", "Hunt ", "Hurt ", "Impeach ", "Impede ", "Injure ", "Kick ", "Kill ", "Murder ", "Obliterate ", "Oppose ", "Outmanoeuvre ", "Overpower ", "Overthrow ", "Pursue ", "Repel ", "Repress ", "Repulse ", "Resist ", "Robust ", "Rout ", "Raid ", "Raze ", "Ravage ", "Shame ", "Slaughter ", "Slay ", "Smash ", "Spar ", "Stop ", "Strike ", "Subdue ", "Surmount ", "Storm ", "Vanquish ", "Wound ", "Wreck ")
 
-	name_part1 = pick("the Automatic ", "Farmer ", "Lord ", "Professor ", "the Cuban ", "the Evil ", "the Dread King ", "the Space ", "Lord ", "the Great ", "Duke ", "General ")
-	name_part2 = pick("Melonoid", "Murdertron", "Sorcerer", "Ruin", "Jeff", "Ectoplasm", "Crushulon", "Uhangoid", "Vhakoid", "Peteoid", "slime", "Griefer", "ERPer", "Lizard Man", "Unicorn", "Bloopers")
+	name_part1 = pick("Admiral ", "Agent ", "Assassin ", "Anarchist ", "Arms Dealer ", "Arsonist ", "Administrator ", "Abductor ", "Baron ", "Bandit ", "Bounty Hunter ", "Blood Cultist ", "Boss ", "Brigadier ", "Bomber ", "Captain ", "Chapter Master ", "Colonel ", "Commander ", "Commodore ", "Count ", "Cultist ", "Crazy ", "Doctor ", "Dread King ", "Duke ", "Deserter ", "Destroyer ", "Deviant ", "Enforcer ", "Emperor ", "Empress ", "Executioner ", "Escaped Prisoner ", "Extorter ", "Forger ", "Fraudster ", "Firestarter ", "Fanatic ", "Fugitive ", "Gangster ", "General ", "Gunner ", "Inquisitor ", "Interferer ", "Inciter ", "Igniter ", "King ", "Killer ", "Kidnapper ", "Leader ", "Legate ", "Lieutenant ", "Lord ", "Mad ", "Magnate ", "Mafioso ", "Major ", "Mercenary ", "Master ", "Maverick ", "NeoTheologist ", "Ninja ", "Officer ", "Operative ", "Prince ", "Princess ", "Professor ", "Private ", "Prophet ", "Pariah ", "Pirate ", "Queen ", "Secret Agent ", "Sergeant ", "Serial Killer ", "Supreme Commander ", "Serbian ", "Smuggler ", "Traitor ", "Terrorist ", "Thief ", "Trafficker ", "Terroriser ", "Viscount ", "Warlord ", "Warmonger ", "Zealot ")
+	name_part2 = pick("Alexander", "Ana", "Adams", "Arthur", "Bash",  "Brown", "Buchanan", "Bush", "Bowchief", "Boyum", "Brooks", "Carly", "Clark", "Campbell", "Cox", "Carter", "David", "Dane", "Divino", "Dizet", "Duket", "Diaz", "Ebonheart", "Earl", "Evans", "Edwards",  "Frank", "Flores", "Foster", "Ford", "Fillmore", "Garfield", "Greyson", "Grid", "Gustavia", "Griffin", "Hank", "Harold", "Helenora", "Hippolyta", "Harris", "Hoover", "Hippie", "Ian", "Iain", "Ivan", "Ianto", "Jathok", "Jermaine", "Jim", "Jackson", "Johnson", "Kate", "K'vhas", "Kei", "Lee", "Leslie", "Luxitou", "Makino", "Marshall", "Muu'rn", "Myrin", "Madison", "Monroe", "Mcfall", "N'imira", "Nathan", "Natasha", "Oliver", "Owen", "Orion", "Pasotel", "Pauper", "Popsy", "Prax", "Pierce", "Quentin", "Ray", "Resca", "Robinson", "Roosevelt", "Samantha", "Sanders", "Sarah", "Seeking", "Stellar", "Strelle", "Szandor", "Thompson", "Thomas", "Uriel", "Victoria", "Violet", "Victor", "Valentine", "Watson", "Walker", "Wilson", "Wolf", "William", "White", "Washington", "Xarillia", "Xander", "Yael", "Yadon", "Yaakov", "Zach", "Zeke", "Zane")
 
 	src.enemy_name = replacetext((name_part1 + name_part2), "the ", "")
 	src.name = (name_action + name_part1 + name_part2)
@@ -204,7 +204,7 @@
 			if(emagged)
 
 				new /obj/effect/spawner/newbomb/timer/syndicate(src.loc)
-				new /obj/item/clothing/head/collectable/petehat(src.loc)
+				new /obj/item/clothing/head/costume/misc/petehat(src.loc)
 				message_admins("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded a bomb.")
 				log_game("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded a bomb.")
 				src.New()

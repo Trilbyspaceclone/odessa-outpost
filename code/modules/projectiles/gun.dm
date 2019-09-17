@@ -2,12 +2,12 @@
 /obj/item/weapon/gun
 	name = "gun"
 	desc = "It's a gun. It's pretty terrible, though."
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/guns/projectile.dmi'
 	item_icons = list(
 		slot_l_hand_str = 'icons/mob/items/lefthand_guns.dmi',
 		slot_r_hand_str = 'icons/mob/items/righthand_guns.dmi',
 		)
-	icon_state = "detective"
+	icon_state = "giskard_old"
 	item_state = "gun"
 	flags =  CONDUCT
 	slot_flags = SLOT_BELT|SLOT_HOLSTER
@@ -16,7 +16,7 @@
 	throwforce = 5
 	throw_speed = 4
 	throw_range = 5
-	force = 5
+	force = WEAPON_FORCE_WEAK
 	origin_tech = list(TECH_COMBAT = 1)
 	attack_verb = list("struck", "hit", "bashed")
 	zoomdevicename = "scope"
@@ -31,9 +31,9 @@
 
 	var/fire_sound_text = "gunshot"
 	var/recoil = 0		//screen shake
+	var/recoil_buildup = 0.2 //How quickly recoil builds up
 
 	var/muzzle_flash = 3
-	var/list/dispersion = list(0)
 	var/requires_two_hands
 	var/dual_wielding
 	var/wielded_icon = "gun_wielded"
@@ -63,6 +63,7 @@
 	var/obj/item/weapon/silencer/silenced = null //The installed silencer, if any
 	var/silencer_type = null //The type of silencer that could be installed in us, if we don't have one
 	var/fire_sound_silenced = 'sound/weapons/Gunshot_silenced.wav' //Firing sound used when silenced
+	var/datum/timedevent/recoil_timer //Allows for recoil buildup, this is reset when you don't fire your gun for N seconds (affected by vig)
 
 /obj/item/weapon/gun/get_item_cost(export)
 	if(export)
@@ -167,35 +168,26 @@
 /obj/item/weapon/gun/afterattack(atom/A, mob/living/user, adjacent, params)
 	if(adjacent) return //A is adjacent, is the user, or is on the user's person
 
-	if(!user.aiming)
-		user.aiming = new(user)
+	var/obj/item/weapon/gun/off_hand   //DUAL WIELDING
+	if(ishuman(user) && user.a_intent == "harm")
+		var/mob/living/carbon/human/H = user
+		if(H.r_hand == src && istype(H.l_hand, /obj/item/weapon/gun))
+			off_hand = H.l_hand
+			dual_wielding = TRUE
 
-	if(user && user.client && user.aiming && user.aiming.active && user.aiming.aiming_at != A)
-		PreFire(A,user,params) //They're using the new gun system, locate what they're aiming at.
-		return
-
-	else
-
-		var/obj/item/weapon/gun/off_hand   //DUAL WIELDING
-		if(ishuman(user) && user.a_intent == "harm")
-			var/mob/living/carbon/human/H = user
-			if(H.r_hand == src && istype(H.l_hand, /obj/item/weapon/gun))
-				off_hand = H.l_hand
-				dual_wielding = TRUE
-
-			else if(H.l_hand == src && istype(H.r_hand, /obj/item/weapon/gun))
-				off_hand = H.r_hand
-				dual_wielding = TRUE
-			else
-				dual_wielding = FALSE
-
-			if(off_hand && off_hand.can_hit(user))
-				spawn(1)
-				off_hand.Fire(A,user,params)
+		else if(H.l_hand == src && istype(H.r_hand, /obj/item/weapon/gun))
+			off_hand = H.r_hand
+			dual_wielding = TRUE
 		else
 			dual_wielding = FALSE
 
-		Fire(A,user,params) //Otherwise, fire normally.
+		if(off_hand && off_hand.can_hit(user))
+			spawn(1)
+			off_hand.Fire(A,user,params)
+	else
+		dual_wielding = FALSE
+
+	Fire(A,user,params) //Otherwise, fire normally.
 
 /obj/item/weapon/gun/attack(atom/A, mob/living/user, def_zone)
 	if (A == user && user.targeted_organ == BP_MOUTH && !mouthshoot)
@@ -233,14 +225,6 @@
 	user.setClickCooldown(shoot_time) //no clicking on things while shooting
 	next_fire_time = world.time + shoot_time
 
-	var/held_disp_mod = 0
-	if(requires_two_hands)
-		if((user.l_hand == src && user.r_hand) || (user.r_hand == src && user.l_hand))
-			held_disp_mod = 3
-
-	if(dual_wielding)
-		held_disp_mod = 6
-
 	//actually attempt to shoot
 	var/turf/targloc = get_turf(target) //cache this in case target gets deleted during shooting, e.g. if it was a securitron that got destroyed.
 	for(var/i in 1 to burst)
@@ -249,8 +233,7 @@
 			handle_click_empty(user)
 			break
 
-		var/disp = dispersion[min(i, dispersion.len)] + held_disp_mod
-		process_accuracy(projectile, user, target, disp)
+		process_accuracy(projectile, user, target)
 
 		projectile.multiply_projectile_damage(damage_multiplier)
 
@@ -320,17 +303,27 @@
 
 		if(muzzle_flash)
 			set_light(muzzle_flash)
+	//We've successfully fired a shot! Now we add recoil, and add a delay to remove the recoil (2s, affected by vig)
+	recoil += recoil_buildup*10 //Course wanted noticeable recoil. EX: 0.2 buildup * 10 = 2
+	var/skill_offset = user.stats.getStat(STAT_VIG)/50 //For example, IH have 40 VIG so this translates into a 0.8s cooldown reduction,meaning they can fire double as fast. Feel free to change this, Course!
+	var/recoil_reset_time = 20 //After you fire your shot, you must wait 2 seconds for it to become accurate again
+	recoil_reset_time -= skill_offset
+	recoil -= skill_offset //People with VIG are better at controlling sprays
 
+	if(!recoil_timer || QDELETED(recoil_timer)) //If there is not already an active recoil timer, make a new one
+		addtimer(CALLBACK(src, .proc/reset_recoil), recoil_reset_time)
+	else //There is already a recoil timer, so add onto its reset time.
+		recoil_timer.timeToRun += recoil_reset_time
 	if(recoil)
-		spawn()
-			if (silenced)
-				shake_camera(user, (recoil+1*0.5), (recoil*0.5))
-			else if(dual_wielding)
-				shake_camera(user, recoil+2, recoil)
-			else
-				shake_camera(user, recoil+1, recoil)
+		update_cursor(user)
 	update_icon()
 
+/obj/item/weapon/gun/proc/reset_recoil() //Clear all our recoil, CSGO style
+	var/mob/living/M = loc
+	if(istype(M) && recoil)
+		update_cursor(M) //Show that their recoil has diminished
+	recoil = 0
+	recoil_timer = null //Remove the timer object's reference to avoid null pointer
 
 /obj/item/weapon/gun/proc/process_point_blank(obj/projectile, mob/user, atom/target)
 	var/obj/item/projectile/P = projectile
@@ -353,11 +346,12 @@
 				damage_mult = 1.5
 	P.damage *= damage_mult
 
-/obj/item/weapon/gun/proc/process_accuracy(obj/projectile, mob/user, atom/target, dispersion)
+/obj/item/weapon/gun/proc/process_accuracy(obj/projectile, mob/user, atom/target, dispersion) //Applies the actual bullet spread
 	var/obj/item/projectile/P = projectile
 	if(!istype(P))
 		return
-
+	if(recoil)
+		dispersion += recoil/2
 	P.dispersion = dispersion
 
 	if (aim_targets && (target in aim_targets))
@@ -371,18 +365,29 @@
 
 	if(params)
 		P.set_clickpoint(params)
-
-	//shooting while in shock
-	var/x_offset = 0
-	var/y_offset = 0
+	var/lower_offset = 0
+	var/upper_offset = 0
+	if(recoil)
+		lower_offset = -recoil*20
+		upper_offset = recoil*20
 	if(iscarbon(user))
 		var/mob/living/carbon/mob = user
-		if(mob.shock_stage > 120)
-			y_offset = rand(-2,2)
-			x_offset = rand(-2,2)
+		var/aim_coeff = mob.stats.getStat(STAT_VIG)/10 //Allows for security to be better at aiming
+		if(aim_coeff > 0)//EG. 60 which is the max, turns into 6. Giving a sizeable accuracy bonus.
+			lower_offset += aim_coeff
+			upper_offset -= aim_coeff
+		if(mob.shock_stage > 120)	//shooting while in shock
+			lower_offset *= 15 //A - * a - is a +
+			upper_offset *= 15
 		else if(mob.shock_stage > 70)
-			y_offset = rand(-1,1)
-			x_offset = rand(-1,1)
+			lower_offset *= 10 //A - * a - is a +
+			upper_offset *= 10
+
+	var/x_offset = 0
+	var/y_offset = 0
+	x_offset = rand(lower_offset, upper_offset) //Recoil fucks up the spread of your bullets
+	y_offset = rand(lower_offset, upper_offset)
+
 
 	return !P.launch_from_gun(target, user, src, target_zone, x_offset, y_offset)
 
@@ -393,7 +398,7 @@
 	var/mob/living/carbon/human/M = user
 
 	mouthshoot = TRUE
-	M.visible_message(SPAN_DANGER("[user] sticks their gun in their mouth, ready to pull the trigger..."))
+	M.visible_message(SPAN_DANGER("[user] points their gun at their head, ready to pull the trigger..."))
 	if(!do_after(user, 40, progress=0))
 		M.visible_message(SPAN_NOTICE("[user] decided life was worth living"))
 		mouthshoot = FALSE
@@ -419,7 +424,7 @@
 		in_chamber.on_hit(M)
 		if (in_chamber.damage_type != HALLOSS)
 			log_and_message_admins("[key_name(user)] commited suicide using \a [src]")
-			user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, BP_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]", sharp=1)
+			user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, BP_HEAD, used_weapon = "Point blank shot in the head with \a [in_chamber]", sharp=1)
 			user.death()
 		else
 			to_chat(user, SPAN_NOTICE("Ow..."))
@@ -445,6 +450,7 @@
 	if(zoom)
 		if(recoil)
 			recoil = round(recoil*zoom_factor+1) //recoil is worse when looking through a scope
+	update_cursor(user)
 	update_hud_actions()
 
 //make sure accuracy and recoil are reset regardless of how the item is unzoomed.
@@ -452,6 +458,7 @@
 	..()
 	if(!zoom)
 		recoil = initial(recoil)
+	update_cursor(usr)
 
 /obj/item/weapon/gun/examine(mob/user)
 	..()
@@ -514,6 +521,7 @@
 	//Update firemode when safeties are toggled
 	update_firemode()
 	update_hud_actions()
+	update_cursor(user)
 
 
 //Finds the current firemode and calls update on it. This is called from a few places:
@@ -558,8 +566,6 @@
 	set src in view(1)
 
 	toggle_safety(usr)
-
-
 
 /*
 	Gun Modding

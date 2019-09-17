@@ -21,6 +21,7 @@
 	var/target_zone
 	var/min_size = 5 //Mobs smaller than this won't trigger the trap
 	var/struggle_prob = 2
+	var/list/aware_mobs = list() //List of refs of mobs that examined this trap. Won't trigger it when walking.
 
 
 /obj/item/weapon/beartrap/Initialize()
@@ -70,7 +71,7 @@ Freeing yourself is much harder than freeing someone else. Calling for help is a
 		//Is there a tool involved?
 		if (istype(I))
 			//Using a crowbar helps
-			user << SPAN_NOTICE("\The [I] gives you extra leverage")
+			to_chat(user, SPAN_NOTICE("\The [I] gives you extra leverage"))
 			var/reduction = I.get_tool_quality(QUALITY_PRYING)*0.5
 			if (user == buckled_mob)
 				reduction *= 0.66 //But it helps less if you don't have good leverage
@@ -82,7 +83,7 @@ Freeing yourself is much harder than freeing someone else. Calling for help is a
 
 		//How about your stats? Being strong or crafty helps.
 		//We'll subtract the highest of either robustness or mechanical, from the difficulty
-		var/reduction = user.stats.getStat(list(STAT_MAX, STAT_ROB, STAT_MEC))
+		var/reduction = user.stats.getMaxStat(list(STAT_ROB, STAT_MEC))
 		if (user == buckled_mob)
 			reduction *= 0.66 //But it helps less if you don't have good leverage
 		difficulty -= reduction
@@ -138,6 +139,21 @@ Freeing yourself is much harder than freeing someone else. Calling for help is a
 /obj/item/weapon/beartrap/attack_hand(mob/user as mob)
 	if (buckled_mob)
 		attempt_release(user)
+		return
+	if (deployed)
+		user.visible_message(
+			SPAN_DANGER("[user] starts to carefully disarm \the [src]."),
+			SPAN_DANGER("You begin to carefully disarm \the [src].")
+			)
+
+		if (do_after(user, 25))
+			user.visible_message(
+				SPAN_DANGER("[user] has disarmed \the [src]."),
+				SPAN_DANGER("You have disarmed \the [src]!")
+				)
+			deployed = FALSE
+			anchored = FALSE
+			update_icon()
 		return
 	.=..()
 
@@ -196,6 +212,7 @@ Freeing yourself is much harder than freeing someone else. Calling for help is a
 				"You hear a latch click loudly."
 				)
 
+			aware_mobs = list()
 			deployed = 1
 			user.drop_from_inventory(src)
 			update_icon()
@@ -216,9 +233,9 @@ Freeing yourself is much harder than freeing someone else. Calling for help is a
 
 	var/mob/living/L = buckled_mob
 	//armour
-	var/blocked = L.run_armor_check(target_zone, "melee")
-	if(blocked < 100)
-		L.apply_damage(fail_damage, BRUTE, target_zone, blocked, src)
+
+	if( L.damage_through_armor(fail_damage, BRUTE, target_zone, ARMOR_MELEE, used_weapon = src) )
+	//No damage - no stun
 		L.Stun(4) //A short stun prevents spamming failure attempts
 		shake_camera(user, 2, 1)
 
@@ -231,9 +248,9 @@ Freeing yourself is much harder than freeing someone else. Calling for help is a
 	playsound(src, 'sound/effects/impacts/beartrap_shut.ogg', 10, 1,-2,-2)//Fairly quiet snapping sound
 
 	if (difficulty)
-		user << SPAN_NOTICE("You failed to release the trap. There was a [round(100 - difficulty)]% chance of success")
+		to_chat(user, SPAN_NOTICE("You failed to release the trap. There was a [round(100 - difficulty)]% chance of success"))
 		if (user == buckled_mob)
-			user << SPAN_NOTICE("Freeing yourself is very difficult. Perhaps you should call for help?")
+			to_chat(user, SPAN_NOTICE("Freeing yourself is very difficult. Perhaps you should call for help?"))
 
 
 
@@ -254,18 +271,16 @@ Freeing yourself is much harder than freeing someone else. Calling for help is a
 
 
 	//armour
-	var/blocked = L.run_armor_check(target_zone, "melee")
-	if(blocked < 100)
-
-		var/success = L.apply_damage(base_damage, BRUTE, target_zone, blocked, src)
-		if(success)
-			shake_camera(L, 2, 1)
+	if( L.damage_through_armor(fail_damage, BRUTE, target_zone, ARMOR_MELEE, used_weapon = src) )
+	//No damage - no stun
+		L.Stun(4) //A short stun prevents spamming failure attempts
+		shake_camera(L, 2, 1)
 
 	//trap the victim in place
 	set_dir(L.dir)
 	can_buckle = 1
 	buckle_mob(L)
-	L << "<span class='danger'>The steel jaws of \the [src] bite into you, trapping you in place!</span>"
+	to_chat(L, "<span class='danger'>The steel jaws of \the [src] bite into you, trapping you in place!</span>")
 
 
 	//If the victim is nonhuman and has no client, start processing.
@@ -301,6 +316,8 @@ Very rarely it might escape
 /obj/item/weapon/beartrap/Crossed(AM as mob|obj)
 	if(deployed && isliving(AM))
 		var/mob/living/L = AM
+		if(("\ref[L]" in aware_mobs) && MOVING_DELIBERATELY(L))
+			return ..()
 		L.visible_message(
 			"<span class='danger'>[L] steps on \the [src].</span>",
 			"<span class='danger'>You step on \the [src]!</span>",
@@ -313,7 +330,11 @@ Very rarely it might escape
 		update_icon()
 	..()
 
-
+/obj/item/weapon/beartrap/examine(mob/user)
+	..()
+	if(deployed && isliving(user) && !("\ref[user]" in aware_mobs))
+		to_chat(user, SPAN_NOTICE("You're aware of this trap, now. You won't set it off when walking carefully."))
+		aware_mobs |= "\ref[user]"
 
 
 /obj/item/weapon/beartrap/update_icon()

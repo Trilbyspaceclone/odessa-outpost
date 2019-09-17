@@ -15,8 +15,14 @@ var/global/list/current_factions = list()
 var/global/list/antag_team_objectives = list()		//List of shared sets of objectives for antag teams
 var/global/list/antag_team_members = list()			//List of the people who are in antag teams
 
+GLOBAL_LIST_EMPTY(factions_list)			//List of active factions.
+GLOBAL_LIST_EMPTY(faxable_factions_list)	//Factions with faxes.
+GLOBAL_LIST_EMPTY(player_factions_list)		//Factions with players in them. Admin factions can have players added.
+GLOBAL_LIST_EMPTY(admin_factions_list)		//Factions with administrative response. All faxes to an admin faction pass through admins first, even with a primary fax.
+
 var/global/list/cable_list = list()					//Index for all cables, so that powernets don't have to look through the entire world all the time
 var/global/list/chemical_reactions_list				//list of all /datum/chemical_reaction datums. Used during chemical reactions
+GLOBAL_LIST_EMPTY(chemical_reactions_list_by_result)					//list of all /datum/chemical_reaction datums. But this one indexed by chemical result instead of reagents
 var/global/list/chemical_reagents_list				//list of all /datum/reagent datums indexed by reagent id. Used by chemistry stuff
 var/global/list/landmarks_list = list()				//list of all landmarks created
 var/global/list/shuttle_landmarks_list = list()		//list of all /obj/effect/shuttle_landmark.
@@ -67,14 +73,15 @@ GLOBAL_LIST_EMPTY(all_stash_datums)
 */
 
 
-//Neotheology
+//NeoTheology
 GLOBAL_LIST_EMPTY(all_rituals)//List of all rituals
 GLOBAL_LIST_EMPTY(global_ritual_cooldowns) // internal lists. Use ritual's cooldown_category
 
 //Preferences stuff
 	//Body Sprites
-var/global/list/all_species_form_list = list()
-var/global/list/selectable_species_form_list = list()
+GLOBAL_LIST_EMPTY(all_species_form_list)
+GLOBAL_LIST_EMPTY(playable_species_form_list)
+GLOBAL_LIST_EMPTY(selectable_species_form_list)
 	//Hairstyles
 GLOBAL_LIST_EMPTY(hair_styles_list)        //stores /datum/sprite_accessory/hair indexed by name
 GLOBAL_LIST_EMPTY(facial_hair_styles_list) //stores /datum/sprite_accessory/facial_hair indexed by name
@@ -100,12 +107,13 @@ var/global/list/organ_structure = list(
 	)
 
 var/global/list/organ_tag_to_name = list(
-	head  = "Head", r_arm = "Right arm",
-	chest = "Body", r_leg = "Right Leg",
-	eyes  = "Eyes", l_arm = "Left arm",
+	head  = "Head" ,r_arm = "Right arm",
+	chest = "Body" ,r_leg = "Right Leg",
+	eyes  = "Eyes" ,l_arm = "Left arm",
 	groin = "Groin",l_leg = "Left Leg",
-	chest2= "Back", heart = "Heart",
-	lungs  = "Lungs", liver = "Liver"
+	torso = "Body" ,heart = "Heart",
+	lungs = "Lungs",liver = "Liver",
+	back  = "Back"
 	)
 
 
@@ -154,14 +162,6 @@ var/global/list/unworn_slots = list(slot_l_hand,slot_r_hand, slot_l_store, slot_
 /proc/makeDatumRefLists()
 
 	var/list/paths
-
-	//Forms
-	paths = typesof(/datum/species_form) - /datum/species_form
-	for(var/path in paths)
-		var/datum/species_form/F = new path()
-		all_species_form_list[F.name] = F
-		if(F.selectable)
-			selectable_species_form_list[F.name] = F
 
 	//Hair - Initialise all /datum/sprite_accessory/hair into an list indexed by hair-style name
 	paths = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
@@ -220,6 +220,17 @@ var/global/list/unworn_slots = list(slot_l_hand,slot_r_hand, slot_l_store, slot_
 		var/datum/job/J = new T
 		joblist[J.title] = J
 
+	//List of factions
+	paths = typesof(/datum/faction)-/datum/faction
+	for(var/T in paths)
+		var/datum/faction/F = new T()
+		GLOB.factions_list[F.name] = F
+		if(F.faxable)
+			GLOB.faxable_factions_list[F.name] = F
+		if(F.admin)
+			GLOB.admin_factions_list[F.name] = F
+		//Player factions don't get loaded here since they have to be done at roundstart.
+
 	//Stashes
 	paths = subtypesof(/datum/stash)
 	for(var/T in paths)
@@ -262,15 +273,29 @@ var/global/list/unworn_slots = list(slot_l_hand,slot_r_hand, slot_l_store, slot_
 		if(S.spawn_flags & IS_WHITELISTED)
 			whitelisted_species += S.name
 
+	//Forms
 	var/fkey = 0
 	paths = typesof(/datum/species_form)-/datum/species_form
-	for(var/T in paths)
+	for(var/path in paths)
 		fkey++
-		var/datum/species_form/F = new T
+		var/datum/species_form/F = new path
 		F.form_key = fkey //Used in mob icon caching. The one a segment above is obsoleted by this.
-		all_species_form_list[F.name] = F
-		if(F.selectable)
-			selectable_species_form_list[F.name] = F
+		GLOB.all_species_form_list[F.name] = F
+		if(F.playable)
+			GLOB.playable_species_form_list[F.name] = F
+			if(!F.variantof || F.variantof == F.name)
+				GLOB.selectable_species_form_list[F.name] = F
+
+	//Form Variants System
+	for(var/formname in GLOB.playable_species_form_list)
+		var/datum/species_form/F = GLOB.all_species_form_list[formname]
+		if(F.variantof && (F.variantof != F.name))
+			var/datum/species_form/P = GLOB.all_species_form_list[F.variantof]
+			if(P)
+				LAZYINITLIST(P.variants)
+				if(!P.variants.len)
+					P.variants[P.name] = P
+				P.variants[F.name] = F
 
 	//Posters
 	paths = typesof(/datum/poster) - /datum/poster - /datum/poster/wanted

@@ -1,7 +1,7 @@
 // It is a gizmo that flashes a small area
 
 /obj/machinery/flasher
-	name = "Mounted flash"
+	name = "mounted flash"
 	desc = "A wall-mounted flashbulb device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "mflash1"
@@ -142,7 +142,7 @@
 	use_power(5)
 
 	active = 1
-	icon_state = "launcheract"
+	icon_state = "launcher1"
 
 	for(var/obj/machinery/flasher/M in SSmachines.machinery)
 		if(M.id == src.id)
@@ -151,7 +151,7 @@
 
 	sleep(50)
 
-	icon_state = "launcherbtt"
+	icon_state = "launcher0"
 	active = 0
 
 	return

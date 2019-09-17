@@ -18,7 +18,7 @@
 	return 0
 
 /obj/machinery/seed_storage
-	name = "Seed storage"
+	name = "SeedMaster"
 	desc = "It stores, sorts, and dispenses seeds."
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "seeds"
@@ -42,12 +42,12 @@
 			add(O)
 
 /obj/machinery/seed_storage/random // This is mostly for testing, but I guess admins could spawn it
-	name = "Random seed storage"
+	name = "random SeedMaster"
 	scanner = list("stats", "produce", "soil", "temperature", "light")
 	starting_seeds = list(/obj/item/seeds/random = 50)
 
 /obj/machinery/seed_storage/garden
-	name = "Garden seed storage"
+	name = "garden SeedMaster"
 	scanner = list("stats")
 	starting_seeds = list(
 		/obj/item/seeds/appleseed = 3,
@@ -86,7 +86,7 @@
 	)
 
 /obj/machinery/seed_storage/xenobotany
-	name = "Xenobotany seed storage"
+	name = "xenobotany SeedMaster"
 	scanner = list("stats", "produce", "soil", "temperature", "light")
 	starting_seeds = list(/obj/item/seeds/ambrosiavulgarisseed = 3,
 		/obj/item/seeds/appleseed = 3,
@@ -290,12 +290,12 @@
 		if (loaded)
 			user.visible_message("[user] puts the seeds from \the [O.name] into \the [src].", "You put the seeds from \the [O.name] into \the [src].")
 		else
-			user << SPAN_NOTICE("There are no seeds in \the [O.name].")
+			to_chat(user, SPAN_NOTICE("There are no seeds in \the [O.name]."))
 		return
 	else if(istype(O, /obj/item/weapon/tool/wrench))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
-		user << "You [anchored ? "wrench" : "unwrench"] \the [src]."
+		to_chat(user, "You [anchored ? "wrench" : "unwrench"] \the [src].")
 
 /obj/machinery/seed_storage/proc/add(var/obj/item/seeds/O as obj)
 	if (ismob(O.loc))

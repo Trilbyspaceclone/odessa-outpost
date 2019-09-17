@@ -14,6 +14,11 @@
 	edge = TRUE
 	tool_qualities = list(QUALITY_WIRE_CUTTING = 30, QUALITY_RETRACTING = 15, QUALITY_BONE_SETTING = 15)
 
+/obj/item/weapon/tool/wirecutters/bs
+	name = "bluespace wirecutters"
+	icon_state = "bs_cutters"
+	tool_qualities = list(QUALITY_WIRE_CUTTING = 100, QUALITY_RETRACTING = 100, QUALITY_BONE_SETTING = 100)
+
 //Better and more flexible than most improvised tools, but more bulky and annoying to make
 /obj/item/weapon/tool/wirecutters/improvised
 	name = "wiremanglers"
@@ -31,7 +36,7 @@
 	force = WEAPON_FORCE_NORMAL
 	matter = list(MATERIAL_STEEL = 4, MATERIAL_PLASTIC = 1)
 	tool_qualities = list(QUALITY_WIRE_CUTTING = 40, QUALITY_CUTTING = 30)
-	degradation = 0.07
+	degradation = 0.7
 	max_upgrades = 4
 
 /obj/item/weapon/tool/wirecutters/attack(mob/living/carbon/C as mob, mob/user as mob)

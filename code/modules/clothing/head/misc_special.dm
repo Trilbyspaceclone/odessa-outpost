@@ -21,7 +21,7 @@
 		)
 	matter = list(MATERIAL_STEEL = 4, MATERIAL_GLASS = 2)
 	var/up = 0
-	armor = list(melee = 40, bullet = 30, laser = 30,energy = 30, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 40, bullet = 30, energy = 30, bomb = 0, bio = 0, rad = 0)
 	flags_inv = (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
 	body_parts_covered = HEAD|FACE|EYES
 	action_button_name = "Flip Welding Mask"
@@ -39,7 +39,7 @@
 
 /obj/item/clothing/head/welding/verb/toggle()
 	set category = "Object"
-	set name = "Adjust welding mask"
+	set name = "Adjust Welding Mask"
 	set src in usr
 
 	if(!usr.incapacitated())
@@ -50,7 +50,7 @@
 			flash_protection = initial(flash_protection)
 			tint = initial(tint)
 			icon_state = base_state
-			usr << "You flip the [src] down to protect your eyes."
+			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
 			body_parts_covered &= ~(EYES|FACE)
@@ -58,50 +58,89 @@
 			tint = TINT_NONE
 			flags_inv &= ~(HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
 			icon_state = "[base_state]up"
-			usr << "You push the [src] up out of your face."
+			to_chat(usr, "You push the [src] up out of your face.")
 		update_wear_icon()	//so our mob-overlays
 		usr.update_action_buttons()
+
+/obj/item/clothing/head/welding/demon
+	name = "demonic welding helmet"
+	desc = "A welding helmet painted to resemble a demonic face."
+	icon_state = "demonwelding"
+	item_state_slots = list(
+		slot_l_hand_str = "demonwelding",
+		slot_r_hand_str = "demonwelding",
+		)
+
+/obj/item/clothing/head/welding/knight
+	name = "knightly welding helmet"
+	desc = "A welding helmet painted to resemble a medieval knight."
+	icon_state = "knightwelding"
+	item_state_slots = list(
+		slot_l_hand_str = "knightwelding",
+		slot_r_hand_str = "knightwelding",
+		)
+
+/obj/item/clothing/head/welding/fancy
+	name = "fancy welding helmet"
+	desc = "A welding helmet painted in fancy black and gold colors."
+	icon_state = "fancywelding"
+	item_state_slots = list(
+		slot_l_hand_str = "fancywelding",
+		slot_r_hand_str = "fancywelding",
+		)
+
+/obj/item/clothing/head/welding/technomancer
+	name = "technomancer welding helmet"
+	desc = "A welding helmet painted in technomancer colors."
+	icon_state = "engiewelding"
+	item_state_slots = list(
+		slot_l_hand_str = "engiewelding",
+		slot_r_hand_str = "engiewelding",
+		)
+
+/obj/item/clothing/head/welding/flame
+	name = "flame welding helmet"
+	desc = "A welding helmet painted with vivid flames and fire."
+	icon_state = "alice_mccrea_1"
+	item_state_slots = list(
+		slot_l_hand_str = "alice_mccrea_1",
+		slot_r_hand_str = "alice_mccrea_1",
+		)
+
+/obj/item/clothing/head/welding/ghetto
+	name = "ghetto welding helmet"
+	desc = "A welding helmet painted white with a graffiti tag."
+	icon_state = "yuki_matsuda_1"
+	item_state_slots = list(
+		slot_l_hand_str = "yuki_matsuda_1",
+		slot_r_hand_str = "yuki_matsuda_1",
+		)
+
+/obj/item/clothing/head/welding/aquatic
+	name = "aquatic welding helmet"
+	desc = "A welding helmet painting in an underwater blue theme."
+	icon_state = "norah_briggs_1"
+	item_state_slots = list(
+		slot_l_hand_str = "norah_briggs_1",
+		slot_r_hand_str = "norah_briggs1",
+		)
+
+
+
+
+
+norah_briggs_1
+
+alice_mccrea_1
+
+yuki_matsuda_1
+
 
 
 /*
  * Cakehat
  */
-/obj/item/clothing/head/cakehat
-	name = "cake-hat"
-	desc = "It's tasty looking!"
-	icon_state = "cake0"
-	item_state = "cake0"
-	var/onfire = 0
-	body_parts_covered = HEAD
 
-/obj/item/clothing/head/cakehat/Process()
-	if(!onfire)
-		STOP_PROCESSING(SSobj, src)
-		return
-
-	var/turf/location = src.loc
-	if(istype(location, /mob/))
-		var/mob/living/carbon/human/M = location
-		if(M.l_hand == src || M.r_hand == src || M.head == src)
-			location = M.loc
-
-	if (istype(location, /turf))
-		location.hotspot_expose(700, 1)
-
-/obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
-	src.onfire = !( src.onfire )
-	if (src.onfire)
-		src.force = 3
-		src.damtype = "fire"
-		src.icon_state = "cake1"
-		src.item_state = "cake1"
-		START_PROCESSING(SSobj, src)
-	else
-		src.force = null
-		src.damtype = "brute"
-		src.icon_state = "cake0"
-		src.item_state = "cake0"
-	return
 
 
 /*
@@ -109,17 +148,17 @@
  */
 /obj/item/clothing/head/ushanka
 	name = "ushanka"
-	desc = "Perfect for winter in Siberia, da?"
+	desc = "A warm fur cap with ear flaps."
 	icon_state = "ushankadown"
 	flags_inv = HIDEEARS
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
 	if(src.icon_state == "ushankadown")
 		src.icon_state = "ushankaup"
-		user << "You raise the ear flaps on the ushanka."
+		to_chat(user, "You raise the ear flaps on the ushanka.")
 	else
 		src.icon_state = "ushankadown"
-		user << "You lower the ear flaps on the ushanka."
+		to_chat(user, "You lower the ear flaps on the ushanka.")
 
 /*
  * Pumpkin head

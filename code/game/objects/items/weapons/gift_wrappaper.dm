@@ -37,7 +37,7 @@
 		/obj/item/weapon/storage/belt/champion,
 		/obj/item/weapon/soap/deluxe,
 		/obj/item/weapon/pen/invisible,
-		/obj/item/weapon/lipstick/random,
+		/obj/item/weapon/lipstick/jade,
 		/obj/item/weapon/grenade/smokebomb,
 		/obj/item/weapon/corncob,
 		/obj/item/weapon/contraband/poster,
@@ -46,30 +46,30 @@
 		/obj/item/weapon/bikehorn,
 		/obj/item/weapon/beach_ball,
 		/obj/item/weapon/beach_ball/holoball,
-		/obj/item/toy/balloon,
-		/obj/item/toy/blink,
-		/obj/item/toy/crossbow,
+		/obj/item/toy/junk/balloon,
+		/obj/item/toy/junk/blink,
+		/obj/item/toy/weapon/crossbow,
 		/obj/item/weapon/gun/projectile/revolver/capgun,
-		/obj/item/toy/katana,
-		/obj/item/toy/prize/deathripley,
-		/obj/item/toy/prize/durand,
-		/obj/item/toy/prize/fireripley,
-		/obj/item/toy/prize/gygax,
-		/obj/item/toy/prize/honk,
-		/obj/item/toy/prize/marauder,
-		/obj/item/toy/prize/mauler,
-		/obj/item/toy/prize/odysseus,
-		/obj/item/toy/prize/phazon,
-		/obj/item/toy/prize/ripley,
-		/obj/item/toy/prize/seraph,
-		/obj/item/toy/spinningtoy,
-		/obj/item/toy/sword,
+		/obj/item/toy/weapon/katana,
+		/obj/item/toy/figure/mecha/deathripley,
+		/obj/item/toy/figure/mecha/durand,
+		/obj/item/toy/figure/mecha/fireripley,
+		/obj/item/toy/figure/mecha/gygax,
+		/obj/item/toy/figure/mecha/honk,
+		/obj/item/toy/figure/mecha/marauder,
+		/obj/item/toy/figure/mecha/mauler,
+		/obj/item/toy/figure/mecha/odysseus,
+		/obj/item/toy/figure/mecha/phazon,
+		/obj/item/toy/figure/mecha/ripley,
+		/obj/item/toy/figure/mecha/seraph,
+		/obj/item/toy/junk/spinningtoy,
+		/obj/item/toy/weapon/sword,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiadeus,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
 		/obj/item/device/paicard,
 		/obj/item/device/violin,
 		/obj/item/weapon/storage/belt/utility/full,
-		/obj/item/clothing/accessory/horrible)
+		/obj/item/clothing/accessory/tie/yellow)
 
 	if(!ispath(gift_type,/obj/item))	return
 
@@ -96,22 +96,22 @@
 		user.put_in_active_hand(gift)
 		src.gift.add_fingerprint(user)
 	else
-		user << SPAN_WARNING("The gift was empty!")
+		to_chat(user, SPAN_WARNING("The gift was empty!"))
 	qdel(src)
 
 /obj/effect/spresent/relaymove(mob/user as mob)
 	if (user.stat)
 		return
-	user << SPAN_WARNING("You can't move.")
+	to_chat(user, SPAN_WARNING("You can't move."))
 
 /obj/effect/spresent/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 
 	if (!istype(W, /obj/item/weapon/tool/wirecutters))
-		user << SPAN_WARNING("I need wirecutters for that.")
+		to_chat(user, SPAN_WARNING("I need wirecutters for that."))
 		return
 
-	user << SPAN_NOTICE("You cut open the present.")
+	to_chat(user, SPAN_NOTICE("You cut open the present."))
 
 	for(var/mob/M in src) //Should only be one but whatever.
 		M.forceMove(loc)
@@ -140,12 +140,12 @@
 /obj/item/weapon/wrapping_paper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if (!( locate(/obj/structure/table, src.loc) ))
-		user << SPAN_WARNING("You MUST put the paper on a table!")
+		to_chat(user, SPAN_WARNING("You MUST put the paper on a table!"))
 	if (W.w_class < ITEM_SIZE_LARGE)
 		if ((istype(user.l_hand, /obj/item/weapon/tool/wirecutters) || istype(user.r_hand, /obj/item/weapon/tool/wirecutters)))
 			var/a_used = 2 ** (src.w_class - 1)
 			if (src.amount < a_used)
-				user << SPAN_WARNING("You need more paper!")
+				to_chat(user, SPAN_WARNING("You need more paper!"))
 				return
 			else
 				if(istype(W, /obj/item/smallDelivery) || istype(W, /obj/item/weapon/gift)) //No gift wrapping gifts!
@@ -167,15 +167,15 @@
 				qdel(src)
 				return
 		else
-			user << SPAN_WARNING("You need scissors!")
+			to_chat(user, SPAN_WARNING("You need scissors!"))
 	else
-		user << SPAN_WARNING("The object is FAR too large!")
+		to_chat(user, SPAN_WARNING("The object is FAR too large!"))
 	return
 
 
 /obj/item/weapon/wrapping_paper/examine(mob/user)
 	if(..(user, 1))
-		user << text("There is about [] square units of paper left!", src.amount)
+		to_chat(user, text("There is about [] square units of paper left!", src.amount))
 
 /obj/item/weapon/wrapping_paper/attack(mob/target as mob, mob/user as mob)
 	if (!ishuman(target))
@@ -198,6 +198,6 @@
 			msg_admin_attack("[key_name(user)] used [src] to wrap [key_name(H)]")
 
 		else
-			user << SPAN_WARNING("You need more paper.")
+			to_chat(user, SPAN_WARNING("You need more paper."))
 	else
-		user << "They are moving around too much. A straightjacket would help."
+		to_chat(user, "They are moving around too much. A straightjacket would help.")

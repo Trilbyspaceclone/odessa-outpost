@@ -89,7 +89,7 @@ You can set verify to TRUE if you want send() to sleep until the client has the 
 	if(!unreceived || !unreceived.len)
 		return 0
 	if (unreceived.len >= ASSET_CACHE_TELL_CLIENT_AMOUNT)
-		client << "Sending Resources..."
+		to_chat(client, "Sending Resources...")
 	for(var/asset in unreceived)
 		if (asset in asset_cache.cache)
 			client << browse_rsc(asset_cache.cache[asset], asset)
@@ -138,6 +138,12 @@ You can set verify to TRUE if you want send() to sleep until the client has the 
 /proc/register_asset(var/asset_name, var/asset)
 	asset_cache.cache[asset_name] = asset
 
+//Generated names do not include file extention.
+//Used mainly for code that deals with assets in a generic way
+//The same asset will always lead to the same asset name
+/proc/generate_asset_name(var/file)
+	return "asset.[md5(fcopy_rsc(file))]"
+
 // will return filename for cached atom icon or null if not cached
 // can accept atom objects or types
 /proc/getAtomCacheFilename(var/atom/A)
@@ -165,6 +171,7 @@ You can set verify to TRUE if you want send() to sleep until the client has the 
 
 /datum/asset/New()
 	asset_datums[type] = src
+	register()
 
 /datum/asset/proc/register()
 	return
@@ -184,25 +191,31 @@ You can set verify to TRUE if you want send() to sleep until the client has the 
 /datum/asset/simple/send(client)
 	send_asset_list(client,assets,verify)
 
+// For registering or sending multiple others at once
+/datum/asset/group
+	var/list/children
+
+/datum/asset/group/register()
+	for(var/type in children)
+		get_asset_datum(type)
+
+/datum/asset/group/send(client/C)
+	for(var/type in children)
+		var/datum/asset/A = get_asset_datum(type)
+		A.send(C)
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
-/datum/asset/simple/autolathe/register()
-	for(var/type in typesof(/datum/autolathe/recipe)-/datum/autolathe/recipe)
-		var/datum/autolathe/recipe/R = type
-		if(initial(R.path))
-			var/filename = sanitizeFileName("[initial(R.path)].png")
-			var/icon/I = getFlatTypeIcon(initial(R.path))
-			register_asset(filename, I)
-			assets[filename] = I
+/datum/asset/simple/design_icons/register()
+	for(var/D in SSresearch.all_designs)
+		var/datum/design/design = D
 
-/datum/asset/simple/rnd/register()
-	for(var/type in typesof(/datum/design) - /datum/design)
-		var/datum/design/D = type
-		if(initial(D.build_path))
-			var/filename = sanitizeFileName("[initial(D.build_path)].png")
-			var/icon/I = getFlatTypeIcon(initial(D.build_path))
-			register_asset(filename, I)
-			assets[filename] = I
+		var/filename = sanitizeFileName("[design.build_path].png")
+		var/icon/I = getFlatTypeIcon(design.build_path)
+		register_asset(filename, I)
+		assets[filename] = I
+
+		design.ui_data["icon"] = filename
+
 
 /datum/asset/simple/craft/register()
 	for(var/name in SScraft.categories)
@@ -221,18 +234,11 @@ You can set verify to TRUE if you want send() to sleep until the client has the 
 					assets[filename] = I
 
 /datum/asset/simple/materials/register()
-	for(var/type in typesof(/obj/item/stack/material)-/obj/item/stack/material - typesof(/obj/item/stack/material/cyborg))
+	for(var/type in subtypesof(/obj/item/stack/material) - typesof(/obj/item/stack/material/cyborg))
 		var/filename = sanitizeFileName("[type].png")
 		var/icon/I = getFlatTypeIcon(type)
 		register_asset(filename, I)
 		assets[filename] = I
-
-/datum/asset/simple/tgui
-	isTrivial = FALSE
-	assets = list(
-		"tgui.css"	= 'tgui/assets/tgui.css',
-		"tgui.js"	= 'tgui/assets/tgui.js'
-	)
 
 /datum/asset/simple/pda
 	assets = list(

@@ -3,8 +3,8 @@ var/list/flooring_types
 /proc/get_flooring_data(var/flooring_path)
 	if(!flooring_types)
 		flooring_types = list()
-	if(!flooring_types["[flooring_path]"])
-		flooring_types["[flooring_path]"] = new flooring_path
+		for(var/path in typesof(/decl/flooring))
+			flooring_types["[path]"] = new path
 	return flooring_types["[flooring_path]"]
 
 // State values:
@@ -240,7 +240,7 @@ var/list/flooring_types
 			return
 		else
 			R.use(3)
-			user << SPAN_NOTICE("You start connecting [R.name]s to [src.name], creating catwalk ...")
+			to_chat(user, SPAN_NOTICE("You start connecting [R.name]s to [src.name], creating catwalk ..."))
 			if(do_after(user,60))
 				T.alpha = 0
 				var/obj/structure/catwalk/CT = new /obj/structure/catwalk(T)
@@ -275,7 +275,7 @@ var/list/flooring_types
 			M.adjustBruteLoss(5)
 			M.slip(null, 6)
 			playsound(M, 'sound/effects/bang.ogg', 50, 1)
-			M << SPAN_WARNING("You tripped over!")
+			to_chat(M, SPAN_WARNING("You tripped over!"))
 			return
 
 
@@ -329,6 +329,8 @@ var/list/flooring_types
 	flags = TURF_HAS_CORNERS | TURF_HAS_INNER_CORNERS | TURF_REMOVE_CROWBAR | TURF_CAN_BURN | TURF_HIDES_THINGS
 	floor_smooth = SMOOTH_NONE
 	wall_smooth = SMOOTH_NONE
+	space_smooth = SMOOTH_NONE
+	smooth_movable_atom = SMOOTH_NONE
 
 /decl/flooring/carpet/bcarpet
 	name = "black carpet"
@@ -457,6 +459,18 @@ var/list/flooring_types
 	icon_base = "monofloor"
 	build_type = /obj/item/stack/tile/floor/steel/monofloor
 	has_base_range = 15
+
+/decl/flooring/tiling/steel/bar_flat
+	icon_base = "bar_flat"
+	build_type = /obj/item/stack/tile/floor/steel/bar_flat
+
+/decl/flooring/tiling/steel/bar_dance
+	icon_base = "bar_dance"
+	build_type = /obj/item/stack/tile/floor/steel/bar_dance
+
+/decl/flooring/tiling/steel/bar_light
+	icon_base = "bar_light"
+	build_type = /obj/item/stack/tile/floor/steel/bar_light
 
 
 
