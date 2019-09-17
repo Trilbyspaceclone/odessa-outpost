@@ -50,15 +50,6 @@
 	name = "camera assembly"
 	path = /obj/item/weapon/camera_assembly
 
-
-/datum/autolathe/recipe/part/laserguide
-	name = "Asters \"Guiding Light\" laser guide"
-	path = /obj/item/weapon/tool_upgrade/refinement/laserguide
-
-/datum/autolathe/recipe/part/diamondblade
-	name = "Asters \"Gleaming Edge\": Diamond blade"
-	path = /obj/item/weapon/tool_upgrade/productivity/diamond_blade
-
 /datum/autolathe/recipe/part/subspace_transmitter
 	name = "subspace transmitter"
 	path = /obj/item/weapon/stock_parts/subspace/transmitter
@@ -70,3 +61,83 @@
 /datum/autolathe/recipe/part/subspace_amplifier
 	name = "subspace amplifier"
 	path = /obj/item/weapon/stock_parts/subspace/amplifier
+
+/datum/autolathe/recipe/part/laserguide
+	name = "Asters \"Guiding Light\" laser guide"
+	path = /obj/item/weapon/tool_upgrade/refinement/laserguide
+
+/datum/autolathe/recipe/part/diamondblade
+	name = "Asters \"Gleaming Edge\": Diamond blade"
+	path = /obj/item/weapon/tool_upgrade/productivity/diamond_blade
+
+/datum/autolathe/recipe/part/stick
+	name = "Reinforcing Brace Bar"
+	path = /obj/item/weapon/tool_upgrade/reinforcement/stick
+
+/datum/autolathe/recipe/part/heatsink
+	name = "Aptiva Heat Sink"
+	path = /obj/item/weapon/tool_upgrade/reinforcement/heatsink
+
+/datum/autolathe/recipe/part/plating
+	name = "Reinforcing Plate"
+	path = /obj/item/weapon/tool_upgrade/reinforcement/plating
+
+/datum/autolathe/recipe/part/guard
+	name = "Reinforcing Arm Guard"
+	path = /obj/item/weapon/tool_upgrade/reinforcement/guard
+
+/datum/autolathe/recipe/part/ergonomic_grip
+	name = "Ergonomic Grip"
+	path = /obj/item/weapon/tool_upgrade/productivity/ergonomic_grip
+
+/datum/autolathe/recipe/part/ratchet
+	name = "Ratcheting Mechanism"
+	path = /obj/item/weapon/tool_upgrade/productivity/ratchet
+
+/datum/autolathe/recipe/part/red_paint
+	name = "Red Paint"
+	path = /obj/item/weapon/tool_upgrade/productivity/red_paint
+
+/datum/autolathe/recipe/part/whetstone
+	name = "Whetstone"
+	path = /obj/item/weapon/tool_upgrade/productivity/whetstone
+
+/datum/autolathe/recipe/part/magbit
+	name = "Magnetic Tool Bit"
+	path = /obj/item/weapon/tool_upgrade/refinement/magbit
+
+/datum/autolathe/recipe/part/red_paint
+	name = "Red Paint"
+	path = /obj/item/weapon/tool_upgrade/productivity/red_paint
+
+/datum/autolathe/recipe/part/stabilized_grip
+	name = "Gyrostabilized Grip"
+	path = /obj/item/weapon/tool_upgrade/refinement/stabilized_grip
+
+/datum/autolathe/recipe/part/motor
+	name = "High Power Motor"
+	path = /obj/item/weapon/tool_upgrade/productivity/motor
+
+/datum/autolathe/recipe/part/ported_barrel
+	name = "Welder Ported Barrel"
+	path = /obj/item/weapon/tool_upgrade/refinement/ported_barrel
+
+/datum/autolathe/recipe/part/cell_mout
+	name = "Tool Heavy Cell Mout"
+	path = /obj/item/weapon/tool_upgrade/augment/cell_mount
+
+/datum/autolathe/recipe/part/fuel_tank
+	name = "Expanded Fuel Tank"
+	path = /obj/item/weapon/tool_upgrade/augment/fuel_tank
+
+/datum/autolathe/recipe/part/expansion
+	name = "Expansion Port"
+	path = /obj/item/weapon/tool_upgrade/augment/expansion
+
+/datum/autolathe/recipe/part/spikes
+	name = "Additive Tool Spikes"
+	path = /obj/item/weapon/tool_upgrade/augment/spikes
+
+/datum/autolathe/recipe/part/dampener
+	name = "Sound Dampener"
+	path = /obj/item/weapon/tool_upgrade/augment/dampener

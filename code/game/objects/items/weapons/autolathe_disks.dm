@@ -143,6 +143,7 @@
 		/datum/autolathe/recipe/cell/medium/high,
 		/datum/autolathe/recipe/cell/small,
 		/datum/autolathe/recipe/cell/small/high,
+		/datum/autolathe/recipe/part/cell_mout,
 	)
 	..()
 
@@ -192,6 +193,37 @@
 		/datum/autolathe/recipe/tool/combi_driver,
 		/datum/autolathe/recipe/tool/armature_cutter,
 		/datum/autolathe/recipe/part/diamondblade,
+	)
+	..()
+
+/obj/item/weapon/disk/autolathe_disk/parttoolpack
+	name = "Technomancers PAK-103 Tool Mods"
+	category = "Engineering"
+	icon_state = "technomancers"
+	license = 10
+
+/obj/item/weapon/disk/autolathe_disk/parttoolpack/New()
+	recipes = list(
+		/datum/autolathe/recipe/part/laserguide,
+		/datum/autolathe/recipe/part/diamondblade,
+		/datum/autolathe/recipe/part/stick,
+		/datum/autolathe/recipe/part/plating,
+		/datum/autolathe/recipe/part/guard,
+		/datum/autolathe/recipe/part/heatsink,
+		/datum/autolathe/recipe/part/ergonomic_grip,
+		/datum/autolathe/recipe/part/ratchet,
+		/datum/autolathe/recipe/part/red_paint,
+		/datum/autolathe/recipe/part/whetstone,
+		/datum/autolathe/recipe/part/magbit,
+		/datum/autolathe/recipe/part/red_paint,
+		/datum/autolathe/recipe/part/stabilized_grip,
+		/datum/autolathe/recipe/part/ported_barrel,
+		/datum/autolathe/recipe/part/motor,
+		/datum/autolathe/recipe/part/cell_mout,
+		/datum/autolathe/recipe/part/fuel_tank,
+		/datum/autolathe/recipe/part/expansion,
+		/datum/autolathe/recipe/part/spikes,
+		/datum/autolathe/recipe/part/dampener,
 	)
 	..()
 
@@ -277,6 +309,10 @@
 		/datum/autolathe/recipe/computer_part/nano_printer,
 		/datum/autolathe/recipe/computer_part/scanner_paper,
 		/datum/autolathe/recipe/computer_part/scanner_atmos,
+		/datum/autolathe/recipe/part/heatsink,
+		/datum/autolathe/recipe/part/motor,
+		/datum/autolathe/recipe/part/dampener,
+		/datum/autolathe/recipe/part/cell_mout,
 	)
 	..()
 
@@ -294,6 +330,7 @@
 		/datum/autolathe/recipe/misc/taperecorder,
 		/datum/autolathe/recipe/tool/tacknife,
 		/datum/autolathe/recipe/sec/beartrap,
+		/datum/autolathe/recipe/sec/silencer,
 	)
 	..()
 
@@ -418,6 +455,27 @@
 	)
 	..()
 
+/obj/item/weapon/disk/autolathe_disk/nonlethal_ammoboxs
+	name = "Frozen Star Nonlethal Ammo Box Pack"
+	category = "Ammo"
+	icon_state = "frozenstar"
+	license = 30
+
+/obj/item/weapon/disk/autolathe_disk/nonlethal_ammoboxs/New()
+	recipes = list(
+		/datum/autolathe/recipe/ammo/box_a10mm/rubber,
+		/datum/autolathe/recipe/ammo/box_c9mm/flash,
+		/datum/autolathe/recipe/ammo/box_c9mm/rubber,
+		/datum/autolathe/recipe/ammo/box_c9mm/practice,
+		/datum/autolathe/recipe/ammo/box_cl32/rubber,
+		/datum/autolathe/recipe/ammo/box_c45/flash,
+		/datum/autolathe/recipe/ammo/box_c45/rubber,
+		/datum/autolathe/recipe/ammo/box_c45/practice,
+		/datum/autolathe/recipe/ammo/box_c65mm/rubber,
+		/datum/autolathe/recipe/ammo/box_c44/rubber,
+		/datum/autolathe/recipe/ammo/box_c50/rubber,
+	)
+	..()
 
 /obj/item/weapon/disk/autolathe_disk/lethal_ammo
 	name = "Frozen Star Lethal Ammo Pack"
@@ -450,6 +508,29 @@
 	)
 	..()
 
+/obj/item/weapon/disk/autolathe_disk/lethal_ammoboxs
+	name = "Frozen Star Lethal Ammo Boxes Pack"
+	category = "Ammo"
+	icon_state = "frozenstar"
+	license = 30
+
+/obj/item/weapon/disk/autolathe_disk/lethal_ammoboxs/New()
+	recipes = list(
+		/datum/autolathe/recipe/ammo/box_a762,
+		/datum/autolathe/recipe/ammo/box_a10mm,
+		/datum/autolathe/recipe/ammo/box_a9mm,
+		/datum/autolathe/recipe/ammo/box_cl32,
+		/datum/autolathe/recipe/ammo/box_c45,
+		/datum/autolathe/recipe/ammo/box_c10x24,
+		/datum/autolathe/recipe/ammo/box_a556,
+		/datum/autolathe/recipe/ammo/box_c65mm,
+		/datum/autolathe/recipe/ammo/box_c357,
+		/datum/autolathe/recipe/ammo/box_c38,
+		/datum/autolathe/recipe/ammo/box_c44,
+		/datum/autolathe/recipe/ammo/box_c50,
+		/datum/autolathe/recipe/ammo/box_a145,
+	)
+	..()
 
 /obj/item/weapon/disk/autolathe_disk/excelsior
 	name = "Excelsior Means of Production"
@@ -488,6 +569,7 @@
 		/datum/autolathe/recipe/part/signaler,
 		/datum/autolathe/recipe/part/sensor_prox,
 		/datum/autolathe/recipe/part/capacitor,
+		/datum/autolathe/recipe/part/dampener,
 		/datum/autolathe/recipe/part/camera_assembly
 	)
 	..()
