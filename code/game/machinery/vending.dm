@@ -925,7 +925,7 @@
 /obj/machinery/vending/boozeomat
 	name = "Booze-O-Mat"
 	desc = "A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one."
-	icon_state = "boozeomat"        //////////////18 drink entities below, plus the glasses, in case someone wants to edit the number of bottles
+	icon_state = "boozeomat"	//18 drink entities below, plus the glasses, in case someone wants to edit the number of bottles
 	icon_deny = "boozeomat-deny"
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/gin = 5,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 5,
