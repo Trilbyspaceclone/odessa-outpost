@@ -6,16 +6,12 @@
 	sort_category = "Suits and Overwear"
 	cost = 1
 
-/datum/gear/suit/jacket
-	display_name = "jacket"
-	path = /obj/item/clothing/suit/storage/toggle/bomber
-
 /datum/gear/suit/kimono
 	display_name = "kimono"
 	path = /obj/item/clothing/suit/kimono
 
-/datum/gear/suit/leather_jacket
-	display_name = "leather jacket selection"
+/datum/gear/suit/jackets
+	display_name = "jacket selection"
 	path = /obj/item/clothing/suit/storage/leather_jacket
 	flags = GEAR_HAS_TYPE_SELECTION
 
@@ -32,14 +28,6 @@
 	display_name = "hoodie selection"
 	path = /obj/item/clothing/suit/storage/toggle/hoodie
 	flags = GEAR_HAS_TYPE_SELECTION
-
-/datum/gear/suit/hoodie/New()
-	..()
-	var/jacket = list(
-		"Black"		=	/obj/item/clothing/suit/storage/toggle/hoodie/black,
-		"Grey"		=	/obj/item/clothing/suit/storage/toggle/hoodie,
-	)
-	gear_tweaks += new /datum/gear_tweak/path(jacket)
 
 /datum/gear/suit/labcoat
 	display_name = "labcoat"
@@ -63,6 +51,21 @@
 /datum/gear/suit/miljacket
 	display_name = "military jacket selection"
 	path = /obj/item/clothing/suit/storage/miljacket
+	flags = GEAR_HAS_TYPE_SELECTION
+
+/datum/gear/suit/trackjacket
+	display_name = "track jacket selection"
+	path = /obj/item/clothing/suit/storage/toggle/track
+	flags = GEAR_HAS_TYPE_SELECTION
+
+/datum/gear/suit/modularjackets
+	display_name = "modular suit jacket selection"
+	path = /obj/item/clothing/suit/storage/toggle/lawyer
+	flags = GEAR_HAS_TYPE_SELECTION
+
+/datum/gear/suit/bombers
+	display_name = "bomber jacket selection"
+	path = /obj/item/clothing/suit/storage/toggle/bomber
 	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/suit/shirts
@@ -157,3 +160,15 @@
 	path = /obj/item/clothing/suit/hooded/cloak/job/ironhammer
 	allowed_roles = list("Ironhammer Operative","Ironhammer Commander","Ironhammer Gunnery Sergeant", "Ironhammer Inspector", "Ironhammer Medical Specialist")
 	sort_category = "Faction: Ironhammer"
+
+/datum/gear/uniform/overcloak
+	display_name = "black overcloa selection"
+	path = /obj/item/clothing/suit/overcloak/
+	flags = GEAR_HAS_TYPE_SELECTION
+	sort_category = "Xenowear"
+
+/datum/gear/uniform/overcloak_colors
+	display_name = "colored overcloak selection"
+	path = /obj/item/clothing/suit/overcloak_colors/
+	flags = GEAR_HAS_TYPE_SELECTION
+	sort_category = "Xenowear"
