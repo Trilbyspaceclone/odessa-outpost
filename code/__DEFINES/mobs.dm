@@ -68,6 +68,7 @@
 #define ROBOT_NOTIFICATION_NEW_MODULE 3
 #define ROBOT_NOTIFICATION_MODULE_RESET 4
 #define ROBOT_NOTIFICATION_SIGNAL_LOST 5
+#define ROBOT_NOTIFICATION_AI_SHELL 5
 
 // Appearance change flags
 #define APPEARANCE_UPDATE_DNA  0x1
@@ -281,3 +282,5 @@
 // Sojourn Additions End
 
 #define RANDOM_BLOOD_TYPE pick(4;"O-", 36;"O+", 3;"A-", 28;"A+", 1;"B-", 20;"B+", 1;"AB-", 5;"AB+")
+
+#define BORG_BRAINTYPE_AI_SHELL	"AI Shell" //For telling if this is for the AI only

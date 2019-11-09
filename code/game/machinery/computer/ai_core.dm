@@ -206,6 +206,8 @@
 	if(!istype(transfer) || locate(/mob/living/silicon/ai) in src)
 		return
 
+	if(transfer.deployed_shell) //Sos add
+		transfer.disconnect_shell("Disconnected from remote shell due to core intelligence transfer.") //Sos Add
 	transfer.aiRestorePowerRoutine = 0
 	transfer.control_disabled = 0
 	transfer.aiRadio.disabledAi = 0

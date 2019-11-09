@@ -312,6 +312,8 @@
 		braintype = "Android"
 	else if(istype(mmi, /obj/item/device/mmi/digital/robot))
 		braintype = "Robot"
+	else if(istype(mmi, /obj/item/device/mmi/inert/ai_remote))
+		braintype = BORG_BRAINTYPE_AI_SHELL
 	else
 		braintype = "Cyborg"
 
@@ -738,6 +740,16 @@
 			spark_system.start()
 		return ..()
 
+/mob/living/silicon/robot/proc/module_reset()
+	uneq_all()
+	modtype = initial(modtype)
+
+	notify_ai(ROBOT_NOTIFICATION_MODULE_RESET, module.name)
+	module.Reset(src)
+	qdel(module)
+	module = null
+	updatename("Default")
+
 /mob/living/silicon/robot/attack_hand(mob/user)
 
 	add_fingerprint(user)
@@ -1090,21 +1102,24 @@
 		return 1
 	return 0
 
+
 /mob/living/silicon/robot/proc/notify_ai(var/notifytype, var/first_arg, var/second_arg)
 	if(!connected_ai)
 		return
+	if(shell && notifytype != ROBOT_NOTIFICATION_AI_SHELL)
+		return // No point annoying the AI/s about renames and module resets for shells.
 	switch(notifytype)
-		if(ROBOT_NOTIFICATION_SIGNAL_LOST)
-			to_chat(connected_ai , SPAN_NOTICE("NOTICE - Signal lost: [braintype] [name]."))
 		if(ROBOT_NOTIFICATION_NEW_UNIT) //New Robot
-			to_chat(connected_ai , SPAN_NOTICE("NOTICE - New [lowertext(braintype)] connection detected: <a href='byond://?src=\ref[connected_ai];track2=\ref[connected_ai];track=\ref[src]'>[name]</a>"))
+			connected_ai << "<br><br><span class='notice'>NOTICE - New [lowertext(braintype)] connection detected: <a href='byond://?src=\ref[connected_ai];track2=\ref[connected_ai];track=\ref[src]'>[name]</a></span><br>"
 		if(ROBOT_NOTIFICATION_NEW_MODULE) //New Module
-			to_chat(connected_ai , SPAN_NOTICE("NOTICE - [braintype] module change detected: [name] has loaded the [first_arg]."))
+			connected_ai << "<br><br><span class='notice'>NOTICE - [braintype] module change detected: [name] has loaded the [first_arg].</span><br>"
 		if(ROBOT_NOTIFICATION_MODULE_RESET)
-			to_chat(connected_ai , SPAN_NOTICE("NOTICE - [braintype] module reset detected: [name] has unloaded the [first_arg]."))
+			connected_ai << "<br><br><span class='notice'>NOTICE - [braintype] module reset detected: [name] has unloaded the [first_arg].</span><br>"
 		if(ROBOT_NOTIFICATION_NEW_NAME) //New Name
 			if(first_arg != second_arg)
-				to_chat(connected_ai , SPAN_NOTICE("NOTICE - [braintype] reclassification detected: [first_arg] is now designated as [second_arg]."))
+				connected_ai << "<br><br><span class='notice'>NOTICE - [braintype] reclassification detected: [first_arg] is now designated as [second_arg].</span><br>"
+		if(ROBOT_NOTIFICATION_AI_SHELL) //New Shell
+			to_chat(connected_ai, "<br><br><span class='notice'>NOTICE - New AI shell detected</span><br>")
 
 /mob/living/silicon/robot/proc/disconnect_from_ai()
 	if(connected_ai)
@@ -1113,7 +1128,7 @@
 		connected_ai = null
 
 /mob/living/silicon/robot/proc/connect_to_ai(var/mob/living/silicon/ai/AI)
-	if(AI && AI != connected_ai)
+	if(AI && AI != connected_ai && !shell)
 		disconnect_from_ai()
 		connected_ai = AI
 		connected_ai.connected_robots |= src
@@ -1139,54 +1154,52 @@
 		if(wiresexposed)
 			to_chat(user, "You must close the panel first")
 			return
-		else
-			sleep(6)
-			if(prob(50))
-				emagged = 1
-				lawupdate = 0
-				disconnect_from_ai()
-				to_chat(user, "You emag [src]'s interface.")
-				message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
-				log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
-				clear_supplied_laws()
-				clear_inherent_laws()
-				laws = new /datum/ai_laws/syndicate_override
-				var/time = time2text(world.realtime,"hh:mm:ss")
-				lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
-				set_zeroth_law("Only [user.real_name] and people \he designates as being such are operatives.")
-				. = 1
-				spawn()
-					to_chat(src, SPAN_DANGER("ALERT: Foreign software detected."))
-					sleep(5)
-					to_chat(src, SPAN_DANGER("Initiating diagnostics..."))
-					sleep(20)
-					to_chat(src, SPAN_DANGER("SynBorg v1.7.1 loaded."))
-					sleep(5)
-					to_chat(src, SPAN_DANGER("LAW SYNCHRONISATION ERROR"))
-					sleep(5)
-					to_chat(src, SPAN_DANGER("Would you like to send a report to NanoTraSoft? Y/N"))
-					sleep(10)
-					to_chat(src, SPAN_DANGER("> N"))
-					sleep(20)
-					to_chat(src, SPAN_DANGER("ERRORERRORERROR"))
-					to_chat(src, "<b>Obey these laws:</b>")
-					laws.show_laws(src)
-					to_chat(src, SPAN_DANGER("ALERT: [user.real_name] is your new master. Obey your new laws and his commands."))
-					if(src.module)
-						var/rebuild = 0
-						for(var/obj/item/weapon/tool/pickaxe/drill/D in src.module.modules)
-							qdel(D)
-							rebuild = 1
-						if(rebuild)
-							src.module.modules += new /obj/item/weapon/tool/pickaxe/diamonddrill(src.module)
-							src.module.rebuild()
-					updateicon()
-			else
-				to_chat(user, "You fail to hack [src]'s interface.")
-				to_chat(src, "Hack attempt detected.")
-			return 1
-		return
 
+		// The block of code below is from TG. Feel free to replace with a better result if desired.
+		if(shell) // AI shells cannot be emagged, so we try to make it look like a standard reset. Smart players may see through this, however.
+			to_chat(user, span("danger", "[src] is remotely controlled! Your emag attempt has triggered a system reset instead!"))
+			log_game("[key_name(user)] attempted to emag an AI shell belonging to [key_name(src) ? key_name(src) : connected_ai]. The shell has been reset as a result.")
+			module_reset()
+			return
+
+		sleep(6)
+		if(prob(50))
+			emagged = 1
+			lawupdate = 0
+			disconnect_from_ai()
+			to_chat(user, "You emag [src]'s interface.")
+			message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].  Laws overridden.")
+			log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
+			clear_supplied_laws()
+			clear_inherent_laws()
+			laws = new /datum/ai_laws/syndicate_override
+			var/time = time2text(world.realtime,"hh:mm:ss")
+			lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
+			set_zeroth_law("Only [user.real_name] and people [user.real_name] designate as being such are operatives.")
+			. = 1
+			spawn()
+				to_chat(src, "<span class='danger'>ALERT: Foreign software detected.</span>")
+				sleep(5)
+				to_chat(src, "<span class='danger'>Initiating diagnostics...</span>")
+				sleep(20)
+				to_chat(src, "<span class='danger'>SynBorg v1.7.1 loaded.</span>")
+				sleep(5)
+				to_chat(src, "<span class='danger'>LAW SYNCHRONISATION ERROR</span>")
+				sleep(5)
+				to_chat(src, "<span class='danger'>Would you like to send a report to NanoTraSoft? Y/N</span>")
+				sleep(10)
+				to_chat(src, "<span class='danger'>> N</span>")
+				sleep(20)
+				to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
+				to_chat(src, "<b>Obey these laws:</b>")
+				laws.show_laws(src)
+				to_chat(src, "<span class='danger'>ALERT: [user.real_name] is your new master. Obey your new laws and [user.real_name] commands.</span>")
+				updateicon()
+		else
+			to_chat(user, "You fail to hack [src]'s interface.")
+			to_chat(src, "Hack attempt detected.")
+		return 1
+	return
 
 /mob/living/silicon/robot/incapacitated(var/incapacitation_flags = INCAPACITATION_DEFAULT)
 	if ((incapacitation_flags & INCAPACITATION_FORCELYING) && (lockcharge || !is_component_functioning("actuator")))

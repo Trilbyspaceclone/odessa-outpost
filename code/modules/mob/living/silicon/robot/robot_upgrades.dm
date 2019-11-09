@@ -25,21 +25,9 @@
 	require_module = TRUE
 
 /obj/item/borg/upgrade/reset/action(var/mob/living/silicon/robot/R)
-	if(..()) return 0
-	R.uneq_all()
-	R.modtype = initial(R.modtype)
-
-	R.notify_ai(ROBOT_NOTIFICATION_MODULE_RESET, R.module.name)
-	R.module.Reset(R)
-	qdel(R.module)
-	R.module = null
-	R.updatename("Default")
-
-	R.icon = 'icons/mob/robots.dmi'
-	R.pixel_x = 0
-	R.old_x = 0
-	R.default_pixel_x = 0
-
+	if(..())
+		return 0
+	R.module_reset()
 	return 1
 
 /obj/item/borg/upgrade/rename

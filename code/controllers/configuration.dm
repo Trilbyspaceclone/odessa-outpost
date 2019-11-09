@@ -55,6 +55,8 @@ GLOBAL_LIST_EMPTY(storyteller_cache)
 	var/humans_need_surnames = 0
 	var/allow_random_events = 0			// enables random events mid-round when set to 1
 	var/allow_ai = 0					// allow ai job
+	var/allow_ai_shells = FALSE			// allow AIs to enter and leave special borg shells at will, and for those shells to be buildable.//Sos change
+	var/give_free_ai_shell = FALSE		// allows a specific spawner object to instantiate a premade AI Shell //Sos Change
 	var/hostedby = null
 	var/respawn_delay = 30
 	var/guest_jobban = 1
@@ -373,6 +375,12 @@ GLOBAL_LIST_EMPTY(storyteller_cache)
 				if ("allow_ai")
 					config.allow_ai = 1
 
+				if ("allow_ai_shells")
+					config.allow_ai_shells = TRUE
+
+				if("give_free_ai_shell")
+					config.give_free_ai_shell = TRUE
+
 //				if ("authentication")
 //					config.enable_authentication = 1
 
@@ -673,7 +681,7 @@ GLOBAL_LIST_EMPTY(storyteller_cache)
 
 				if("emojis")
 					config.emojis = 1
-				
+
 				if("webhook_key")
 					config.webhook_key = value
 

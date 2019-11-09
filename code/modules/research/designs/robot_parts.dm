@@ -118,3 +118,8 @@
 	name = "Illegal upgrade"
 	desc = "Allows for the construction of lethal upgrades for cyborgs."
 	build_path = /obj/item/borg/upgrade/syndicate
+
+/datum/design/research/item/robot_upgrade/ai_shell
+	name = "AI Remote Interface"
+	desc = "Allows an AI to wirelessly connect to a borg shell."
+	build_path = /obj/item/device/mmi/inert/ai_remote

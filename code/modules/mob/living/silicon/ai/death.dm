@@ -3,6 +3,10 @@
 	if(stat == DEAD)
 		return
 
+	if(deployed_shell)
+		disconnect_shell("Disconnecting from remote shell due to critical system failure.")
+	. = ..(gibbed)
+
 	if(src.eyeobj)
 		src.eyeobj.setLoc(get_turf(src))
 
@@ -19,6 +23,6 @@
 
 	for (var/mob/living/silicon/robot/R in connected_robots)
 		to_chat(R, "<span class='notice'>You lost signal from your master [src.name].</span>")
-		
+
 	. = ..(gibbed,"gives one shrill beep before falling lifeless.")
 	density = 1

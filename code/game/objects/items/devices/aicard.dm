@@ -61,6 +61,8 @@
 			flush = 1
 			to_chat(carded_ai, "Your core files are being wiped!")
 			while (carded_ai && carded_ai.stat != DEAD)
+				if(carded_ai.deployed_shell && prob(carded_ai.oxyloss)) //You feel it creeping? Eventually will reach 100, resulting in the second half of the AI's remaining life being lonely.
+					carded_ai.disconnect_shell("Disconnecting from remote shell due to insufficent power.")
 				carded_ai.adjustOxyLoss(2)
 				carded_ai.updatehealth()
 				sleep(10)
@@ -74,6 +76,9 @@
 		to_chat(carded_ai, "<span class='warning'>Your wireless interface has been [carded_ai.control_disabled ? "disabled" : "enabled"]!</span>")
 		to_chat(user, "<span class='notice'>You [carded_ai.control_disabled ? "disable" : "enable"] the AI's wireless interface.</span>")
 		update_icon()
+		if(carded_ai.control_disabled && carded_ai.deployed_shell)
+			carded_ai.disconnect_shell("Disconnecting from remote shell due to [src] wireless access interface being disabled.")
+			update_icon()
 	return 1
 
 /obj/item/device/aicard/update_icon()
@@ -89,7 +94,7 @@
 		icon_state = "aicard"
 
 /obj/item/device/aicard/proc/grab_ai(var/mob/living/silicon/ai/ai, var/mob/living/user)
-	if(!ai.client)
+	if(!ai.client && !ai.deployed_shell)
 		to_chat(user, "<span class='danger'>ERROR:</span> AI [ai.name] is offline. Unable to download.")
 		return 0
 
@@ -114,6 +119,7 @@
 	ai.control_disabled = 1
 	ai.aiRestorePowerRoutine = 0
 	carded_ai = ai
+	ai.disconnect_shell("Disconnected from remote shell due to core intelligence transfer.") //If the AI is controlling a borg, force the player back to core!
 
 	if(ai.client)
 		to_chat(ai, "You have been downloaded to a mobile storage device. Remote access lost.")

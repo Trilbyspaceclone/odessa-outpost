@@ -5,9 +5,10 @@
 		//Being dead doesn't mean your temperature never changes
 		var/turf/T = get_turf(src)
 
-		if (src.stat!=CONSCIOUS)
+		if (src.stat != CONSCIOUS)
 			src.cameraFollow = null
 			src.reset_view(null)
+			disconnect_shell("Disconnecting from remote shell due to local system failure.")
 
 		src.updatehealth()
 
@@ -65,6 +66,7 @@
 
 					//Now to tell the AI why they're blind and dying slowly.
 					to_chat(src, "You've lost power!")
+					disconnect_shell(message = "Disconnected from remote shell due to depowered networking interface.")
 
 					spawn(20)
 						to_chat(src, "Backup battery online. Scanners, camera, and radio interface offline. Beginning fault-detection.")

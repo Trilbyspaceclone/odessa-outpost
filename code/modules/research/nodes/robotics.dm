@@ -259,6 +259,7 @@
 							/datum/design/research/item/mmi_radio,
 							/datum/design/research/item/intellicard,
 							/datum/design/research/item/paicard,
+							/datum/design/research/item/robot_upgrade/ai_shell,
 							/datum/design/research/circuit/robocontrol
 							)
 
